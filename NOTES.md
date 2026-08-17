@@ -1,3 +1,30 @@
-# Galicia beach water temps PoC
+# Catalog build notes
 
-See NOTES.md
+- duplicate idPraia 2045 (Praia de Codesal) — keeping first
+- FORCE_CONCELLO applied: 2095,2096,2099 → Vilaboa
+- AEMET Galicia beaches: 114
+- AEMET match pairs: 82
+- AEMET rejected by name (23):
+-   - 1971 Praia de Salseiras ↔ 1504101 Caión (114m)
+-   - 2345 Praia de Carragueiros ↔ 1501103 Mañóns (45m)
+-   - 1959 Praia de Canido ↔ 1504302 Maior, Malpica (178m)
+-   - 2518 Praia de Vares (Oeste) ↔ 1504402 Bares (136m)
+-   - 2421 Praia de Portiño ↔ 1505303 Esteiro (274m)
+-   - 2526 Praia de A Concha ↔ 1506101 Espasante (234m)
+-   - 2360 Praia do Caramiñal ↔ 1506701 Areal (303m)
+-   - 2363 Praia de Nineiriños ↔ 1506702 Cabío-Lombiña (125m)
+-   - 2394 Praia de Río Sieira ↔ 1507110 As Furnas (168m)
+-   - 2395 Praia de Seiras ↔ 1507109 Queiruga (148m)
+-   - 2326 Praia de Tronco ↔ 1507202 Tanxil (357m)
+-   - 1993 Praia Coto ↔ 2700503 San Miguel Reinante/Area Longa (200m)
+-   - 1995 Praia San Bartolo ↔ 2700501 Altar, San Cosme (357m)
+-   - 2306 Praia O Bao (Sur) ↔ 3690102 Camaxe (77m)
+-   - 2149 Praia de Vilariño ↔ 3600806 Area Grande (246m)
+-   - 2154 Praia de Pinténs ↔ 3600808 Vilariño-Arnelas, Hio (200m)
+-   - 2127 Praia de Santa Marta ↔ 3600807 Limens (206m)
+-   - 2134 Praia de Viñó ↔ 3600802 Barra-Nerga (147m)
+-   - 2114 Praia da Videira ↔ 3602902 Tirán (195m)
+-   - 2070 Praia O Vao ↔ 3605711 Canido (212m)
+-   - 2071 Praia da Fontaíña ↔ 3605702 Bao (274m)
+-   - 2297 Praia A Concha ↔ 3606001 Compostela (275m)
+-   - 2285 Praia Con da Mina ↔ 3606103 O Terrón (141m)

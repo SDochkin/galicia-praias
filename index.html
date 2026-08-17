@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Temperatura del agua — playas de Galicia</title>
+  <style>
+    :root {
+      --bg: #0f1419;
+      --card: #1a222c;
+      --text: #e8eef4;
+      --muted: #9aabbc;
+      --accent: #3db8a8;
+      --warn: #e0a106;
+      --border: #2a3542;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.45;
+    }
+    main {
+      max-width: 42rem;
+      margin: 0 auto;
+      padding: 1.25rem 1rem 3rem;
+    }
+    h1 {
+      font-size: 1.35rem;
+      font-weight: 650;
+      margin: 0 0 0.35rem;
+    }
+    .sub {
+      color: var(--muted);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    .banner {
+      background: #2a2414;
+      border: 1px solid var(--warn);
+      color: #f5e6b8;
+      padding: 0.65rem 0.8rem;
+      border-radius: 0.5rem;
+      font-size: 0.85rem;
+      margin-bottom: 1rem;
+    }
+    label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
+    select {
+      width: 100%;
+      padding: 0.65rem 0.75rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font-size: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    h2 {
+      font-size: 0.95rem;
+      font-weight: 600;
+      margin: 1.4rem 0 0.55rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+    .row {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0.85rem;
+      border-radius: 0.55rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: inherit;
+      cursor: pointer;
+      font: inherit;
+    }
+    .row:hover, .row.active { border-color: var(--accent); }
+    .rank { color: var(--muted); min-width: 1.5rem; font-variant-numeric: tabular-nums; }
+    .name { flex: 1; font-weight: 550; }
+    .temp { font-variant-numeric: tabular-nums; font-weight: 650; white-space: nowrap; }
+    .src { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
+    .hint {
+      display: inline-block;
+      margin-left: 0.35rem;
+      color: var(--warn);
+      cursor: help;
+      font-weight: 700;
+      border: 0;
+      background: transparent;
+      padding: 0;
+      font-size: 0.9rem;
+    }
+    .detail {
+      margin-top: 0.75rem;
+      padding: 0.9rem 1rem;
+      border-radius: 0.55rem;
+      border: 1px solid var(--border);
+      background: #141b23;
+    }
+    .detail h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
+    .detail table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .detail th, .detail td { text-align: left; padding: 0.35rem 0.25rem; border-bottom: 1px solid var(--border); }
+    .detail .close {
+      margin-top: 0.75rem;
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text);
+      border-radius: 0.4rem;
+      padding: 0.4rem 0.7rem;
+      cursor: pointer;
+    }
+    footer {
+      margin-top: 2rem;
+      font-size: 0.78rem;
+      color: var(--muted);
+    }
+    footer a { color: var(--accent); }
+    .empty { color: var(--muted); font-size: 0.9rem; padding: 0.5rem 0; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Temperatura del agua</h1>
+    <p class="sub">Pronósticos de playas en Galicia. No son mediciones in situ.</p>
+    <div id="stale" class="banner" hidden></div>
+    <label for="concello">Concello</label>
+    <select id="concello"></select>
+    <div id="lists"></div>
+    <div id="detail" class="detail" hidden></div>
+    <footer>
+      Datos: <a href="https://www.meteogalicia.gal/" rel="noopener">MeteoGalicia</a>
+      (CC BY-SA 4.0) y
+      <a href="https://www.aemet.es/" rel="noopener">AEMET</a>.
+      Actualizado: <span id="fetchedAt">—</span>.
+    </footer>
+  </main>
+  <script>
+    const DISAGREE_TIP =
+      "Dos predicciones distintas. Mostramos MeteoGalicia como cifra principal por ser el servicio gallego. No hay medición in situ.";
+
+    let data = { beaches: [], fetchedAt: "" };
+    let currentConcello = "vigo";
+    let currentBeach = null;
+
+    function trackPage() {
+      if (typeof umami !== "undefined" && typeof umami.track === "function") {
+        umami.track();
+      }
+    }
+
+    function setUrl(params, { replace = false, track = true } = {}) {
+      const q = new URLSearchParams(params).toString();
+      const url = q ? `?${q}` : location.pathname;
+      if (replace) history.replaceState(null, "", url);
+      else history.pushState(null, "", url);
+      if (track && !replace) trackPage();
+    }
+
+    function parseQuery() {
+      const p = new URLSearchParams(location.search);
+      return { c: p.get("c"), b: p.get("b") };
+    }
+
+    function dayOf(iso) {
+      return (iso || "").slice(0, 10);
+    }
+
+    function todayLocalISO() {
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      return `${y}-${m}-${day}`;
+    }
+
+    function formatDateEs(isoDay) {
+      const [y, m, d] = isoDay.split("-").map(Number);
+      const dt = new Date(y, m - 1, d);
+      return dt.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+    }
+
+    function temps(beach) {
+      return beach.sources
+        .map((s) => s.days && s.days[0] && typeof s.days[0].t === "number" ? { name: s.name, t: s.days[0].t } : null)
+        .filter(Boolean);
+    }
+
+    function classify(beach) {
+      const ts = temps(beach);
+      if (ts.length === 0) return null;
+      if (ts.length === 1) {
+        return { kind: "single", mid: ts[0].t, min: ts[0].t, max: ts[0].t, ts };
+      }
+      const vals = ts.map((x) => x.t);
+      const min = Math.min(...vals);
+      const max = Math.max(...vals);
+      const mid = (min + max) / 2;
+      if (max - min >= 3) return { kind: "disagree", mid, min, max, ts };
+      return { kind: "ranked", mid, min, max, ts };
+    }
+
+    function tempLabel(c) {
+      if (c.kind === "single") return `${c.min} °C`;
+      return `${c.min}–${c.max} °C`;
+    }
+
+    function mgTemp(c) {
+      const mg = c.ts.find((x) => x.name === "MeteoGalicia");
+      return mg ? mg.t : c.max;
+    }
+
+    function sourceLine(c) {
+      return c.ts.map((x) => `${x.name} ${x.t} °C`).join(" · ");
+    }
+
+    function renderSelect() {
+      const sel = document.getElementById("concello");
+      const map = new Map();
+      for (const b of data.beaches) {
+        if (!temps(b).length) continue;
+        map.set(b.concelloSlug, b.concello);
+      }
+      const items = [...map.entries()].sort((a, b) => a[1].localeCompare(b[1], "es"));
+      sel.innerHTML = items
+        .map(([slug, name]) => `<option value="${slug}">${name}</option>`)
+        .join("");
+      if (!map.has(currentConcello) && items.length) currentConcello = items[0][0];
+      sel.value = currentConcello;
+    }
+
+    function renderLists() {
+      const root = document.getElementById("lists");
+      const beaches = data.beaches
+        .filter((b) => b.concelloSlug === currentConcello)
+        .map((b) => ({ beach: b, c: classify(b) }))
+        .filter((x) => x.c);
+
+      const ranked = beaches.filter((x) => x.c.kind === "ranked").sort((a, b) => b.c.mid - a.c.mid);
+      const disagree = beaches.filter((x) => x.c.kind === "disagree").sort((a, b) => a.beach.name.localeCompare(b.beach.name, "es"));
+      const single = beaches.filter((x) => x.c.kind === "single").sort((a, b) => a.beach.name.localeCompare(b.beach.name, "es"));
+
+      const parts = [];
+      parts.push(blockHtml("Comparables", ranked, true));
+      parts.push(blockHtml("Las fuentes discrepan", disagree, false, true));
+      parts.push(blockHtml("Una sola fuente", single, false, false));
+      root.innerHTML = parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
+
+      root.querySelectorAll("button.row").forEach((btn) => {
+        btn.addEventListener("click", () => openBeach(btn.dataset.slug));
+      });
+    }
+
+    function blockHtml(title, items, numbered, showTip) {
+      if (!items.length) return "";
+      const showRank = numbered && items.length >= 2;
+      const lis = items
+        .map((item, i) => {
+          const { beach, c } = item;
+          const primary =
+            c.kind === "disagree" ? `${mgTemp(c)} °C` : tempLabel(c);
+          const tip =
+            showTip
+              ? `<span class="hint" title="${DISAGREE_TIP.replace(/"/g, "&quot;")} (${sourceLine(c)})" aria-label="Más información">?</span>`
+              : "";
+          const active = currentBeach === beach.slug ? " active" : "";
+          return `<li>
+            <button type="button" class="row${active}" data-slug="${beach.slug}">
+              <span class="rank">${showRank ? i + 1 + "." : ""}</span>
+              <span class="name">${beach.name}${tip}
+                <div class="src">${sourceLine(c)}</div>
+              </span>
+              <span class="temp">${primary}${c.kind === "disagree" ? ` <span class="src">(${tempLabel(c)})</span>` : ""}</span>
+            </button>
+          </li>`;
+        })
+        .join("");
+      return `<section><h2>${title}</h2><ul>${lis}</ul></section>`;
+    }
+
+    function openBeach(slug, { push = true } = {}) {
+      const beach = data.beaches.find((b) => b.slug === slug);
+      if (!beach) return;
+      currentBeach = slug;
+      currentConcello = beach.concelloSlug;
+      document.getElementById("concello").value = currentConcello;
+      if (push) setUrl({ c: currentConcello, b: slug }, { track: true });
+      renderLists();
+      const el = document.getElementById("detail");
+      el.hidden = false;
+      const rows = beach.sources
+        .map((s) => {
+          const days = (s.days || [])
+            .map((d) => `<tr><td>${d.date}</td><td>${d.t} °C</td></tr>`)
+            .join("");
+          return `<h4 style="margin:0.75rem 0 0.25rem;font-size:0.9rem;color:var(--muted)">${s.name}</h4>
+            <table><thead><tr><th>Fecha</th><th>Agua</th></tr></thead><tbody>${days}</tbody></table>`;
+        })
+        .join("");
+      el.innerHTML = `<h3>${beach.name}</h3>
+        <p class="src">${beach.concello}</p>
+        ${rows}
+        <button type="button" class="close" id="closeDetail">Cerrar</button>`;
+      document.getElementById("closeDetail").onclick = () => closeDetail();
+    }
+
+    function closeDetail({ push = true } = {}) {
+      currentBeach = null;
+      document.getElementById("detail").hidden = true;
+      if (push) setUrl({ c: currentConcello }, { track: true });
+      renderLists();
+    }
+
+    function applyStale() {
+      const el = document.getElementById("stale");
+      const day = dayOf(data.fetchedAt);
+      document.getElementById("fetchedAt").textContent = data.fetchedAt || "—";
+      if (day && day !== todayLocalISO()) {
+        el.hidden = false;
+        el.textContent = `Datos del ${formatDateEs(day)}.`;
+      } else {
+        el.hidden = true;
+      }
+    }
+
+    function bootFromQuery() {
+      const { c, b } = parseQuery();
+      if (c) currentConcello = c;
+      renderSelect();
+      if (!c) {
+        setUrl({ c: currentConcello }, { replace: true, track: false });
+      }
+      renderLists();
+      if (b) openBeach(b, { push: false });
+      else document.getElementById("detail").hidden = true;
+    }
+
+    document.getElementById("concello").addEventListener("change", (e) => {
+      currentConcello = e.target.value;
+      currentBeach = null;
+      document.getElementById("detail").hidden = true;
+      setUrl({ c: currentConcello }, { track: true });
+      renderLists();
+    });
+
+    window.addEventListener("popstate", () => {
+      const { c, b } = parseQuery();
+      if (c) currentConcello = c;
+      document.getElementById("concello").value = currentConcello;
+      renderLists();
+      if (b) openBeach(b, { push: false });
+      else {
+        currentBeach = null;
+        document.getElementById("detail").hidden = true;
+      }
+    });
+
+    fetch("./beaches.json", { cache: "no-store" })
+      .then((r) => r.json())
+      .then((json) => {
+        data = json;
+        applyStale();
+        bootFromQuery();
+      })
+      .catch((err) => {
+        document.getElementById("lists").innerHTML =
+          `<p class="empty">No se pudo cargar beaches.json (${err.message}).</p>`;
+      });
+  </script>
+  <!-- Umami: insert when Website ID is ready
+  <script defer src="https://cloud.umami.is/script.js" data-website-id="REPLACE"></script>
+  -->
+</body>
+</html>
