@@ -5,26 +5,34 @@
 - AEMET Galicia beaches: 114
 - AEMET match pairs: 82
 - AEMET rejected by name (23):
--   - 1971 Praia de Salseiras ↔ 1504101 Caión (114m)
--   - 2345 Praia de Carragueiros ↔ 1501103 Mañóns (45m)
--   - 1959 Praia de Canido ↔ 1504302 Maior, Malpica (178m)
--   - 2518 Praia de Vares (Oeste) ↔ 1504402 Bares (136m)
--   - 2421 Praia de Portiño ↔ 1505303 Esteiro (274m)
--   - 2526 Praia de A Concha ↔ 1506101 Espasante (234m)
--   - 2360 Praia do Caramiñal ↔ 1506701 Areal (303m)
--   - 2363 Praia de Nineiriños ↔ 1506702 Cabío-Lombiña (125m)
--   - 2394 Praia de Río Sieira ↔ 1507110 As Furnas (168m)
--   - 2395 Praia de Seiras ↔ 1507109 Queiruga (148m)
--   - 2326 Praia de Tronco ↔ 1507202 Tanxil (357m)
--   - 1993 Praia Coto ↔ 2700503 San Miguel Reinante/Area Longa (200m)
--   - 1995 Praia San Bartolo ↔ 2700501 Altar, San Cosme (357m)
--   - 2306 Praia O Bao (Sur) ↔ 3690102 Camaxe (77m)
--   - 2149 Praia de Vilariño ↔ 3600806 Area Grande (246m)
--   - 2154 Praia de Pinténs ↔ 3600808 Vilariño-Arnelas, Hio (200m)
--   - 2127 Praia de Santa Marta ↔ 3600807 Limens (206m)
--   - 2134 Praia de Viñó ↔ 3600802 Barra-Nerga (147m)
--   - 2114 Praia da Videira ↔ 3602902 Tirán (195m)
--   - 2070 Praia O Vao ↔ 3605711 Canido (212m)
--   - 2071 Praia da Fontaíña ↔ 3605702 Bao (274m)
--   - 2297 Praia A Concha ↔ 3606001 Compostela (275m)
--   - 2285 Praia Con da Mina ↔ 3606103 O Terrón (141m)
+-   - 1971 | reject | near Caión but different beach (Salseiras) | nearest 1504101 Caión (114m)
+-   - 2345 | reject | near Mañóns but different beach (Carragueiros) | nearest 1501103 Mañóns (45m)
+-   - 1959 | reject | near Maior/Malpica but different beach (Canido) | nearest 1504302 Maior, Malpica (178m)
+-   - 2518 | reject | near Bares but different beach (Vares Oeste) | nearest 1504402 Bares (136m)
+-   - 2421 | reject | near Esteiro but different beach (Portiño) | nearest 1505303 Esteiro (274m)
+-   - 2526 | reject | near Espasante but different beach (A Concha) | nearest 1506101 Espasante (234m)
+-   - 2360 | reject | near Areal but different beach (Caramiñal) | nearest 1506701 Areal (303m)
+-   - 2363 | reject | near Cabío-Lombiña but different beach (Nineiriños) | nearest 1506702 Cabío-Lombiña (125m)
+-   - 2394 | reject | near As Furnas but different beach (Río Sieira) | nearest 1507110 As Furnas (168m)
+-   - 2395 | reject | near Queiruga but different beach (Seiras) | nearest 1507109 Queiruga (148m)
+-   - 2326 | reject | near Tanxil but different beach (Tronco) | nearest 1507202 Tanxil (357m)
+-   - 1993 | reject | near San Miguel Reinante/Area Longa but different beach (Coto) | nearest 2700503 San Miguel Reinante/Area Longa (200m)
+-   - 1995 | reject | near Altar/San Cosme but different beach (San Bartolo) | nearest 2700501 Altar, San Cosme (357m)
+-   - 2306 | reject | near Camaxe but different beach (O Bao Sur) | nearest 3690102 Camaxe (77m)
+-   - 2149 | reject | near Area Grande but different beach (Vilariño) | nearest 3600806 Area Grande (246m)
+-   - 2154 | reject | near Vilariño-Arnelas/Hio but different beach (Pinténs) | nearest 3600808 Vilariño-Arnelas, Hio (200m)
+-   - 2127 | reject | near Limens but different beach (Santa Marta) | nearest 3600807 Limens (206m)
+-   - 2134 | reject | near Barra-Nerga but different beach (Viñó) | nearest 3600802 Barra-Nerga (147m)
+-   - 2114 | reject | near Tirán but different beach (Videira) | nearest 3602902 Tirán (195m)
+-   - 2070 | reject | near Canido but different beach (O Vao) | nearest 3605711 Canido (212m)
+-   - 2071 | reject | near Bao but different beach (Fontaíña) | nearest 3605702 Bao (274m)
+-   - 2297 | reject | near Compostela but different beach (A Concha) | nearest 3606001 Compostela (275m)
+-   - 2285 | reject | near O Terrón but different beach (Con da Mina) | nearest 3606103 O Terrón (141m)
+- 2453 | Praia de Adormideiras | Praia de Durmideiras | osm
+- 2380 | Praia A Cobasa | Praia da Covasa | osm
+- 1979 | Praia Rocas Blancas | Praia de Rochas Brancas | osm
+- 1936 | Praia de Masteiras | Praia das Maceiras | osm
+- 1856 | Praia Simprón | Praia de Ximprón | osm
+- 2141 | Praia de Estrepeiros | Praia do Estripeiro | osm
+- 2262 | Praia de Lauxiñas (Sur) | Praia das Lousiñas (Sur) | osm
+- 2527 | Praia de Vidueiros | Praia de Bidueiro | osm

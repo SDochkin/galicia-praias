@@ -13,6 +13,9 @@
       --accent: #3db8a8;
       --warn: #e0a106;
       --border: #2a3542;
+      --calida: #3dba6e;
+      --templada: #d4b106;
+      --fria: #e05252;
     }
     * { box-sizing: border-box; }
     body {
@@ -47,7 +50,7 @@
       margin-bottom: 1rem;
     }
     label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
-    select {
+    #concello {
       width: 100%;
       padding: 0.65rem 0.75rem;
       border-radius: 0.5rem;
@@ -65,7 +68,7 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
-    ul {
+    ul.beach-list {
       list-style: none;
       margin: 0;
       padding: 0;
@@ -89,9 +92,19 @@
       font: inherit;
     }
     .row:hover, .row.active { border-color: var(--accent); }
-    .rank { color: var(--muted); min-width: 1.5rem; font-variant-numeric: tabular-nums; }
+    .row.band-calida { border-color: color-mix(in srgb, var(--calida) 55%, var(--border)); }
+    .row.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
+    .row.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
     .name { flex: 1; font-weight: 550; }
-    .temp { font-variant-numeric: tabular-nums; font-weight: 650; white-space: nowrap; }
+    .temp {
+      font-variant-numeric: tabular-nums;
+      font-weight: 650;
+      white-space: nowrap;
+    }
+    .temp.band-calida { color: var(--calida); }
+    .temp.band-templada { color: var(--templada); }
+    .temp.band-fria { color: var(--fria); }
+    .trend { margin-left: 0.25rem; font-weight: 700; }
     .src { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
     .hint {
       display: inline-block;
@@ -101,28 +114,44 @@
       font-weight: 700;
       border: 0;
       background: transparent;
-      padding: 0;
+      padding: 0 0.15rem;
       font-size: 0.9rem;
+      line-height: 1;
     }
-    .detail {
-      margin-top: 0.75rem;
-      padding: 0.9rem 1rem;
+    .accordion {
+      margin: -0.15rem 0 0.35rem;
+      padding: 0.85rem 0.9rem;
       border-radius: 0.55rem;
       border: 1px solid var(--border);
       background: #141b23;
     }
-    .detail h3 { margin: 0 0 0.5rem; font-size: 1.05rem; }
-    .detail table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .detail th, .detail td { text-align: left; padding: 0.35rem 0.25rem; border-bottom: 1px solid var(--border); }
-    .detail .close {
-      margin-top: 0.75rem;
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 0.4rem;
-      padding: 0.4rem 0.7rem;
-      cursor: pointer;
+    .accordion h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
+    .accordion h4 {
+      margin: 0.75rem 0 0.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
     }
+    .accordion table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .accordion th, .accordion td {
+      text-align: left;
+      padding: 0.35rem 0.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    #tip {
+      position: fixed;
+      z-index: 40;
+      max-width: min(18rem, calc(100vw - 1.5rem));
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.45rem;
+      border: 1px solid var(--warn);
+      background: #2a2414;
+      color: #f5e6b8;
+      font-size: 0.82rem;
+      line-height: 1.35;
+      pointer-events: none;
+      box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+    }
+    #tip[hidden] { display: none; }
     footer {
       margin-top: 2rem;
       font-size: 0.78rem;
@@ -135,26 +164,35 @@
 <body>
   <main>
     <h1>Temperatura del agua</h1>
-    <p class="sub">Pronósticos de playas en Galicia. No son mediciones in situ.</p>
+    <p class="sub">Temperatura del agua en playas de Galicia. No son mediciones in situ en la orilla.</p>
     <div id="stale" class="banner" hidden></div>
     <label for="concello">Concello</label>
-    <select id="concello"></select>
+    <input id="concello" list="concello-list" autocomplete="off" placeholder="Buscar concello…" />
+    <datalist id="concello-list"></datalist>
     <div id="lists"></div>
-    <div id="detail" class="detail" hidden></div>
     <footer>
-      Datos: <a href="https://www.meteogalicia.gal/" rel="noopener">MeteoGalicia</a>
+      Datos:
+      <a href="https://marine.copernicus.eu/" rel="noopener">E.U. Copernicus Marine Service</a>,
+      <a href="https://www.meteogalicia.gal/" rel="noopener">MeteoGalicia</a>
       (CC BY-SA 4.0) y
       <a href="https://www.aemet.es/" rel="noopener">AEMET</a>.
       Actualizado: <span id="fetchedAt">—</span>.
     </footer>
   </main>
+  <div id="tip" hidden role="tooltip"></div>
   <script>
-    const DISAGREE_TIP =
-      "Dos predicciones distintas. Mostramos MeteoGalicia como cifra principal por ser el servicio gallego. No hay medición in situ.";
+    const BANDS = [
+      { id: "calida", title: "Cálida", min: 20, max: Infinity, cls: "band-calida" },
+      { id: "templada", title: "Templada", min: 17, max: 19, cls: "band-templada" },
+      { id: "fria", title: "Fría", min: -Infinity, max: 16, cls: "band-fria" },
+    ];
 
-    let data = { beaches: [], fetchedAt: "" };
+    let index = { fetchedAt: "", concellos: [], beachConcello: {} };
     let currentConcello = "vigo";
     let currentBeach = null;
+    const concelloCache = new Map();
+    let tipTimer = null;
+    let tipOpen = false;
 
     function trackPage() {
       if (typeof umami !== "undefined" && typeof umami.track === "function") {
@@ -193,141 +231,312 @@
       return dt.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
     }
 
-    function temps(beach) {
-      return beach.sources
-        .map((s) => s.days && s.days[0] && typeof s.days[0].t === "number" ? { name: s.name, t: s.days[0].t } : null)
+    function bandFor(t) {
+      if (typeof t !== "number") return null;
+      if (t >= 20) return BANDS[0];
+      if (t >= 17) return BANDS[1];
+      return BANDS[2];
+    }
+
+    function sourceTemps(beach) {
+      return (beach.sources || [])
+        .map((s) =>
+          s.days && s.days[0] && typeof s.days[0].t === "number"
+            ? { name: s.name, t: s.days[0].t }
+            : null
+        )
         .filter(Boolean);
     }
 
-    function classify(beach) {
-      const ts = temps(beach);
-      if (ts.length === 0) return null;
-      if (ts.length === 1) {
-        return { kind: "single", mid: ts[0].t, min: ts[0].t, max: ts[0].t, ts };
-      }
+    function sourceLine(beach) {
+      return sourceTemps(beach)
+        .map((x) => `${x.name} ${x.t} °C`)
+        .join(" · ");
+    }
+
+    function disagree(beach) {
+      const ts = sourceTemps(beach);
+      if (ts.length < 2) return false;
       const vals = ts.map((x) => x.t);
-      const min = Math.min(...vals);
-      const max = Math.max(...vals);
-      const mid = (min + max) / 2;
-      if (max - min >= 3) return { kind: "disagree", mid, min, max, ts };
-      return { kind: "ranked", mid, min, max, ts };
+      return Math.max(...vals) - Math.min(...vals) >= 3;
     }
 
-    function tempLabel(c) {
-      if (c.kind === "single") return `${c.min} °C`;
-      return `${c.min}–${c.max} °C`;
+    function disagreeText(beach) {
+      return `Las fuentes discrepan (≥3 °C): ${sourceLine(beach)}`;
     }
 
-    function mgTemp(c) {
-      const mg = c.ts.find((x) => x.name === "MeteoGalicia");
-      return mg ? mg.t : c.max;
+    function trendGlyph(trend) {
+      if (trend === "up") return "↑";
+      if (trend === "down") return "↓";
+      if (trend === "flat") return "→";
+      return "";
     }
 
-    function sourceLine(c) {
-      return c.ts.map((x) => `${x.name} ${x.t} °C`).join(" · ");
+    function trendLabel(trend) {
+      if (trend === "up") return "subiendo";
+      if (trend === "down") return "bajando";
+      if (trend === "flat") return "estable";
+      return "";
     }
 
-    function renderSelect() {
-      const sel = document.getElementById("concello");
-      const map = new Map();
-      for (const b of data.beaches) {
-        if (!temps(b).length) continue;
-        map.set(b.concelloSlug, b.concello);
+    function collapseRuns(points) {
+      const rows = [];
+      for (const p of points || []) {
+        if (!p || typeof p.t !== "number") continue;
+        const last = rows[rows.length - 1];
+        if (last && last.t === p.t) {
+          last.end = p.date;
+        } else {
+          rows.push({ start: p.date, end: p.date, t: p.t });
+        }
       }
-      const items = [...map.entries()].sort((a, b) => a[1].localeCompare(b[1], "es"));
-      sel.innerHTML = items
-        .map(([slug, name]) => `<option value="${slug}">${name}</option>`)
-        .join("");
-      if (!map.has(currentConcello) && items.length) currentConcello = items[0][0];
-      sel.value = currentConcello;
+      return rows;
     }
 
-    function renderLists() {
-      const root = document.getElementById("lists");
-      const beaches = data.beaches
-        .filter((b) => b.concelloSlug === currentConcello)
-        .map((b) => ({ beach: b, c: classify(b) }))
-        .filter((x) => x.c);
+    function formatRange(start, end) {
+      if (start === end) return start;
+      return `${start} – ${end}`;
+    }
 
-      const ranked = beaches.filter((x) => x.c.kind === "ranked").sort((a, b) => b.c.mid - a.c.mid);
-      const disagree = beaches.filter((x) => x.c.kind === "disagree").sort((a, b) => a.beach.name.localeCompare(b.beach.name, "es"));
-      const single = beaches.filter((x) => x.c.kind === "single").sort((a, b) => a.beach.name.localeCompare(b.beach.name, "es"));
+    function concelloName(slug) {
+      const hit = index.concellos.find((c) => c.slug === slug);
+      return hit ? hit.name : slug;
+    }
 
-      const parts = [];
-      parts.push(blockHtml("Comparables", ranked, true));
-      parts.push(blockHtml("Las fuentes discrepan", disagree, false, true));
-      parts.push(blockHtml("Una sola fuente", single, false, false));
-      root.innerHTML = parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
+    function setConcelloInput() {
+      const input = document.getElementById("concello");
+      input.value = concelloName(currentConcello);
+    }
 
-      root.querySelectorAll("button.row").forEach((btn) => {
-        btn.addEventListener("click", () => openBeach(btn.dataset.slug));
+    function renderDatalist() {
+      const dl = document.getElementById("concello-list");
+      const items = [...index.concellos].sort((a, b) =>
+        a.name.localeCompare(b.name, "es")
+      );
+      dl.innerHTML = items
+        .map((c) => `<option value="${c.name}"></option>`)
+        .join("");
+      if (!items.some((c) => c.slug === currentConcello) && items.length) {
+        currentConcello = items[0].slug;
+      }
+      setConcelloInput();
+    }
+
+    function matchConcelloInput(raw) {
+      const q = (raw || "").trim().toLowerCase();
+      if (!q) return null;
+      const exact = index.concellos.find((c) => c.name.toLowerCase() === q);
+      if (exact) return exact.slug;
+      const starts = index.concellos.filter((c) =>
+        c.name.toLowerCase().startsWith(q)
+      );
+      if (starts.length === 1) return starts[0].slug;
+      return null;
+    }
+
+    async function loadConcello(slug) {
+      if (concelloCache.has(slug)) return concelloCache.get(slug);
+      const r = await fetch(`./data/${slug}.json`, { cache: "no-store" });
+      if (!r.ok) throw new Error(`${r.status}`);
+      const json = await r.json();
+      concelloCache.set(slug, json);
+      return json;
+    }
+
+    function hideTip() {
+      tipOpen = false;
+      const tip = document.getElementById("tip");
+      tip.hidden = true;
+      tip.textContent = "";
+      document.querySelectorAll(".hint[aria-expanded='true']").forEach((el) => {
+        el.setAttribute("aria-expanded", "false");
       });
     }
 
-    function blockHtml(title, items, numbered, showTip) {
-      if (!items.length) return "";
-      const showRank = numbered && items.length >= 2;
-      const lis = items
-        .map((item, i) => {
-          const { beach, c } = item;
-          const primary =
-            c.kind === "disagree" ? `${mgTemp(c)} °C` : tempLabel(c);
-          const tip =
-            showTip
-              ? `<span class="hint" title="${DISAGREE_TIP.replace(/"/g, "&quot;")} (${sourceLine(c)})" aria-label="Más información">?</span>`
-              : "";
-          const active = currentBeach === beach.slug ? " active" : "";
-          return `<li>
-            <button type="button" class="row${active}" data-slug="${beach.slug}">
-              <span class="rank">${showRank ? i + 1 + "." : ""}</span>
-              <span class="name">${beach.name}${tip}
-                <div class="src">${sourceLine(c)}</div>
-              </span>
-              <span class="temp">${primary}${c.kind === "disagree" ? ` <span class="src">(${tempLabel(c)})</span>` : ""}</span>
-            </button>
-          </li>`;
-        })
-        .join("");
-      return `<section><h2>${title}</h2><ul>${lis}</ul></section>`;
+    function showTip(btn, text, clientX, clientY) {
+      const tip = document.getElementById("tip");
+      tip.textContent = text;
+      tip.hidden = false;
+      tipOpen = true;
+      btn.setAttribute("aria-expanded", "true");
+      const pad = 12;
+      let x = clientX + 10;
+      let y = clientY + 10;
+      tip.style.left = "0px";
+      tip.style.top = "0px";
+      const rect = tip.getBoundingClientRect();
+      if (x + rect.width > window.innerWidth - pad) {
+        x = Math.max(pad, clientX - rect.width - 10);
+      }
+      if (y + rect.height > window.innerHeight - pad) {
+        y = Math.max(pad, clientY - rect.height - 10);
+      }
+      tip.style.left = `${x}px`;
+      tip.style.top = `${y}px`;
     }
 
-    function openBeach(slug, { push = true } = {}) {
-      const beach = data.beaches.find((b) => b.slug === slug);
-      if (!beach) return;
+    function bindHint(btn) {
+      const text = btn.dataset.tip || "";
+      btn.setAttribute("aria-expanded", "false");
+
+      btn.addEventListener("mouseenter", (e) => {
+        showTip(btn, text, e.clientX, e.clientY);
+      });
+      btn.addEventListener("mousemove", (e) => {
+        if (tipOpen) showTip(btn, text, e.clientX, e.clientY);
+      });
+      btn.addEventListener("mouseleave", () => hideTip());
+      btn.addEventListener("focus", (e) => {
+        const r = btn.getBoundingClientRect();
+        showTip(btn, text, r.left + r.width / 2, r.bottom);
+      });
+      btn.addEventListener("blur", () => hideTip());
+
+      btn.addEventListener("pointerdown", (e) => {
+        if (e.pointerType === "touch" || e.pointerType === "pen") {
+          e.stopPropagation();
+          tipTimer = setTimeout(() => {
+            showTip(btn, text, e.clientX, e.clientY);
+          }, 450);
+        }
+      });
+      const clearPress = () => {
+        if (tipTimer) {
+          clearTimeout(tipTimer);
+          tipTimer = null;
+        }
+      };
+      btn.addEventListener("pointerup", clearPress);
+      btn.addEventListener("pointercancel", clearPress);
+      btn.addEventListener("pointerleave", clearPress);
+      btn.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+      btn.addEventListener("click", (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+      });
+    }
+
+    function accordionHtml(beach) {
+      const parts = [`<h3>${beach.name}</h3><p class="src">${concelloName(currentConcello)}</p>`];
+      for (const s of beach.sources || []) {
+        parts.push(`<h4>${s.name}</h4>`);
+        const hist = collapseRuns(s.history || []);
+        const days = collapseRuns(s.days || []);
+        if (hist.length) {
+          parts.push("<table><thead><tr><th>Histórico</th><th>Agua</th></tr></thead><tbody>");
+          for (const r of hist) {
+            parts.push(
+              `<tr><td>${formatRange(r.start, r.end)}</td><td>${r.t} °C</td></tr>`
+            );
+          }
+          parts.push("</tbody></table>");
+        }
+        if (days.length) {
+          parts.push("<table><thead><tr><th>Pronóstico</th><th>Agua</th></tr></thead><tbody>");
+          for (const r of days) {
+            parts.push(
+              `<tr><td>${formatRange(r.start, r.end)}</td><td>${r.t} °C</td></tr>`
+            );
+          }
+          parts.push("</tbody></table>");
+        }
+      }
+      return parts.join("");
+    }
+
+    function rowHtml(beach) {
+      const band = bandFor(beach.t);
+      const bandCls = band ? band.cls : "";
+      const tip = disagree(beach)
+        ? `<button type="button" class="hint" data-tip="${disagreeText(beach).replace(/"/g, "&quot;")}" aria-label="Fuentes discrepan">?</button>`
+        : "";
+      const g = trendGlyph(beach.trend);
+      const trend =
+        g
+          ? `<span class="trend" title="${trendLabel(beach.trend)}">${g}</span>`
+          : "";
+      const active = currentBeach === beach.slug ? " active" : "";
+      const open = currentBeach === beach.slug;
+      return `<li>
+        <button type="button" class="row ${bandCls}${active}" data-slug="${beach.slug}">
+          <span class="name">${beach.name}${tip}
+            <div class="src">${sourceLine(beach)}</div>
+          </span>
+          <span class="temp ${bandCls}">${beach.t} °C${trend}</span>
+        </button>
+        ${open ? `<div class="accordion" data-for="${beach.slug}">${accordionHtml(beach)}</div>` : ""}
+      </li>`;
+    }
+
+    async function renderLists() {
+      const root = document.getElementById("lists");
+      root.innerHTML = '<p class="empty">Cargando…</p>';
+      let payload;
+      try {
+        payload = await loadConcello(currentConcello);
+      } catch (err) {
+        root.innerHTML = `<p class="empty">No se pudo cargar ${currentConcello} (${err.message}).</p>`;
+        return;
+      }
+      const beaches = (payload.beaches || []).filter(
+        (b) => typeof b.t === "number"
+      );
+      const parts = [];
+      for (const band of BANDS) {
+        const items = beaches
+          .filter((b) => {
+            if (band.max === Infinity) return b.t >= band.min;
+            if (band.min === -Infinity) return b.t <= band.max;
+            return b.t >= band.min && b.t <= band.max;
+          })
+          .sort((a, b) => {
+            if (b.t !== a.t) return b.t - a.t;
+            return a.name.localeCompare(b.name, "es");
+          });
+        if (!items.length) continue;
+        parts.push(
+          `<section><h2>${band.title}</h2><ul class="beach-list">${items
+            .map(rowHtml)
+            .join("")}</ul></section>`
+        );
+      }
+      root.innerHTML = parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
+
+      root.querySelectorAll("button.row").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slug = btn.dataset.slug;
+          if (currentBeach === slug) closeBeach();
+          else openBeach(slug);
+        });
+      });
+      root.querySelectorAll("button.hint").forEach(bindHint);
+    }
+
+    async function openBeach(slug, { push = true } = {}) {
+      const mapped = index.beachConcello[slug];
+      if (mapped) currentConcello = mapped;
       currentBeach = slug;
-      currentConcello = beach.concelloSlug;
-      document.getElementById("concello").value = currentConcello;
+      setConcelloInput();
       if (push) setUrl({ c: currentConcello, b: slug }, { track: true });
-      renderLists();
-      const el = document.getElementById("detail");
-      el.hidden = false;
-      const rows = beach.sources
-        .map((s) => {
-          const days = (s.days || [])
-            .map((d) => `<tr><td>${d.date}</td><td>${d.t} °C</td></tr>`)
-            .join("");
-          return `<h4 style="margin:0.75rem 0 0.25rem;font-size:0.9rem;color:var(--muted)">${s.name}</h4>
-            <table><thead><tr><th>Fecha</th><th>Agua</th></tr></thead><tbody>${days}</tbody></table>`;
-        })
-        .join("");
-      el.innerHTML = `<h3>${beach.name}</h3>
-        <p class="src">${beach.concello}</p>
-        ${rows}
-        <button type="button" class="close" id="closeDetail">Cerrar</button>`;
-      document.getElementById("closeDetail").onclick = () => closeDetail();
+      await renderLists();
+      const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
+      if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
     }
 
-    function closeDetail({ push = true } = {}) {
+    function closeBeach({ push = true } = {}) {
       currentBeach = null;
-      document.getElementById("detail").hidden = true;
+      hideTip();
       if (push) setUrl({ c: currentConcello }, { track: true });
       renderLists();
     }
 
     function applyStale() {
       const el = document.getElementById("stale");
-      const day = dayOf(data.fetchedAt);
-      document.getElementById("fetchedAt").textContent = data.fetchedAt || "—";
+      const day = dayOf(index.fetchedAt);
+      document.getElementById("fetchedAt").textContent = index.fetchedAt || "—";
       if (day && day !== todayLocalISO()) {
         el.hidden = false;
         el.textContent = `Datos del ${formatDateEs(day)}.`;
@@ -336,48 +545,68 @@
       }
     }
 
-    function bootFromQuery() {
+    async function bootFromQuery() {
       const { c, b } = parseQuery();
-      if (c) currentConcello = c;
-      renderSelect();
-      if (!c) {
+      if (b && index.beachConcello[b]) {
+        currentConcello = index.beachConcello[b];
+      } else if (c) {
+        currentConcello = c;
+      }
+      renderDatalist();
+      if (!c && !b) {
         setUrl({ c: currentConcello }, { replace: true, track: false });
       }
-      renderLists();
-      if (b) openBeach(b, { push: false });
-      else document.getElementById("detail").hidden = true;
+      if (b) await openBeach(b, { push: false });
+      else await renderLists();
     }
 
-    document.getElementById("concello").addEventListener("change", (e) => {
-      currentConcello = e.target.value;
+    document.getElementById("concello").addEventListener("change", async (e) => {
+      const slug = matchConcelloInput(e.target.value);
+      if (!slug) {
+        setConcelloInput();
+        return;
+      }
+      currentConcello = slug;
       currentBeach = null;
-      document.getElementById("detail").hidden = true;
+      hideTip();
+      setConcelloInput();
       setUrl({ c: currentConcello }, { track: true });
-      renderLists();
+      await renderLists();
     });
 
-    window.addEventListener("popstate", () => {
+    window.addEventListener("popstate", async () => {
       const { c, b } = parseQuery();
-      if (c) currentConcello = c;
-      document.getElementById("concello").value = currentConcello;
-      renderLists();
-      if (b) openBeach(b, { push: false });
+      if (b && index.beachConcello[b]) currentConcello = index.beachConcello[b];
+      else if (c) currentConcello = c;
+      setConcelloInput();
+      if (b) await openBeach(b, { push: false });
       else {
         currentBeach = null;
-        document.getElementById("detail").hidden = true;
+        hideTip();
+        await renderLists();
       }
     });
 
-    fetch("./beaches.json", { cache: "no-store" })
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") hideTip();
+    });
+    document.addEventListener("pointerdown", (e) => {
+      if (!tipOpen) return;
+      const tip = document.getElementById("tip");
+      if (e.target.closest(".hint") || tip.contains(e.target)) return;
+      hideTip();
+    });
+
+    fetch("./data/index.json", { cache: "no-store" })
       .then((r) => r.json())
-      .then((json) => {
-        data = json;
+      .then(async (json) => {
+        index = json;
         applyStale();
-        bootFromQuery();
+        await bootFromQuery();
       })
       .catch((err) => {
         document.getElementById("lists").innerHTML =
-          `<p class="empty">No se pudo cargar beaches.json (${err.message}).</p>`;
+          `<p class="empty">No se pudo cargar data/index.json (${err.message}).</p>`;
       });
   </script>
   <script defer src="https://cloud.umami.is/script.js" data-website-id="d4689bbc-a673-4072-a3e0-5c8a7b5f16c9"></script>

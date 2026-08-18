@@ -27,6 +27,48 @@ FORCE_CONCELLO = {
     2099: "Vilaboa",
 }
 
+# Map-facing names (OSM / local spelling). Slug is recomputed from the new name.
+NAME_OVERRIDES: dict[int, str] = {
+    2453: "Praia de Durmideiras",  # was Adormideiras; OSM
+    2380: "Praia da Covasa",  # was A Cobasa; OSM
+    1979: "Praia de Rochas Brancas",  # was Rocas Blancas; OSM
+    1936: "Praia das Maceiras",  # was Masteiras; OSM
+    1856: "Praia de Ximprón",  # was Simprón; OSM
+    2141: "Praia do Estripeiro",  # was Estrepeiros; OSM
+    2262: "Praia das Lousiñas (Sur)",  # was Lauxiñas; OSM
+    2527: "Praia de Bidueiro",  # was Vidueiros; OSM
+}
+
+# Only documented same-beach aliases (applied after names_agree fails).
+AEMET_FORCE_PAIRS: dict[int, str] = {}
+
+# Mutual-nearest ≤400 m but different beaches — keep unpaired with reason.
+AEMET_REJECT_REASONS: dict[int, str] = {
+    1971: "near Caión but different beach (Salseiras)",
+    2345: "near Mañóns but different beach (Carragueiros)",
+    1959: "near Maior/Malpica but different beach (Canido)",
+    2518: "near Bares but different beach (Vares Oeste)",
+    2421: "near Esteiro but different beach (Portiño)",
+    2526: "near Espasante but different beach (A Concha)",
+    2360: "near Areal but different beach (Caramiñal)",
+    2363: "near Cabío-Lombiña but different beach (Nineiriños)",
+    2394: "near As Furnas but different beach (Río Sieira)",
+    2395: "near Queiruga but different beach (Seiras)",
+    2326: "near Tanxil but different beach (Tronco)",
+    1993: "near San Miguel Reinante/Area Longa but different beach (Coto)",
+    1995: "near Altar/San Cosme but different beach (San Bartolo)",
+    2306: "near Camaxe but different beach (O Bao Sur)",
+    2149: "near Area Grande but different beach (Vilariño)",
+    2154: "near Vilariño-Arnelas/Hio but different beach (Pinténs)",
+    2127: "near Limens but different beach (Santa Marta)",
+    2134: "near Barra-Nerga but different beach (Viñó)",
+    2114: "near Tirán but different beach (Videira)",
+    2070: "near Canido but different beach (O Vao)",
+    2071: "near Bao but different beach (Fontaíña)",
+    2297: "near Compostela but different beach (A Concha)",
+    2285: "near O Terrón but different beach (Con da Mina)",
+}
+
 HEADER_RE = re.compile(
     r'(\d+)\.\s*(?:Ayuntamiento|Concello)\s*[""\u201c\u201d]([^""\u201c\u201d]+)[""\u201c\u201d]'
 )
@@ -283,7 +325,8 @@ def match_aemet(beaches: list[dict], aemet: list[dict], notes: list[str]) -> Non
 
     aemet_by_id = {a["id"]: a for a in aemet}
     pairs = 0
-    rejected_name = []
+    rejected_name: list[str] = []
+    forced: list[str] = []
 
     for b in beaches:
         d, aid = mg_best[b["id"]]
@@ -298,18 +341,57 @@ def match_aemet(beaches: list[dict], aemet: list[dict], notes: list[str]) -> Non
             b["aemetId"] = None
             continue
         a = aemet_by_id[aid]
-        if not names_agree(b["name"], a["name"]):
-            rejected_name.append(
-                f"{b['id']} {b['name']} ↔ {aid} {a['name']} ({d:.0f}m)"
-            )
-            b["aemetId"] = None
+        if names_agree(b["name"], a["name"]):
+            b["aemetId"] = aid
+            pairs += 1
             continue
-        b["aemetId"] = aid
+        force_id = AEMET_FORCE_PAIRS.get(b["id"])
+        if force_id and force_id == aid:
+            b["aemetId"] = force_id
+            pairs += 1
+            forced.append(f"{b['id']} {b['name']} ↔ {aid} {a['name']} ({d:.0f}m)")
+            continue
+        reason = AEMET_REJECT_REASONS.get(
+            b["id"], "name mismatch with mutual-nearest neighbour"
+        )
+        rejected_name.append(
+            f"{b['id']} | reject | {reason} | nearest {aid} {a['name']} ({d:.0f}m)"
+        )
+        b["aemetId"] = None
+
+    # FORCE_PAIRS that were not mutual-nearest (rare) — still apply if id exists
+    for bid, aid in AEMET_FORCE_PAIRS.items():
+        beach = next((x for x in beaches if x["id"] == bid), None)
+        if not beach or beach.get("aemetId"):
+            continue
+        if aid not in aemet_by_id:
+            notes.append(f"AEMET_FORCE_PAIRS missing id {aid} for beach {bid}")
+            continue
+        beach["aemetId"] = aid
         pairs += 1
+        forced.append(f"{bid} {beach['name']} ↔ {aid} (forced)")
 
     notes.append(f"AEMET match pairs: {pairs}")
+    if forced:
+        notes.append(f"AEMET force pairs ({len(forced)}):")
+        notes.extend(f"  - {x}" for x in forced)
     notes.append(f"AEMET rejected by name ({len(rejected_name)}):")
     notes.extend(f"  - {x}" for x in rejected_name)
+
+
+def apply_name_overrides(beaches: list[dict], notes: list[str]) -> None:
+    by_id = {b["id"]: b for b in beaches}
+    for bid, new_name in NAME_OVERRIDES.items():
+        b = by_id.get(bid)
+        if not b:
+            notes.append(f"NAME_OVERRIDES missing beach {bid}")
+            continue
+        old = b["name"]
+        if old == new_name:
+            continue
+        b["name"] = new_name
+        notes.append(f"{bid} | {old} | {new_name} | osm")
+
 
 
 def unique_slugs(beaches: list[dict]) -> None:
@@ -347,6 +429,7 @@ def main() -> None:
     aemet = load_aemet_galicia(csv_path)
     notes.append(f"AEMET Galicia beaches: {len(aemet)}")
     match_aemet(beaches, aemet, notes)
+    apply_name_overrides(beaches, notes)
     unique_slugs(beaches)
 
     concellos = sorted({b["concello"] for b in beaches})
