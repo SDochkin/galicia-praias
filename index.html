@@ -50,6 +50,10 @@
       margin-bottom: 1rem;
     }
     label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
+    .combo {
+      position: relative;
+      margin-bottom: 1.25rem;
+    }
     #concello {
       width: 100%;
       padding: 0.65rem 0.75rem;
@@ -58,7 +62,38 @@
       background: var(--card);
       color: var(--text);
       font-size: 1rem;
-      margin-bottom: 1.25rem;
+    }
+    #concello:focus {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+      border-color: var(--accent);
+    }
+    #concello-listbox {
+      position: absolute;
+      z-index: 30;
+      left: 0;
+      right: 0;
+      top: calc(100% + 0.25rem);
+      margin: 0;
+      padding: 0.25rem;
+      list-style: none;
+      max-height: min(16rem, 50vh);
+      overflow: auto;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.4);
+    }
+    #concello-listbox[hidden] { display: none; }
+    #concello-listbox [role="option"] {
+      padding: 0.55rem 0.7rem;
+      border-radius: 0.35rem;
+      cursor: pointer;
+    }
+    #concello-listbox [role="option"][aria-selected="true"],
+    #concello-listbox [role="option"]:hover {
+      background: #24303c;
+      color: var(--accent);
     }
     h2 {
       font-size: 0.95rem;
@@ -167,8 +202,18 @@
     <p class="sub">Temperatura del agua en playas de Galicia. No son mediciones in situ en la orilla.</p>
     <div id="stale" class="banner" hidden></div>
     <label for="concello">Concello</label>
-    <input id="concello" list="concello-list" autocomplete="off" placeholder="Buscar concello…" />
-    <datalist id="concello-list"></datalist>
+    <div class="combo">
+      <input
+        id="concello"
+        role="combobox"
+        aria-expanded="false"
+        aria-controls="concello-listbox"
+        aria-autocomplete="list"
+        autocomplete="off"
+        placeholder="Buscar concello…"
+      />
+      <ul id="concello-listbox" role="listbox" hidden></ul>
+    </div>
     <div id="lists"></div>
     <footer>
       Datos:
@@ -303,35 +348,98 @@
       return hit ? hit.name : slug;
     }
 
+    let comboActive = -1;
+    let comboFiltered = [];
+
     function setConcelloInput() {
       const input = document.getElementById("concello");
       input.value = concelloName(currentConcello);
     }
 
-    function renderDatalist() {
-      const dl = document.getElementById("concello-list");
-      const items = [...index.concellos].sort((a, b) =>
+    function sortedConcellos() {
+      return [...index.concellos].sort((a, b) =>
         a.name.localeCompare(b.name, "es")
       );
-      dl.innerHTML = items
-        .map((c) => `<option value="${c.name}"></option>`)
+    }
+
+    function filterConcellos(raw) {
+      const q = (raw || "").trim().toLowerCase();
+      const items = sortedConcellos();
+      if (!q) return items;
+      return items.filter((c) => c.name.toLowerCase().includes(q));
+    }
+
+    function closeCombo() {
+      const input = document.getElementById("concello");
+      const list = document.getElementById("concello-listbox");
+      list.hidden = true;
+      input.setAttribute("aria-expanded", "false");
+      input.removeAttribute("aria-activedescendant");
+      comboActive = -1;
+    }
+
+    function openCombo() {
+      const input = document.getElementById("concello");
+      const list = document.getElementById("concello-listbox");
+      list.hidden = false;
+      input.setAttribute("aria-expanded", "true");
+    }
+
+    function renderComboOptions(query) {
+      const list = document.getElementById("concello-listbox");
+      comboFiltered = filterConcellos(query);
+      if (!comboFiltered.length) {
+        list.innerHTML =
+          '<li role="presentation" class="empty" style="padding:0.55rem 0.7rem">Sin resultados</li>';
+        comboActive = -1;
+        openCombo();
+        return;
+      }
+      list.innerHTML = comboFiltered
+        .map(
+          (c, i) =>
+            `<li role="option" id="concello-opt-${i}" data-slug="${c.slug}">${c.name}</li>`
+        )
         .join("");
+      comboActive = -1;
+      openCombo();
+    }
+
+    function setComboActive(i) {
+      const list = document.getElementById("concello-listbox");
+      const input = document.getElementById("concello");
+      const opts = [...list.querySelectorAll('[role="option"]')];
+      if (!opts.length) return;
+      comboActive = ((i % opts.length) + opts.length) % opts.length;
+      opts.forEach((el, idx) => {
+        el.setAttribute("aria-selected", idx === comboActive ? "true" : "false");
+      });
+      const active = opts[comboActive];
+      input.setAttribute("aria-activedescendant", active.id);
+      active.scrollIntoView({ block: "nearest" });
+    }
+
+    function ensureConcelloReady() {
+      const items = sortedConcellos();
       if (!items.some((c) => c.slug === currentConcello) && items.length) {
         currentConcello = items[0].slug;
       }
       setConcelloInput();
     }
 
-    function matchConcelloInput(raw) {
-      const q = (raw || "").trim().toLowerCase();
-      if (!q) return null;
-      const exact = index.concellos.find((c) => c.name.toLowerCase() === q);
-      if (exact) return exact.slug;
-      const starts = index.concellos.filter((c) =>
-        c.name.toLowerCase().startsWith(q)
-      );
-      if (starts.length === 1) return starts[0].slug;
-      return null;
+    async function selectConcello(slug) {
+      if (!slug || slug === currentConcello) {
+        setConcelloInput();
+        closeCombo();
+        return;
+      }
+      currentConcello = slug;
+      currentBeach = null;
+      hideTip();
+      setConcelloInput();
+      closeCombo();
+      setUrl({ c: currentConcello }, { track: true });
+      await renderLists();
     }
 
     async function loadConcello(slug) {
@@ -552,7 +660,7 @@
       } else if (c) {
         currentConcello = c;
       }
-      renderDatalist();
+      ensureConcelloReady();
       if (!c && !b) {
         setUrl({ c: currentConcello }, { replace: true, track: false });
       }
@@ -560,18 +668,67 @@
       else await renderLists();
     }
 
-    document.getElementById("concello").addEventListener("change", async (e) => {
-      const slug = matchConcelloInput(e.target.value);
-      if (!slug) {
+    const concelloInput = document.getElementById("concello");
+    const concelloList = document.getElementById("concello-listbox");
+
+    concelloInput.addEventListener("focus", () => {
+      renderComboOptions(concelloInput.value);
+    });
+
+    concelloInput.addEventListener("click", () => {
+      renderComboOptions(concelloInput.value);
+    });
+
+    concelloInput.addEventListener("input", () => {
+      renderComboOptions(concelloInput.value);
+    });
+
+    concelloInput.addEventListener("keydown", async (e) => {
+      const open = concelloInput.getAttribute("aria-expanded") === "true";
+      if (e.key === "ArrowDown") {
+        e.preventDefault();
+        if (!open) renderComboOptions(concelloInput.value);
+        setComboActive(comboActive + 1);
+      } else if (e.key === "ArrowUp") {
+        e.preventDefault();
+        if (!open) renderComboOptions(concelloInput.value);
+        setComboActive(comboActive - 1);
+      } else if (e.key === "Enter") {
+        e.preventDefault();
+        if (comboActive >= 0 && comboFiltered[comboActive]) {
+          await selectConcello(comboFiltered[comboActive].slug);
+        } else {
+          const hits = filterConcellos(concelloInput.value);
+          const exact = hits.find(
+            (c) => c.name.toLowerCase() === concelloInput.value.trim().toLowerCase()
+          );
+          if (exact) await selectConcello(exact.slug);
+          else if (hits.length === 1) await selectConcello(hits[0].slug);
+          else {
+            setConcelloInput();
+            closeCombo();
+          }
+        }
+      } else if (e.key === "Escape") {
+        e.preventDefault();
         setConcelloInput();
-        return;
+        closeCombo();
       }
-      currentConcello = slug;
-      currentBeach = null;
-      hideTip();
-      setConcelloInput();
-      setUrl({ c: currentConcello }, { track: true });
-      await renderLists();
+    });
+
+    concelloList.addEventListener("mousedown", (e) => {
+      const opt = e.target.closest('[role="option"]');
+      if (!opt) return;
+      e.preventDefault();
+      selectConcello(opt.dataset.slug);
+    });
+
+    concelloInput.addEventListener("blur", () => {
+      window.setTimeout(() => {
+        if (document.activeElement === concelloInput) return;
+        setConcelloInput();
+        closeCombo();
+      }, 120);
     });
 
     window.addEventListener("popstate", async () => {
@@ -579,6 +736,7 @@
       if (b && index.beachConcello[b]) currentConcello = index.beachConcello[b];
       else if (c) currentConcello = c;
       setConcelloInput();
+      closeCombo();
       if (b) await openBeach(b, { push: false });
       else {
         currentBeach = null;
@@ -591,6 +749,11 @@
       if (e.key === "Escape") hideTip();
     });
     document.addEventListener("pointerdown", (e) => {
+      if (e.target.closest(".combo")) return;
+      if (concelloInput.getAttribute("aria-expanded") === "true") {
+        setConcelloInput();
+        closeCombo();
+      }
       if (!tipOpen) return;
       const tip = document.getElementById("tip");
       if (e.target.closest(".hint") || tip.contains(e.target)) return;
