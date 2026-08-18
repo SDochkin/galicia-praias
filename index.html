@@ -56,7 +56,7 @@
     }
     #concello {
       width: 100%;
-      padding: 0.65rem 0.75rem;
+      padding: 0.65rem 2.85rem 0.65rem 0.75rem;
       border-radius: 0.5rem;
       border: 1px solid var(--border);
       background: var(--card);
@@ -68,6 +68,23 @@
       outline-offset: 1px;
       border-color: var(--accent);
     }
+    #concello-clear {
+      position: absolute;
+      right: 0.15rem;
+      top: 50%;
+      transform: translateY(-50%);
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      border: 0;
+      background: transparent;
+      color: var(--muted);
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+      border-radius: 0.35rem;
+    }
+    #concello-clear:hover { color: var(--text); }
+    #concello-clear[hidden] { display: none; }
     #concello-listbox {
       position: absolute;
       z-index: 30;
@@ -112,44 +129,70 @@
       gap: 0.4rem;
     }
     .row {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0.5rem;
       align-items: baseline;
-      justify-content: space-between;
-      gap: 0.75rem;
       width: 100%;
-      text-align: left;
       padding: 0.75rem 0.85rem;
       border-radius: 0.55rem;
       border: 1px solid var(--border);
       background: var(--card);
       color: inherit;
-      cursor: pointer;
-      font: inherit;
     }
     .row:hover, .row.active { border-color: var(--accent); }
     .row.band-calida { border-color: color-mix(in srgb, var(--calida) 55%, var(--border)); }
     .row.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
     .row.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
-    .name { flex: 1; font-weight: 550; }
-    .temp {
+    .row-main {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 0 0.75rem;
+      min-width: 0;
+      background: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      color: inherit;
+      font: inherit;
+      text-align: left;
+      cursor: pointer;
+    }
+    .row-main .name {
+      grid-column: 1;
+      font-weight: 550;
+      min-width: 0;
+    }
+    .row-main .temp {
+      grid-column: 2;
+      grid-row: 1;
       font-variant-numeric: tabular-nums;
       font-weight: 650;
       white-space: nowrap;
+    }
+    .row-main .src {
+      grid-column: 1 / -1;
+      min-width: 0;
+      color: var(--muted);
+      font-size: 0.78rem;
+      margin-top: 0.15rem;
     }
     .temp.band-calida { color: var(--calida); }
     .temp.band-templada { color: var(--templada); }
     .temp.band-fria { color: var(--fria); }
     .trend { margin-left: 0.25rem; font-weight: 700; }
-    .src { color: var(--muted); font-size: 0.78rem; margin-top: 0.15rem; }
     .hint {
-      display: inline-block;
-      margin-left: 0.35rem;
+      min-width: 2.75rem;
+      min-height: 2.75rem;
+      display: grid;
+      place-items: center;
+      align-self: center;
       color: var(--warn);
       cursor: help;
       font-weight: 700;
       border: 0;
       background: transparent;
-      padding: 0 0.15rem;
+      padding: 0;
       font-size: 0.9rem;
       line-height: 1;
     }
@@ -166,12 +209,27 @@
       font-size: 0.9rem;
       color: var(--muted);
     }
+    .accordion .src { color: var(--muted); font-size: 0.78rem; margin: 0 0 0.55rem; }
     .accordion table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .accordion th, .accordion td {
       text-align: left;
       padding: 0.35rem 0.25rem;
       border-bottom: 1px solid var(--border);
     }
+    .maps {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2.75rem;
+      margin-top: 0.35rem;
+      padding: 0.45rem 0.85rem;
+      border-radius: 0.55rem;
+      border: 1px solid var(--border);
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    .maps:hover { border-color: var(--accent); }
     #tip {
       position: fixed;
       z-index: 40;
@@ -212,6 +270,7 @@
         autocomplete="off"
         placeholder="Buscar concello…"
       />
+      <button type="button" id="concello-clear" hidden aria-label="Limpiar">×</button>
       <ul id="concello-listbox" role="listbox" hidden></ul>
     </div>
     <div id="lists"></div>
@@ -227,17 +286,18 @@
   <div id="tip" hidden role="tooltip"></div>
   <script>
     const BANDS = [
-      { id: "calida", title: "Cálida", min: 20, max: Infinity, cls: "band-calida" },
-      { id: "templada", title: "Templada", min: 17, max: 19, cls: "band-templada" },
-      { id: "fria", title: "Fría", min: -Infinity, max: 16, cls: "band-fria" },
+      { id: "calida", title: "Cálida", cls: "band-calida" },
+      { id: "templada", title: "Templada", cls: "band-templada" },
+      { id: "fria", title: "Fría", cls: "band-fria" },
     ];
 
-    let index = { fetchedAt: "", concellos: [], beachConcello: {} };
-    let currentConcello = "vigo";
+    let index = { fetchedAt: "", concellos: [], beachConcello: {}, top: [] };
+    let refDay = "";
+    let currentConcello = null;
     let currentBeach = null;
     const concelloCache = new Map();
-    let tipTimer = null;
     let tipOpen = false;
+    let tipOwner = null;
 
     function trackPage() {
       if (typeof umami !== "undefined" && typeof umami.track === "function") {
@@ -246,7 +306,11 @@
     }
 
     function setUrl(params, { replace = false, track = true } = {}) {
-      const q = new URLSearchParams(params).toString();
+      const clean = {};
+      for (const [k, v] of Object.entries(params || {})) {
+        if (v != null && v !== "") clean[k] = v;
+      }
+      const q = new URLSearchParams(clean).toString();
       const url = q ? `?${q}` : location.pathname;
       if (replace) history.replaceState(null, "", url);
       else history.pushState(null, "", url);
@@ -271,9 +335,17 @@
     }
 
     function formatDateEs(isoDay) {
+      if (!isoDay) return "";
       const [y, m, d] = isoDay.split("-").map(Number);
       const dt = new Date(y, m - 1, d);
       return dt.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+    }
+
+    function fmtT(t) {
+      return Number(t).toLocaleString("es-ES", {
+        minimumFractionDigits: 1,
+        maximumFractionDigits: 1,
+      });
     }
 
     function bandFor(t) {
@@ -283,20 +355,30 @@
       return BANDS[2];
     }
 
+    function dayEntry(days, day) {
+      return (days || []).find(
+        (d) => d && d.date === day && typeof d.t === "number"
+      );
+    }
+
     function sourceTemps(beach) {
       return (beach.sources || [])
-        .map((s) =>
-          s.days && s.days[0] && typeof s.days[0].t === "number"
-            ? { name: s.name, t: s.days[0].t }
-            : null
-        )
+        .map((s) => {
+          const d = dayEntry(s.days, refDay);
+          return d ? { name: s.name, t: d.t } : null;
+        })
         .filter(Boolean);
     }
 
-    function sourceLine(beach) {
-      return sourceTemps(beach)
-        .map((x) => `${x.name} ${x.t} °C`)
-        .join(" · ");
+    function sourceLine(beach, { withConcello = false } = {}) {
+      const bits = sourceTemps(beach).map((x) => `${x.name} ${fmtT(x.t)} °C`);
+      if (withConcello) {
+        const c =
+          beach.concello ||
+          concelloName(index.beachConcello[beach.slug] || beach.concelloSlug);
+        if (c) bits.unshift(c);
+      }
+      return bits.join(" · ");
     }
 
     function disagree(beach) {
@@ -308,6 +390,26 @@
 
     function disagreeText(beach) {
       return `Las fuentes discrepan (≥3 °C): ${sourceLine(beach)}`;
+    }
+
+    function lastKnown(beach) {
+      let best = null;
+      for (const s of beach.sources || []) {
+        for (const d of [...(s.history || []), ...(s.days || [])]) {
+          if (!d || typeof d.t !== "number" || !d.date) continue;
+          if (refDay && d.date >= refDay) continue;
+          if (!best || d.date > best.date) {
+            best = { date: d.date, t: d.t, name: s.name };
+          }
+        }
+      }
+      return best;
+    }
+
+    function dashTip(beach) {
+      const last = lastKnown(beach);
+      if (!last) return "Sin dato de hoy.";
+      return `Sin dato de hoy. Último: ${formatDateEs(last.date)} — ${last.name} ${fmtT(last.t)} °C`;
     }
 
     function trendGlyph(trend) {
@@ -344,6 +446,7 @@
     }
 
     function concelloName(slug) {
+      if (!slug) return "";
       const hit = index.concellos.find((c) => c.slug === slug);
       return hit ? hit.name : slug;
     }
@@ -351,9 +454,16 @@
     let comboActive = -1;
     let comboFiltered = [];
 
+    function syncClearButton() {
+      const input = document.getElementById("concello");
+      const btn = document.getElementById("concello-clear");
+      btn.hidden = !input.value.trim();
+    }
+
     function setConcelloInput() {
       const input = document.getElementById("concello");
-      input.value = concelloName(currentConcello);
+      input.value = currentConcello ? concelloName(currentConcello) : "";
+      syncClearButton();
     }
 
     function sortedConcellos() {
@@ -420,6 +530,10 @@
     }
 
     function ensureConcelloReady() {
+      if (currentConcello === null) {
+        setConcelloInput();
+        return;
+      }
       const items = sortedConcellos();
       if (!items.some((c) => c.slug === currentConcello) && items.length) {
         currentConcello = items[0].slug;
@@ -442,6 +556,16 @@
       await renderLists();
     }
 
+    async function clearConcello() {
+      currentConcello = null;
+      currentBeach = null;
+      hideTip();
+      setConcelloInput();
+      closeCombo();
+      setUrl({}, { track: true });
+      await renderLists();
+    }
+
     async function loadConcello(slug) {
       if (concelloCache.has(slug)) return concelloCache.get(slug);
       const r = await fetch(`./data/${slug}.json`, { cache: "no-store" });
@@ -453,11 +577,12 @@
 
     function hideTip() {
       tipOpen = false;
+      tipOwner = null;
       const tip = document.getElementById("tip");
       tip.hidden = true;
       tip.textContent = "";
-      document.querySelectorAll(".hint[aria-expanded='true']").forEach((el) => {
-        el.setAttribute("aria-expanded", "false");
+      document.querySelectorAll(".hint[aria-describedby='tip']").forEach((el) => {
+        el.removeAttribute("aria-describedby");
       });
     }
 
@@ -466,7 +591,11 @@
       tip.textContent = text;
       tip.hidden = false;
       tipOpen = true;
-      btn.setAttribute("aria-expanded", "true");
+      tipOwner = btn;
+      document.querySelectorAll(".hint[aria-describedby='tip']").forEach((el) => {
+        el.removeAttribute("aria-describedby");
+      });
+      btn.setAttribute("aria-describedby", "tip");
       const pad = 12;
       let x = clientX + 10;
       let y = clientY + 10;
@@ -483,70 +612,81 @@
       tip.style.top = `${y}px`;
     }
 
+    function canHover() {
+      return window.matchMedia("(hover: hover)").matches;
+    }
+
     function bindHint(btn) {
       const text = btn.dataset.tip || "";
-      btn.setAttribute("aria-expanded", "false");
 
       btn.addEventListener("mouseenter", (e) => {
+        if (!canHover()) return;
         showTip(btn, text, e.clientX, e.clientY);
       });
       btn.addEventListener("mousemove", (e) => {
-        if (tipOpen) showTip(btn, text, e.clientX, e.clientY);
+        if (!canHover() || !tipOpen) return;
+        showTip(btn, text, e.clientX, e.clientY);
       });
-      btn.addEventListener("mouseleave", () => hideTip());
-      btn.addEventListener("focus", (e) => {
+      btn.addEventListener("mouseleave", () => {
+        if (!canHover()) return;
+        hideTip();
+      });
+      btn.addEventListener("focus", () => {
         const r = btn.getBoundingClientRect();
         showTip(btn, text, r.left + r.width / 2, r.bottom);
       });
       btn.addEventListener("blur", () => hideTip());
-
-      btn.addEventListener("pointerdown", (e) => {
-        if (e.pointerType === "touch" || e.pointerType === "pen") {
-          e.stopPropagation();
-          tipTimer = setTimeout(() => {
-            showTip(btn, text, e.clientX, e.clientY);
-          }, 450);
-        }
-      });
-      const clearPress = () => {
-        if (tipTimer) {
-          clearTimeout(tipTimer);
-          tipTimer = null;
-        }
-      };
-      btn.addEventListener("pointerup", clearPress);
-      btn.addEventListener("pointercancel", clearPress);
-      btn.addEventListener("pointerleave", clearPress);
-      btn.addEventListener("contextmenu", (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-      });
       btn.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();
+        if (tipOpen && tipOwner === btn) {
+          hideTip();
+          return;
+        }
+        const r = btn.getBoundingClientRect();
+        showTip(btn, text, r.left + r.width / 2, r.bottom);
       });
     }
 
+    function beachConcelloLabel(beach) {
+      return (
+        beach.concello ||
+        concelloName(index.beachConcello[beach.slug] || beach.concelloSlug)
+      );
+    }
+
     function accordionHtml(beach) {
-      const parts = [`<h3>${beach.name}</h3><p class="src">${concelloName(currentConcello)}</p>`];
+      const concello = beachConcelloLabel(beach);
+      const parts = [
+        `<h3>${beach.name}</h3><p class="src">${concello}</p>`,
+      ];
+      const q = encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
+      parts.push(
+        `<a class="maps" target="_blank" rel="noopener" ` +
+          `href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Ver en Google Maps</a>`
+      );
       for (const s of beach.sources || []) {
         parts.push(`<h4>${s.name}</h4>`);
         const hist = collapseRuns(s.history || []);
         const days = collapseRuns(s.days || []);
         if (hist.length) {
-          parts.push("<table><thead><tr><th>Histórico</th><th>Agua</th></tr></thead><tbody>");
+          parts.push(
+            "<table><thead><tr><th>Histórico</th><th>Agua</th></tr></thead><tbody>"
+          );
           for (const r of hist) {
             parts.push(
-              `<tr><td>${formatRange(r.start, r.end)}</td><td>${r.t} °C</td></tr>`
+              `<tr><td>${formatRange(r.start, r.end)}</td><td>${fmtT(r.t)} °C</td></tr>`
             );
           }
           parts.push("</tbody></table>");
         }
         if (days.length) {
-          parts.push("<table><thead><tr><th>Pronóstico</th><th>Agua</th></tr></thead><tbody>");
+          parts.push(
+            "<table><thead><tr><th>Pronóstico</th><th>Agua</th></tr></thead><tbody>"
+          );
           for (const r of days) {
             parts.push(
-              `<tr><td>${formatRange(r.start, r.end)}</td><td>${r.t} °C</td></tr>`
+              `<tr><td>${formatRange(r.start, r.end)}</td><td>${fmtT(r.t)} °C</td></tr>`
             );
           }
           parts.push("</tbody></table>");
@@ -555,65 +695,97 @@
       return parts.join("");
     }
 
-    function rowHtml(beach) {
-      const band = bandFor(beach.t);
+    function escapeAttr(s) {
+      return String(s)
+        .replace(/&/g, "&amp;")
+        .replace(/"/g, "&quot;")
+        .replace(/</g, "&lt;");
+    }
+
+    function rowHtml(beach, { topMode = false } = {}) {
+      const hasT = typeof beach.t === "number";
+      const band = hasT ? bandFor(beach.t) : null;
       const bandCls = band ? band.cls : "";
-      const tip = disagree(beach)
-        ? `<button type="button" class="hint" data-tip="${disagreeText(beach).replace(/"/g, "&quot;")}" aria-label="Fuentes discrepan">?</button>`
+      let tipBtn = "";
+      if (hasT && disagree(beach)) {
+        tipBtn = `<button type="button" class="hint" data-tip="${escapeAttr(
+          disagreeText(beach)
+        )}" aria-label="Fuentes discrepan">?</button>`;
+      } else if (!hasT) {
+        tipBtn = `<button type="button" class="hint" data-tip="${escapeAttr(
+          dashTip(beach)
+        )}" aria-label="Sin dato de hoy">?</button>`;
+      }
+      const g = hasT ? trendGlyph(beach.trend) : "";
+      const trend = g
+        ? `<span class="trend" title="${trendLabel(beach.trend)}">${g}</span>`
         : "";
-      const g = trendGlyph(beach.trend);
-      const trend =
-        g
-          ? `<span class="trend" title="${trendLabel(beach.trend)}">${g}</span>`
-          : "";
       const active = currentBeach === beach.slug ? " active" : "";
       const open = currentBeach === beach.slug;
+      const tempText = hasT ? `${fmtT(beach.t)} °C${trend}` : "—";
+      const src = sourceLine(beach, { withConcello: topMode });
       return `<li>
-        <button type="button" class="row ${bandCls}${active}" data-slug="${beach.slug}">
-          <span class="name">${beach.name}${tip}
-            <div class="src">${sourceLine(beach)}</div>
-          </span>
-          <span class="temp ${bandCls}">${beach.t} °C${trend}</span>
-        </button>
-        ${open ? `<div class="accordion" data-for="${beach.slug}">${accordionHtml(beach)}</div>` : ""}
+        <div class="row ${bandCls}${active}">
+          <button type="button" class="row-main" data-slug="${beach.slug}" aria-expanded="${
+        open ? "true" : "false"
+      }">
+            <span class="name">${beach.name}</span>
+            <span class="temp ${bandCls}">${tempText}</span>
+            <span class="src">${src}</span>
+          </button>
+          ${tipBtn}
+        </div>
+        ${
+          open
+            ? `<div class="accordion" data-for="${beach.slug}">${accordionHtml(
+                beach
+              )}</div>`
+            : ""
+        }
       </li>`;
     }
 
-    async function renderLists() {
-      const root = document.getElementById("lists");
-      root.innerHTML = '<p class="empty">Cargando…</p>';
-      let payload;
-      try {
-        payload = await loadConcello(currentConcello);
-      } catch (err) {
-        root.innerHTML = `<p class="empty">No se pudo cargar ${currentConcello} (${err.message}).</p>`;
-        return;
-      }
-      const beaches = (payload.beaches || []).filter(
-        (b) => typeof b.t === "number"
+    function sortBeaches(items) {
+      return [...items].sort((a, b) => {
+        if (typeof a.t === "number" && typeof b.t === "number" && b.t !== a.t) {
+          return b.t - a.t;
+        }
+        return a.name.localeCompare(b.name, "es");
+      });
+    }
+
+    function renderBanded(beaches, { topMode = false } = {}) {
+      const withT = beaches.filter((b) => typeof b.t === "number");
+      const withoutT = beaches.filter(
+        (b) => typeof b.t !== "number" && (b.sources || []).length
       );
       const parts = [];
       for (const band of BANDS) {
-        const items = beaches
-          .filter((b) => {
-            if (band.max === Infinity) return b.t >= band.min;
-            if (band.min === -Infinity) return b.t <= band.max;
-            return b.t >= band.min && b.t <= band.max;
-          })
-          .sort((a, b) => {
-            if (b.t !== a.t) return b.t - a.t;
-            return a.name.localeCompare(b.name, "es");
-          });
+        const items = sortBeaches(
+          withT.filter((b) => bandFor(b.t)?.id === band.id)
+        );
         if (!items.length) continue;
         parts.push(
           `<section><h2>${band.title}</h2><ul class="beach-list">${items
-            .map(rowHtml)
+            .map((b) => rowHtml(b, { topMode }))
             .join("")}</ul></section>`
         );
       }
-      root.innerHTML = parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
+      if (withoutT.length) {
+        const items = [...withoutT].sort((a, b) =>
+          a.name.localeCompare(b.name, "es")
+        );
+        parts.push(
+          `<section><h2>Sin dato de hoy</h2><ul class="beach-list">${items
+            .map((b) => rowHtml(b, { topMode }))
+            .join("")}</ul></section>`
+        );
+      }
+      return parts;
+    }
 
-      root.querySelectorAll("button.row").forEach((btn) => {
+    function bindList(root) {
+      root.querySelectorAll("button.row-main").forEach((btn) => {
         btn.addEventListener("click", () => {
           const slug = btn.dataset.slug;
           if (currentBeach === slug) closeBeach();
@@ -623,8 +795,71 @@
       root.querySelectorAll("button.hint").forEach(bindHint);
     }
 
+    async function enrichTopBeach(beach) {
+      if ((beach.sources || []).some((s) => s.history)) return beach;
+      const cslug = index.beachConcello[beach.slug] || beach.concelloSlug;
+      if (!cslug) return beach;
+      try {
+        const payload = await loadConcello(cslug);
+        const full = (payload.beaches || []).find((b) => b.slug === beach.slug);
+        if (full) {
+          return {
+            ...beach,
+            ...full,
+            concello: beach.concello || beachConcelloLabel(beach),
+            concelloSlug: cslug,
+          };
+        }
+      } catch (_) {
+        /* keep slim */
+      }
+      return beach;
+    }
+
+    async function renderLists() {
+      const root = document.getElementById("lists");
+      root.innerHTML = '<p class="empty">Cargando…</p>';
+
+      if (currentConcello === null) {
+        let top = [...(index.top || [])];
+        if (currentBeach) {
+          const idx = top.findIndex((b) => b.slug === currentBeach);
+          if (idx >= 0) {
+            top[idx] = await enrichTopBeach(top[idx]);
+          }
+        }
+        const parts = renderBanded(top, { topMode: true });
+        root.innerHTML = parts.length
+          ? `<h2>Las más cálidas</h2>${parts.join("")}`
+          : '<p class="empty">Sin destacadas.</p>';
+        bindList(root);
+        return;
+      }
+
+      let payload;
+      try {
+        payload = await loadConcello(currentConcello);
+      } catch (err) {
+        root.innerHTML = `<p class="empty">No se pudo cargar ${currentConcello} (${err.message}).</p>`;
+        return;
+      }
+      const beaches = payload.beaches || [];
+      const parts = renderBanded(beaches, { topMode: false });
+      root.innerHTML =
+        parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
+      bindList(root);
+    }
+
     async function openBeach(slug, { push = true } = {}) {
       const mapped = index.beachConcello[slug];
+      if (currentConcello === null) {
+        currentBeach = slug;
+        // stay in top; load history without changing URL / concello
+        await renderLists();
+        const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
+        if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
+        return;
+      }
       if (mapped) currentConcello = mapped;
       currentBeach = slug;
       setConcelloInput();
@@ -637,7 +872,10 @@
     function closeBeach({ push = true } = {}) {
       currentBeach = null;
       hideTip();
-      if (push) setUrl({ c: currentConcello }, { track: true });
+      if (push) {
+        if (currentConcello === null) setUrl({}, { track: true });
+        else setUrl({ c: currentConcello }, { track: true });
+      }
       renderLists();
     }
 
@@ -659,17 +897,22 @@
         currentConcello = index.beachConcello[b];
       } else if (c) {
         currentConcello = c;
+      } else {
+        currentConcello = null;
       }
       ensureConcelloReady();
-      if (!c && !b) {
-        setUrl({ c: currentConcello }, { replace: true, track: false });
-      }
       if (b) await openBeach(b, { push: false });
       else await renderLists();
     }
 
     const concelloInput = document.getElementById("concello");
     const concelloList = document.getElementById("concello-listbox");
+    const concelloClear = document.getElementById("concello-clear");
+
+    concelloClear.addEventListener("click", (e) => {
+      e.preventDefault();
+      clearConcello();
+    });
 
     concelloInput.addEventListener("focus", () => {
       renderComboOptions(concelloInput.value);
@@ -680,6 +923,7 @@
     });
 
     concelloInput.addEventListener("input", () => {
+      syncClearButton();
       renderComboOptions(concelloInput.value);
     });
 
@@ -700,7 +944,8 @@
         } else {
           const hits = filterConcellos(concelloInput.value);
           const exact = hits.find(
-            (c) => c.name.toLowerCase() === concelloInput.value.trim().toLowerCase()
+            (c) =>
+              c.name.toLowerCase() === concelloInput.value.trim().toLowerCase()
           );
           if (exact) await selectConcello(exact.slug);
           else if (hits.length === 1) await selectConcello(hits[0].slug);
@@ -726,6 +971,7 @@
     concelloInput.addEventListener("blur", () => {
       window.setTimeout(() => {
         if (document.activeElement === concelloInput) return;
+        if (document.activeElement === concelloClear) return;
         setConcelloInput();
         closeCombo();
       }, 120);
@@ -735,6 +981,7 @@
       const { c, b } = parseQuery();
       if (b && index.beachConcello[b]) currentConcello = index.beachConcello[b];
       else if (c) currentConcello = c;
+      else currentConcello = null;
       setConcelloInput();
       closeCombo();
       if (b) await openBeach(b, { push: false });
@@ -761,9 +1008,14 @@
     });
 
     fetch("./data/index.json", { cache: "no-store" })
-      .then((r) => r.json())
+      .then((r) => {
+        if (!r.ok) throw new Error(`${r.status}`);
+        return r.json();
+      })
       .then(async (json) => {
         index = json;
+        if (!index.top) index.top = [];
+        refDay = dayOf(index.fetchedAt);
         applyStale();
         await bootFromQuery();
       })

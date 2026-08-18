@@ -32,6 +32,8 @@ GAL_LON = (-9.4, -6.7)
 CMEMS_SEARCH_RADIUS = 2  # cells
 HISTORY_DAYS = 7
 PRIMARY_ORDER = ("Copernicus", "MeteoGalicia")
+TOP_CAP = 20
+TOP_PER_CONCELLO = 2
 
 
 def today_utc() -> date:
@@ -52,6 +54,17 @@ def http_get(url: str, headers: dict | None = None, timeout: int = 45) -> tuple[
     return body, hdrs
 
 
+def _round_t(t: Any) -> float:
+    return round(float(t), 1)
+
+
+def day_for_date(days: list[dict], day: str) -> dict | None:
+    for d in days or []:
+        if d.get("date") == day and isinstance(d.get("t"), (int, float)):
+            return d
+    return None
+
+
 def fetch_mg(beach_id: int) -> list[dict] | None:
     url = MG_URL.format(beach_id)
     for attempt in range(3):
@@ -63,15 +76,13 @@ def fetch_mg(beach_id: int) -> list[dict] | None:
             for d in days[:3]:
                 t = d.get("tAuga")
                 if t is None or t == -9999:
-                    return None
+                    continue
                 raw = d["dataPredicion"]
                 day = raw[:10] if isinstance(raw, str) else str(raw)[:10]
-                out.append({"date": day, "t": int(t)})
-            if len(out) < 1:
+                out.append({"date": day, "t": _round_t(t)})
+            if not out:
                 return None
-            while len(out) < 3 and out:
-                out.append(out[-1])
-            return out[:3]
+            return out
         except Exception:  # noqa: BLE001
             if attempt == 2:
                 return None
@@ -122,12 +133,12 @@ def fetch_aemet(aemet_id: str, api_key: str) -> list[dict] | None:
                 else:
                     day = fecha[:10]
                 t = d["tAgua"]["valor1"]
-                out.append({"date": day, "t": int(t)})
+                if t is None:
+                    continue
+                out.append({"date": day, "t": _round_t(t)})
             if not out:
                 return None
-            while len(out) < 3:
-                out.append(out[-1])
-            return out[:3]
+            return out
         except urllib.error.HTTPError as exc:
             if exc.code == 429:
                 remaining_pause = min(remaining_pause * 2, 30)
@@ -174,43 +185,41 @@ def previous_source(prev_beach: dict | None, source_name: str) -> dict | None:
 
 def source_fresh(src: dict, max_age_days: int = 3) -> bool:
     try:
-        d0 = date.fromisoformat(src["days"][0]["date"])
+        dates = [d.get("date") for d in src.get("days") or [] if d.get("date")]
+        if not dates:
+            return False
+        d0 = date.fromisoformat(min(dates))
     except (KeyError, IndexError, ValueError, TypeError):
         return False
     return (today_utc() - d0).days <= max_age_days
 
 
-def pick_primary(sources: list[dict], today: str) -> tuple[int | None, str | None]:
-    """Return (t, source_name) for today's primary figure."""
+def pick_primary(sources: list[dict], today: str) -> tuple[float | None, str | None]:
+    """Return (t, source_name) for today's primary figure only."""
     by_name = {s["name"]: s for s in sources if s.get("days")}
     for name in PRIMARY_ORDER:
         s = by_name.get(name)
         if not s:
             continue
-        d0 = s["days"][0]
-        if d0.get("date") == today and isinstance(d0.get("t"), (int, float)):
-            return int(d0["t"]), name
-    # fallback: any source with today, else first available day-0
+        d = day_for_date(s["days"], today)
+        if d is not None:
+            return float(d["t"]), name
     for s in sources:
-        d0 = (s.get("days") or [None])[0]
-        if d0 and d0.get("date") == today and isinstance(d0.get("t"), (int, float)):
-            return int(d0["t"]), s["name"]
-    for s in sources:
-        d0 = (s.get("days") or [None])[0]
-        if d0 and isinstance(d0.get("t"), (int, float)):
-            return int(d0["t"]), s["name"]
+        d = day_for_date(s.get("days") or [], today)
+        if d is not None:
+            return float(d["t"]), s["name"]
     return None, None
 
 
-def compute_trend(history: list[dict], today_t: int, today: str) -> str | None:
-    target = (date.fromisoformat(today) - timedelta(days=HISTORY_DAYS)).isoformat()
+def compute_trend(history: list[dict], today_t: float, today: str) -> str | None:
+    target = (date.fromisoformat(today) - timedelta(days=1)).isoformat()
     past = next((h for h in history if h.get("date") == target), None)
     if past is None or not isinstance(past.get("t"), (int, float)):
         return None
-    delta = today_t - int(past["t"])
-    if delta >= 1:
+    delta = round(float(today_t) - float(past["t"]), 1)
+    if delta >= 0.5:
         return "up"
-    if delta <= -1:
+    if delta <= -0.5:
         return "down"
     return "flat"
 
@@ -225,12 +234,20 @@ def merge_history(
 ) -> list[dict]:
     """Keep up to keep_days past points (dates strictly before today_point)."""
     if replace is not None:
-        pts = {h["date"]: int(h["t"]) for h in replace if "date" in h and "t" in h}
+        pts = {
+            h["date"]: _round_t(h["t"])
+            for h in replace
+            if "date" in h and "t" in h
+        }
     else:
-        pts = {h["date"]: int(h["t"]) for h in (old or []) if "date" in h and "t" in h}
+        pts = {
+            h["date"]: _round_t(h["t"])
+            for h in (old or [])
+            if "date" in h and "t" in h
+        }
         if prev_day0 and prev_day0.get("date") and prev_day0.get("t") is not None:
             if prev_day0["date"] < today_point["date"]:
-                pts[prev_day0["date"]] = int(prev_day0["t"])
+                pts[prev_day0["date"]] = _round_t(prev_day0["t"])
     today = date.fromisoformat(today_point["date"])
     out = []
     for i in range(1, keep_days + 1):
@@ -286,7 +303,7 @@ def fetch_copernicus_grid(
     try:
         import copernicusmarine
         import numpy as np
-        import xarray as xr
+        import xarray as xr  # noqa: F401
     except ImportError as exc:
         print(f"copernicusmarine unavailable: {exc}", file=sys.stderr)
         return None
@@ -350,7 +367,7 @@ def extract_copernicus_for_beach(
     t0 = nearest_wet_cell(today_field, lats, lons, lat, lon)
     if t0 is None:
         return None
-    days = [{"date": today, "t": int(round(t0))}]
+    days = [{"date": today, "t": _round_t(t0)}]
     # forecast days if present
     tdate = date.fromisoformat(today)
     for add in (1, 2):
@@ -361,7 +378,7 @@ def extract_copernicus_for_beach(
         tv = nearest_wet_cell(field, lats, lons, lat, lon)
         if tv is None:
             continue
-        days.append({"date": d, "t": int(round(tv))})
+        days.append({"date": d, "t": _round_t(tv)})
 
     history = []
     for i in range(1, HISTORY_DAYS + 1):
@@ -372,12 +389,12 @@ def extract_copernicus_for_beach(
         tv = nearest_wet_cell(field, lats, lons, lat, lon)
         if tv is None:
             continue
-        history.append({"date": d, "t": int(round(tv))})
+        history.append({"date": d, "t": _round_t(tv)})
     history.sort(key=lambda x: x["date"])
     return {"name": "Copernicus", "days": days, "history": history}
 
 
-def copernicus_sane(today_temps: list[int], n_beaches: int) -> bool:
+def copernicus_sane(today_temps: list[float], n_beaches: int) -> bool:
     if not today_temps:
         return False
     if len(today_temps) < n_beaches / 2:
@@ -395,26 +412,61 @@ def copernicus_sane(today_temps: list[int], n_beaches: int) -> bool:
 
 def attach_primary_fields(beach: dict, today: str) -> None:
     sources = beach.get("sources") or []
-    # strip history from non-primary later
     t, src = pick_primary(sources, today)
     beach["t"] = t
     beach["source"] = src
     if t is None or src is None:
         beach["trend"] = None
-        for s in sources:
-            s.pop("history", None)
         return
 
     primary = next(s for s in sources if s["name"] == src)
     hist = primary.get("history") or []
-    ref_date = primary["days"][0]["date"]
-    beach["trend"] = compute_trend(hist, t, ref_date)
+    beach["trend"] = compute_trend(hist, t, today)
     # keep history only on primary source
     for s in sources:
         if s["name"] != src:
             s.pop("history", None)
         elif "history" not in s:
             s["history"] = hist
+
+
+def build_top(beaches: list[dict], cap: int = TOP_CAP) -> list[dict]:
+    """Warmest beaches: sort by t desc, at most TOP_PER_CONCELLO per concello, cap total."""
+    ranked = [
+        b
+        for b in beaches
+        if isinstance(b.get("t"), (int, float))
+    ]
+    ranked.sort(
+        key=lambda b: (-float(b["t"]), b["name"].casefold(), b["slug"])
+    )
+    per: dict[str, int] = defaultdict(int)
+    out: list[dict] = []
+    for b in ranked:
+        slug = b["concelloSlug"]
+        if per[slug] >= TOP_PER_CONCELLO:
+            continue
+        per[slug] += 1
+        sources_slim = []
+        for s in b.get("sources") or []:
+            sources_slim.append(
+                {"name": s["name"], "days": s.get("days") or []}
+            )
+        out.append(
+            {
+                "slug": b["slug"],
+                "name": b["name"],
+                "concello": b["concello"],
+                "concelloSlug": b["concelloSlug"],
+                "t": b["t"],
+                "source": b.get("source"),
+                "trend": b.get("trend"),
+                "sources": sources_slim,
+            }
+        )
+        if len(out) >= cap:
+            break
+    return out
 
 
 def write_data_split(fetched_at: str, beaches: list[dict]) -> None:
@@ -450,6 +502,7 @@ def write_data_split(fetched_at: str, beaches: list[dict]) -> None:
         "fetchedAt": fetched_at,
         "concellos": concellos,
         "beachConcello": beach_map,
+        "top": build_top(beaches),
     }
     (DATA_DIR / "index.json").write_text(
         json.dumps(index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
@@ -467,31 +520,58 @@ def write_data_split(fetched_at: str, beaches: list[dict]) -> None:
 
 def run_selfcheck() -> int:
     today = "2026-08-18"
+    yesterday = "2026-08-17"
+    tomorrow = "2026-08-19"
+
     # primary: Copernicus wins
     sources = [
-        {"name": "MeteoGalicia", "days": [{"date": today, "t": 14}]},
-        {"name": "Copernicus", "days": [{"date": today, "t": 16}], "history": []},
+        {"name": "MeteoGalicia", "days": [{"date": today, "t": 14.0}]},
+        {"name": "Copernicus", "days": [{"date": today, "t": 16.0}], "history": []},
     ]
     t, src = pick_primary(sources, today)
-    assert (t, src) == (16, "Copernicus"), (t, src)
+    assert (t, src) == (16.0, "Copernicus"), (t, src)
 
     # only MG
     t, src = pick_primary(
-        [{"name": "MeteoGalicia", "days": [{"date": today, "t": 14}]}], today
+        [{"name": "MeteoGalicia", "days": [{"date": today, "t": 14.0}]}], today
     )
-    assert (t, src) == (14, "MeteoGalicia")
+    assert (t, src) == (14.0, "MeteoGalicia")
 
     # nothing
     t, src = pick_primary([], today)
     assert (t, src) == (None, None)
 
-    # trend boundaries
-    hist = [{"date": "2026-08-11", "t": 14}]
-    assert compute_trend(hist, 15, today) == "up"
-    assert compute_trend(hist, 13, today) == "down"
-    assert compute_trend(hist, 14, today) == "flat"
-    assert compute_trend([], 14, today) is None
-    assert compute_trend([{"date": "2026-08-12", "t": 14}], 14, today) is None
+    # yesterday only → no primary
+    t, src = pick_primary(
+        [{"name": "MeteoGalicia", "days": [{"date": yesterday, "t": 14.0}]}], today
+    )
+    assert (t, src) == (None, None)
+
+    # today not at index 0
+    t, src = pick_primary(
+        [
+            {
+                "name": "MeteoGalicia",
+                "days": [
+                    {"date": tomorrow, "t": 20.0},
+                    {"date": today, "t": 15.5},
+                ],
+            }
+        ],
+        today,
+    )
+    assert (t, src) == (15.5, "MeteoGalicia"), (t, src)
+
+    # trend vs yesterday, ±0.5 with round(delta, 1)
+    hist = [{"date": yesterday, "t": 14.0}]
+    assert compute_trend(hist, 14.4, today) == "flat"
+    assert compute_trend(hist, 14.5, today) == "up"
+    assert compute_trend(hist, 13.5, today) == "down"
+    assert compute_trend(hist, 13.6, today) == "flat"
+    # float noise: 18.3 - 17.8
+    assert compute_trend([{"date": yesterday, "t": 17.8}], 18.3, today) == "up"
+    assert compute_trend([], 14.0, today) is None
+    assert compute_trend([{"date": "2026-08-11", "t": 14.0}], 15.0, today) is None
 
     # nearest wet cell ±2
     lats = [42.0, 42.03, 42.06, 42.09, 42.12]
@@ -502,25 +582,59 @@ def run_selfcheck() -> int:
     assert v == 15.4
     field2 = [[float("nan")] * 5 for _ in range(5)]
     field2[0][0] = 10.0
-    # centre is (2,2); (0,0) is outside ±1
     v2 = nearest_wet_cell(field2, lats, lons, 42.06, -8.84, radius=1)
     assert v2 is None
     v3 = nearest_wet_cell(field2, lats, lons, 42.06, -8.84, radius=2)
     assert v3 == 10.0
 
-    # history trim
-    old = [{"date": f"2026-08-{d:02d}", "t": 14} for d in range(1, 18)]
-    merged = merge_history(old, {"date": today, "t": 15})
+    # history trim keeps float
+    old = [{"date": f"2026-08-{d:02d}", "t": 18.4} for d in range(1, 18)]
+    merged = merge_history(old, {"date": today, "t": 15.0})
     assert len(merged) <= HISTORY_DAYS
     assert all(h["date"] < today for h in merged)
+    assert all(h["t"] == 18.4 for h in merged)
+
+    # top: ≤2 per concello
+    sample = [
+        {
+            "slug": f"a-{i}",
+            "name": f"A{i}",
+            "concello": "Hot",
+            "concelloSlug": "hot",
+            "t": 25.0 - i * 0.1,
+            "source": "Copernicus",
+            "trend": None,
+            "sources": [{"name": "Copernicus", "days": [{"date": today, "t": 25.0}]}],
+        }
+        for i in range(3)
+    ] + [
+        {
+            "slug": "b-1",
+            "name": "B1",
+            "concello": "Cool",
+            "concelloSlug": "cool",
+            "t": 20.0,
+            "source": "Copernicus",
+            "trend": None,
+            "sources": [{"name": "Copernicus", "days": [{"date": today, "t": 20.0}]}],
+        }
+    ]
+    top = build_top(sample, cap=20)
+    hot = [x for x in top if x["concelloSlug"] == "hot"]
+    assert len(hot) == 2, hot
+    assert hot[0]["t"] >= hot[1]["t"]
 
     print("selfcheck OK")
     return 0
 
 
+def _mg_has_today(days: list[dict] | None, today: str) -> bool:
+    return bool(days and day_for_date(days, today))
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--limit", type=int, default=0, help="First N catalog beaches")
+    parser.add_argument("--limit", type=int, default=0, help="First N catalog beaches (dry-run)")
     parser.add_argument("--selfcheck", action="store_true")
     parser.add_argument("--skip-mg", action="store_true", help="Skip MG fetch (dev)")
     parser.add_argument("--skip-copernicus", action="store_true")
@@ -552,9 +666,8 @@ def main(argv: list[str] | None = None) -> int:
         got = fetch_copernicus_grid(today_d)
         if got:
             cmems_grid, cmems_lats, cmems_lons = got
-            # pre-extract for sanity
-            temps: list[int] = []
-            samples: list[dict] = []
+            temps: list[float] = []
+            samples: list[dict | None] = []
             for entry in entries:
                 src = extract_copernicus_for_beach(
                     cmems_grid,
@@ -564,9 +677,9 @@ def main(argv: list[str] | None = None) -> int:
                     float(entry["lon"]),
                     today,
                 )
-                samples.append(src)  # type: ignore[arg-type]
-                if src and src["days"][0]["date"] == today:
-                    temps.append(src["days"][0]["t"])
+                samples.append(src)
+                if src and day_for_date(src["days"], today):
+                    temps.append(float(day_for_date(src["days"], today)["t"]))  # type: ignore[index]
             if copernicus_sane(temps, len(entries)):
                 cmems_ok = True
                 print(f"Copernicus OK beaches={len(temps)}", flush=True)
@@ -591,16 +704,20 @@ def main(argv: list[str] | None = None) -> int:
         if not args.skip_mg:
             mg_days = fetch_mg(bid)
             time.sleep(0.3)
-            if mg_days and mg_days[0]["date"] == today:
+            if _mg_has_today(mg_days, today):
                 fresh_mg += 1
                 old_mg = previous_source(prev, "MeteoGalicia")
-                prev_d0 = (old_mg or {}).get("days", [None])[0]
+                today_point = day_for_date(mg_days or [], today)
+                old_days = (old_mg or {}).get("days") or []
+                prev_d0 = old_days[0] if old_days else None
                 hist = merge_history(
                     (old_mg or {}).get("history"),
-                    mg_days[0],
+                    today_point,  # type: ignore[arg-type]
                     prev_day0=prev_d0 if isinstance(prev_d0, dict) else None,
                 )
-                sources.append({"name": "MeteoGalicia", "days": mg_days, "history": hist})
+                sources.append(
+                    {"name": "MeteoGalicia", "days": mg_days, "history": hist}
+                )
             else:
                 old = previous_source(prev, "MeteoGalicia")
                 if old and source_fresh(old):
@@ -609,14 +726,14 @@ def main(argv: list[str] | None = None) -> int:
             old = previous_source(prev, "MeteoGalicia")
             if old and source_fresh(old):
                 sources.append(dict(old))
-                if old["days"][0]["date"] == today:
+                if day_for_date(old.get("days") or [], today):
                     fresh_mg += 1
 
         aemet_id = entry.get("aemetId")
         if aemet_id and api_key:
             ae_days = fetch_aemet(str(aemet_id), api_key)
             time.sleep(2.0)
-            if ae_days and ae_days[0]["date"] == today:
+            if ae_days and day_for_date(ae_days, today):
                 sources.append({"name": "AEMET", "days": ae_days})
             else:
                 old = previous_source(prev, "AEMET")
@@ -658,14 +775,8 @@ def main(argv: list[str] | None = None) -> int:
         attach_primary_fields(beach, today)
         beaches_out.append(beach)
 
-    # guards (skip when --limit)
+    # id-set guards (skip when --limit)
     if not args.limit:
-        if fresh_mg < len(catalog["beaches"]) / 2 and not args.skip_mg:
-            print(
-                f"ABORT: fresh MG {fresh_mg}/{len(catalog['beaches'])} < 50%",
-                file=sys.stderr,
-            )
-            return 2
         out_ids = [b["id"] for b in beaches_out]
         if sorted(out_ids) != sorted(cat_ids):
             print("ABORT: id set != catalog", file=sys.stderr)
@@ -675,10 +786,33 @@ def main(argv: list[str] | None = None) -> int:
             print("ABORT: id set != full catalog", file=sys.stderr)
             return 3
 
+        covered = sum(1 for b in beaches_out if b.get("t") is not None)
+        n = len(catalog["beaches"])
+        if covered == 0:
+            print(f"ABORT: coverage 0/{n}", file=sys.stderr)
+            return 2
+        if covered < n / 2:
+            print(
+                f"WARN: coverage {covered}/{n} < 50%",
+                file=sys.stderr,
+            )
+
     fetched_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    top = build_top(beaches_out)
+    covered = sum(1 for b in beaches_out if b.get("t") is not None)
+
+    if args.limit:
+        print(
+            f"dry-run --limit={args.limit} beaches={len(beaches_out)} "
+            f"covered={covered} fresh_mg={fresh_mg} top={len(top)} "
+            f"copernicus={'yes' if cmems_ok else 'no'} fetchedAt={fetched_at}"
+        )
+        return 0
+
     write_data_split(fetched_at, beaches_out)
     print(
         f"wrote data/ fresh_mg={fresh_mg} beaches={len(beaches_out)} "
+        f"covered={covered} top={len(top)} "
         f"copernicus={'yes' if cmems_ok else 'no'}"
     )
     return 0
