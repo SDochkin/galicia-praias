@@ -38,6 +38,9 @@ python3 scripts/update_beaches.py --selfcheck
 python3 scripts/update_beaches.py --limit 5
 ```
 
-Cron: `.github/workflows/update-beaches.yml` a las **15:00 UTC** (IBI publica ~14:00 UTC).
+Cron (`.github/workflows/update-beaches.yml`):
+
+- **07:00 UTC** — MG/AEMET (`--skip-copernicus`); Copernicus de ayer se reutiliza.
+- **15:00 UTC** — bake completo (IBI publica ~14:00 UTC).
 
 Datos servidos: `data/index.json` + `data/<concelloSlug>.json`.

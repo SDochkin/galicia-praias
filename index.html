@@ -40,15 +40,6 @@
       font-size: 0.9rem;
       margin-bottom: 1rem;
     }
-    .banner {
-      background: #2a2414;
-      border: 1px solid var(--warn);
-      color: #f5e6b8;
-      padding: 0.65rem 0.8rem;
-      border-radius: 0.5rem;
-      font-size: 0.85rem;
-      margin-bottom: 1rem;
-    }
     label { font-size: 0.85rem; color: var(--muted); display: block; margin-bottom: 0.35rem; }
     .combo {
       position: relative;
@@ -130,9 +121,13 @@
     }
     .row {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      grid-template-areas:
+        "name hint temp"
+        "maps maps maps"
+        "mar  mar  mar";
       gap: 0.5rem;
-      align-items: baseline;
+      align-items: center;
       width: 100%;
       padding: 0.75rem 0.85rem;
       border-radius: 0.55rem;
@@ -145,9 +140,6 @@
     .row.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
     .row.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
     .row-main {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: 0 0.75rem;
       min-width: 0;
       background: none;
       border: 0;
@@ -158,30 +150,32 @@
       text-align: left;
       cursor: pointer;
     }
-    .row-main .name {
-      grid-column: 1;
+    .row-main.name {
+      grid-area: name;
       font-weight: 550;
       min-width: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
-    .row-main .temp {
-      grid-column: 2;
-      grid-row: 1;
+    .row-main.temp {
+      grid-area: temp;
       font-variant-numeric: tabular-nums;
       font-weight: 650;
       white-space: nowrap;
     }
-    .row-main .src {
-      grid-column: 1 / -1;
+    .mar {
+      grid-area: mar;
       min-width: 0;
       color: var(--muted);
       font-size: 0.78rem;
-      margin-top: 0.15rem;
     }
     .temp.band-calida { color: var(--calida); }
     .temp.band-templada { color: var(--templada); }
     .temp.band-fria { color: var(--fria); }
     .trend { margin-left: 0.25rem; font-weight: 700; }
     .hint {
+      grid-area: hint;
       min-width: 2.75rem;
       min-height: 2.75rem;
       display: grid;
@@ -210,18 +204,25 @@
       color: var(--muted);
     }
     .accordion .src { color: var(--muted); font-size: 0.78rem; margin: 0 0 0.55rem; }
-    .accordion table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .accordion table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
     .accordion th, .accordion td {
       text-align: left;
       padding: 0.35rem 0.25rem;
       border-bottom: 1px solid var(--border);
     }
+    .accordion th:not(:first-child),
+    .accordion td:not(:first-child) {
+      width: 4.75rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
     .maps {
+      grid-area: maps;
+      justify-self: start;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-height: 2.75rem;
-      margin-top: 0.35rem;
       padding: 0.45rem 0.85rem;
       border-radius: 0.55rem;
       border: 1px solid var(--border);
@@ -258,7 +259,6 @@
   <main>
     <h1>Temperatura del agua</h1>
     <p class="sub">Temperatura del agua en playas de Galicia. No son mediciones in situ en la orilla.</p>
-    <div id="stale" class="banner" hidden></div>
     <label for="concello">Concello</label>
     <div class="combo">
       <input
@@ -299,13 +299,11 @@
     let tipOpen = false;
     let tipOwner = null;
 
-    function trackPage() {
-      if (typeof umami !== "undefined" && typeof umami.track === "function") {
-        umami.track();
-      }
+    function track(name, data) {
+      if (typeof umami !== "undefined" && umami.track) umami.track(name, data);
     }
 
-    function setUrl(params, { replace = false, track = true } = {}) {
+    function setUrl(params, { replace = false } = {}) {
       const clean = {};
       for (const [k, v] of Object.entries(params || {})) {
         if (v != null && v !== "") clean[k] = v;
@@ -314,7 +312,6 @@
       const url = q ? `?${q}` : location.pathname;
       if (replace) history.replaceState(null, "", url);
       else history.pushState(null, "", url);
-      if (track && !replace) trackPage();
     }
 
     function parseQuery() {
@@ -326,19 +323,21 @@
       return (iso || "").slice(0, 10);
     }
 
-    function todayLocalISO() {
-      const d = new Date();
-      const y = d.getFullYear();
-      const m = String(d.getMonth() + 1).padStart(2, "0");
-      const day = String(d.getDate()).padStart(2, "0");
-      return `${y}-${m}-${day}`;
-    }
-
     function formatDateEs(isoDay) {
       if (!isoDay) return "";
       const [y, m, d] = isoDay.split("-").map(Number);
       const dt = new Date(y, m - 1, d);
       return dt.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
+    }
+
+    const dayFmt = new Intl.DateTimeFormat("es-ES", {
+      weekday: "short",
+      day: "numeric",
+    });
+
+    function formatDay(iso) {
+      const [y, m, d] = iso.split("-").map(Number);
+      return dayFmt.format(new Date(y, m - 1, d));
     }
 
     function fmtT(t) {
@@ -361,35 +360,33 @@
       );
     }
 
-    function sourceTemps(beach) {
-      return (beach.sources || [])
-        .map((s) => {
-          const d = dayEntry(s.days, refDay);
-          return d ? { name: s.name, t: d.t } : null;
-        })
-        .filter(Boolean);
+    function costaOf(beach) {
+      if (!beach.source || beach.source === "Copernicus") return null;
+      if (typeof beach.t !== "number") return null;
+      return { name: beach.source, t: beach.t };
     }
 
-    function sourceLine(beach, { withConcello = false } = {}) {
-      const bits = sourceTemps(beach).map((x) => `${x.name} ${fmtT(x.t)} °C`);
-      if (withConcello) {
-        const c =
-          beach.concello ||
-          concelloName(index.beachConcello[beach.slug] || beach.concelloSlug);
-        if (c) bits.unshift(c);
-      }
-      return bits.join(" · ");
+    function marOf(beach) {
+      const s = (beach.sources || []).find((x) => x.name === "Copernicus");
+      if (!s) return null;
+      const d = dayEntry(s.days, refDay);
+      return d ? { name: "Copernicus", t: d.t } : null;
     }
 
     function disagree(beach) {
-      const ts = sourceTemps(beach);
-      if (ts.length < 2) return false;
-      const vals = ts.map((x) => x.t);
-      return Math.max(...vals) - Math.min(...vals) >= 3;
+      const costa = costaOf(beach);
+      const mar = marOf(beach);
+      if (!costa || !mar) return false;
+      return Math.abs(costa.t - mar.t) >= 3;
     }
 
     function disagreeText(beach) {
-      return `Las fuentes discrepan (≥3 °C): ${sourceLine(beach)}`;
+      const costa = costaOf(beach);
+      const mar = marOf(beach);
+      return (
+        `Costa ${fmtT(costa.t)} °C (${costa.name}) · Mar ${fmtT(mar.t)} °C (${mar.name}): ` +
+        `predicción en la orilla frente a modelo del mar a ~3 km.`
+      );
     }
 
     function lastKnown(beach) {
@@ -424,25 +421,6 @@
       if (trend === "down") return "bajando";
       if (trend === "flat") return "estable";
       return "";
-    }
-
-    function collapseRuns(points) {
-      const rows = [];
-      for (const p of points || []) {
-        if (!p || typeof p.t !== "number") continue;
-        const last = rows[rows.length - 1];
-        if (last && last.t === p.t) {
-          last.end = p.date;
-        } else {
-          rows.push({ start: p.date, end: p.date, t: p.t });
-        }
-      }
-      return rows;
-    }
-
-    function formatRange(start, end) {
-      if (start === end) return start;
-      return `${start} – ${end}`;
     }
 
     function concelloName(slug) {
@@ -552,7 +530,8 @@
       hideTip();
       setConcelloInput();
       closeCombo();
-      setUrl({ c: currentConcello }, { track: true });
+      setUrl({ c: currentConcello });
+      track("concello_select", { slug: currentConcello });
       await renderLists();
     }
 
@@ -562,7 +541,8 @@
       hideTip();
       setConcelloInput();
       closeCombo();
-      setUrl({}, { track: true });
+      setUrl({});
+      track("top_view");
       await renderLists();
     }
 
@@ -643,6 +623,7 @@
           hideTip();
           return;
         }
+        track("hint_open", { kind: btn.dataset.kind || "disagree" });
         const r = btn.getBoundingClientRect();
         showTip(btn, text, r.left + r.width / 2, r.bottom);
       });
@@ -655,44 +636,69 @@
       );
     }
 
+    function seriesByDay(src) {
+      const m = new Map();
+      if (!src) return m;
+      for (const d of [...(src.history || []), ...(src.days || [])]) {
+        if (d && d.date && typeof d.t === "number") m.set(d.date, d.t);
+      }
+      return m;
+    }
+
+    function accordionTable(title, dates, costaDays, marDays, costaName) {
+      if (!dates.length) return "";
+      const showCosta = costaDays.size > 0;
+      const showMar = marDays.size > 0;
+      if (!showCosta && !showMar) return "";
+      const costaTitle = costaName
+        ? `En la costa, según ${costaName}`
+        : "";
+      const heads = ["<th>Día</th>"];
+      if (showCosta) {
+        heads.push(`<th title="${escapeAttr(costaTitle)}">Costa</th>`);
+      }
+      if (showMar) {
+        heads.push(
+          `<th title="${escapeAttr("En el mar, según Copernicus")}">Mar</th>`
+        );
+      }
+      const rows = dates.map((d) => {
+        const cells = [`<td>${formatDay(d)}</td>`];
+        if (showCosta) {
+          const t = costaDays.get(d);
+          cells.push(`<td>${t == null ? "—" : `${fmtT(t)} °C`}</td>`);
+        }
+        if (showMar) {
+          const t = marDays.get(d);
+          cells.push(`<td>${t == null ? "—" : `${fmtT(t)} °C`}</td>`);
+        }
+        return `<tr>${cells.join("")}</tr>`;
+      });
+      return (
+        `<h4>${title}</h4><table><thead><tr>${heads.join("")}</tr></thead>` +
+        `<tbody>${rows.join("")}</tbody></table>`
+      );
+    }
+
     function accordionHtml(beach) {
       const concello = beachConcelloLabel(beach);
-      const parts = [
+      const costaSrc =
+        beach.source && beach.source !== "Copernicus"
+          ? (beach.sources || []).find((s) => s.name === beach.source)
+          : null;
+      const marSrc = (beach.sources || []).find((s) => s.name === "Copernicus");
+      const costaDays = seriesByDay(costaSrc);
+      const marDays = seriesByDay(marSrc);
+      const allDates = [
+        ...new Set([...costaDays.keys(), ...marDays.keys()]),
+      ].sort();
+      const histDates = allDates.filter((d) => d < refDay);
+      const futDates = allDates.filter((d) => d >= refDay);
+      return [
         `<h3>${beach.name}</h3><p class="src">${concello}</p>`,
-      ];
-      const q = encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
-      parts.push(
-        `<a class="maps" target="_blank" rel="noopener" ` +
-          `href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Ver en Google Maps</a>`
-      );
-      for (const s of beach.sources || []) {
-        parts.push(`<h4>${s.name}</h4>`);
-        const hist = collapseRuns(s.history || []);
-        const days = collapseRuns(s.days || []);
-        if (hist.length) {
-          parts.push(
-            "<table><thead><tr><th>Histórico</th><th>Agua</th></tr></thead><tbody>"
-          );
-          for (const r of hist) {
-            parts.push(
-              `<tr><td>${formatRange(r.start, r.end)}</td><td>${fmtT(r.t)} °C</td></tr>`
-            );
-          }
-          parts.push("</tbody></table>");
-        }
-        if (days.length) {
-          parts.push(
-            "<table><thead><tr><th>Pronóstico</th><th>Agua</th></tr></thead><tbody>"
-          );
-          for (const r of days) {
-            parts.push(
-              `<tr><td>${formatRange(r.start, r.end)}</td><td>${fmtT(r.t)} °C</td></tr>`
-            );
-          }
-          parts.push("</tbody></table>");
-        }
-      }
-      return parts.join("");
+        accordionTable("Histórico", histDates, costaDays, marDays, costaSrc ? beach.source : ""),
+        accordionTable("Pronóstico", futDates, costaDays, marDays, costaSrc ? beach.source : ""),
+      ].join("");
     }
 
     function escapeAttr(s) {
@@ -703,16 +709,18 @@
     }
 
     function rowHtml(beach, { topMode = false } = {}) {
+      const costa = costaOf(beach);
+      const mar = marOf(beach);
       const hasT = typeof beach.t === "number";
       const band = hasT ? bandFor(beach.t) : null;
       const bandCls = band ? band.cls : "";
       let tipBtn = "";
       if (hasT && disagree(beach)) {
-        tipBtn = `<button type="button" class="hint" data-tip="${escapeAttr(
+        tipBtn = `<button type="button" class="hint" data-kind="disagree" data-tip="${escapeAttr(
           disagreeText(beach)
         )}" aria-label="Fuentes discrepan">?</button>`;
       } else if (!hasT) {
-        tipBtn = `<button type="button" class="hint" data-tip="${escapeAttr(
+        tipBtn = `<button type="button" class="hint" data-kind="nodata" data-tip="${escapeAttr(
           dashTip(beach)
         )}" aria-label="Sin dato de hoy">?</button>`;
       }
@@ -722,18 +730,36 @@
         : "";
       const active = currentBeach === beach.slug ? " active" : "";
       const open = currentBeach === beach.slug;
+      const expanded = open ? "true" : "false";
       const tempText = hasT ? `${fmtT(beach.t)} °C${trend}` : "—";
-      const src = sourceLine(beach, { withConcello: topMode });
+      const tempTitle = costa
+        ? `En la costa, según ${costa.name}`
+        : mar
+          ? "En el mar, según Copernicus"
+          : "";
+      const concello = beachConcelloLabel(beach);
+      const q = encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
+      const concelloBit = topMode ? concello : "";
+      let marLine = "";
+      if (costa && mar) {
+        const label = concelloBit
+          ? `${concelloBit} · Mar ${fmtT(mar.t)} °C`
+          : `Mar ${fmtT(mar.t)} °C`;
+        marLine = `<div class="mar" title="En el mar, según Copernicus">${label}</div>`;
+      } else if (concelloBit) {
+        marLine = `<div class="mar">${concelloBit}</div>`;
+      }
       return `<li>
         <div class="row ${bandCls}${active}">
-          <button type="button" class="row-main" data-slug="${beach.slug}" aria-expanded="${
-        open ? "true" : "false"
-      }">
-            <span class="name">${beach.name}</span>
-            <span class="temp ${bandCls}">${tempText}</span>
-            <span class="src">${src}</span>
-          </button>
+          <button type="button" class="row-main name" data-slug="${beach.slug}" aria-expanded="${expanded}">${beach.name}</button>
           ${tipBtn}
+          <button type="button" class="row-main temp ${bandCls}" data-slug="${beach.slug}" aria-expanded="${expanded}"${
+            tempTitle
+              ? ` title="${escapeAttr(tempTitle)}" aria-label="${escapeAttr(tempTitle)}"`
+              : ""
+          }>${tempText}</button>
+          <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Mapa</a>
+          ${marLine}
         </div>
         ${
           open
@@ -793,6 +819,11 @@
         });
       });
       root.querySelectorAll("button.hint").forEach(bindHint);
+      root.querySelectorAll("a.maps").forEach((a) => {
+        a.addEventListener("click", () => {
+          track("maps_open", { slug: a.dataset.slug });
+        });
+      });
     }
 
     async function enrichTopBeach(beach) {
@@ -818,7 +849,6 @@
 
     async function renderLists() {
       const root = document.getElementById("lists");
-      root.innerHTML = '<p class="empty">Cargando…</p>';
 
       if (currentConcello === null) {
         let top = [...(index.top || [])];
@@ -834,6 +864,10 @@
           : '<p class="empty">Sin destacadas.</p>';
         bindList(root);
         return;
+      }
+
+      if (!concelloCache.has(currentConcello)) {
+        root.innerHTML = '<p class="empty">Cargando…</p>';
       }
 
       let payload;
@@ -854,7 +888,7 @@
       const mapped = index.beachConcello[slug];
       if (currentConcello === null) {
         currentBeach = slug;
-        // stay in top; load history without changing URL / concello
+        if (push) track("beach_open", { slug, from: "top" });
         await renderLists();
         const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
         if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -863,7 +897,10 @@
       if (mapped) currentConcello = mapped;
       currentBeach = slug;
       setConcelloInput();
-      if (push) setUrl({ c: currentConcello, b: slug }, { track: true });
+      if (push) {
+        setUrl({ c: currentConcello, b: slug });
+        track("beach_open", { slug, from: "concello" });
+      }
       await renderLists();
       const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
       if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
@@ -873,22 +910,10 @@
       currentBeach = null;
       hideTip();
       if (push) {
-        if (currentConcello === null) setUrl({}, { track: true });
-        else setUrl({ c: currentConcello }, { track: true });
+        if (currentConcello === null) setUrl({});
+        else setUrl({ c: currentConcello });
       }
       renderLists();
-    }
-
-    function applyStale() {
-      const el = document.getElementById("stale");
-      const day = dayOf(index.fetchedAt);
-      document.getElementById("fetchedAt").textContent = index.fetchedAt || "—";
-      if (day && day !== todayLocalISO()) {
-        el.hidden = false;
-        el.textContent = `Datos del ${formatDateEs(day)}.`;
-      } else {
-        el.hidden = true;
-      }
     }
 
     async function bootFromQuery() {
@@ -901,6 +926,7 @@
         currentConcello = null;
       }
       ensureConcelloReady();
+      if (!c && !b) track("top_view");
       if (b) await openBeach(b, { push: false });
       else await renderLists();
     }
@@ -1016,7 +1042,7 @@
         index = json;
         if (!index.top) index.top = [];
         refDay = dayOf(index.fetchedAt);
-        applyStale();
+        document.getElementById("fetchedAt").textContent = index.fetchedAt || "—";
         await bootFromQuery();
       })
       .catch((err) => {

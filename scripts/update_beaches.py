@@ -31,7 +31,7 @@ GAL_LAT = (41.7, 43.9)
 GAL_LON = (-9.4, -6.7)
 CMEMS_SEARCH_RADIUS = 2  # cells
 HISTORY_DAYS = 7
-PRIMARY_ORDER = ("Copernicus", "MeteoGalicia")
+PRIMARY_ORDER = ("MeteoGalicia", "AEMET")
 TOP_CAP = 20
 TOP_PER_CONCELLO = 2
 
@@ -422,12 +422,6 @@ def attach_primary_fields(beach: dict, today: str) -> None:
     primary = next(s for s in sources if s["name"] == src)
     hist = primary.get("history") or []
     beach["trend"] = compute_trend(hist, t, today)
-    # keep history only on primary source
-    for s in sources:
-        if s["name"] != src:
-            s.pop("history", None)
-        elif "history" not in s:
-            s["history"] = hist
 
 
 def build_top(beaches: list[dict], cap: int = TOP_CAP) -> list[dict]:
@@ -523,13 +517,33 @@ def run_selfcheck() -> int:
     yesterday = "2026-08-17"
     tomorrow = "2026-08-19"
 
-    # primary: Copernicus wins
+    # primary: MG wins over Copernicus
     sources = [
         {"name": "MeteoGalicia", "days": [{"date": today, "t": 14.0}]},
         {"name": "Copernicus", "days": [{"date": today, "t": 16.0}], "history": []},
     ]
     t, src = pick_primary(sources, today)
-    assert (t, src) == (16.0, "Copernicus"), (t, src)
+    assert (t, src) == (14.0, "MeteoGalicia"), (t, src)
+
+    beach = {
+        "sources": [
+            {
+                "name": "MeteoGalicia",
+                "days": [{"date": today, "t": 14.0}],
+                "history": [{"date": yesterday, "t": 13.0}],
+            },
+            {
+                "name": "Copernicus",
+                "days": [{"date": today, "t": 16.0}],
+                "history": [{"date": yesterday, "t": 15.0}],
+            },
+        ]
+    }
+    attach_primary_fields(beach, today)
+    assert beach["source"] == "MeteoGalicia" and beach["t"] == 14.0
+    by_name = {s["name"]: s for s in beach["sources"]}
+    assert by_name["MeteoGalicia"]["history"] == [{"date": yesterday, "t": 13.0}]
+    assert by_name["Copernicus"]["history"] == [{"date": yesterday, "t": 15.0}]
 
     # only MG
     t, src = pick_primary(
