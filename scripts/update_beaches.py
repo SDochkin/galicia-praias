@@ -643,6 +643,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.selfcheck:
         return run_selfcheck()
 
+    # TEMP Mar-QA: run wet-cell diag when sentinel present (remove after Actions)
+    _diag_flag = ROOT / "scripts" / ".run_diag_wetcell"
+    if _diag_flag.exists():
+        import diag_wetcell as _diag
+        _rc = _diag.main()
+        _diag_flag.unlink(missing_ok=True)
+        if _rc:
+            return _rc
+
     catalog = load_json(CATALOG)
     if not catalog.get("beaches"):
         print("catalog.json missing beaches", file=sys.stderr)
