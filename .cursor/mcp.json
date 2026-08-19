@@ -1,0 +1,21 @@
+{
+  "mcpServers": {
+    "erddap": {
+      "type": "stdio",
+      "command": "wsl",
+      "args": [
+        "-d", "Ubuntu-22.04",
+        "--cd", "/home/skilled/code/galicia-praias",
+        "-e",
+        "/home/skilled/.local/bin/uvx",
+        "--python",
+        "3.12",
+        "--from",
+        "erddap-mcp",
+        "--with",
+        "mcp[cli]>=1.0.0,<2",
+        "erddap-mcp"
+      ]
+    }
+  }
+}
