@@ -40,7 +40,7 @@ HISTORY_DAYS = 7
 # bind PRIMARY_ORDER, previous_source, data/ history, and index.html costaOf/marOf.
 # Renaming a source wipes accumulated history.
 PRIMARY_ORDER = ("MeteoGalicia", "AEMET")
-TOP_CAP = 20
+TOP_CAP = 8
 TOP_PER_CONCELLO = 2
 
 MADRID_TZ = ZoneInfo("Europe/Madrid")
@@ -811,6 +811,7 @@ def geo_entry(b: dict) -> dict:
         "concelloSlug": b["concelloSlug"],
         "lat": b["lat"],
         "lon": b["lon"],
+        "t": b.get("t"),
         "score": b.get("score"),
     }
 
@@ -1091,6 +1092,7 @@ def build_top(beaches: list[dict], cap: int = TOP_CAP) -> list[dict]:
                 "concello": b["concello"],
                 "concelloSlug": b["concelloSlug"],
                 "t": b["t"],
+                "score": b.get("score"),
                 "source": b.get("source"),
                 "trend": b.get("trend"),
                 "sources": sources_slim,
@@ -1457,6 +1459,7 @@ def run_selfcheck() -> int:
             "concelloSlug": "c",
             "lat": 43.0,
             "lon": -8.0,
+            "t": 20.0,
             "score": 96,
         }
     )
@@ -1466,6 +1469,7 @@ def run_selfcheck() -> int:
         "concelloSlug": "c",
         "lat": 43.0,
         "lon": -8.0,
+        "t": 20.0,
         "score": 96,
     }
 

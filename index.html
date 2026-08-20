@@ -18,15 +18,17 @@
       --fria: #e05252;
     }
     * { box-sizing: border-box; }
+    html { color-scheme: dark; }
     body {
       margin: 0;
       font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.45;
+      touch-action: manipulation;
     }
     main {
-      max-width: 42rem;
+      max-width: 56rem;
       margin: 0 auto;
       padding: 1.25rem 1rem 3rem;
     }
@@ -79,7 +81,7 @@
       color: var(--text);
       font-size: 1rem;
     }
-    #concello:focus {
+    #concello:focus-visible {
       outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
       outline-offset: 1px;
       border-color: var(--accent);
@@ -136,45 +138,50 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+    h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin: 0.85rem 0 0.45rem;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
     ul.beach-list {
       list-style: none;
       margin: 0;
       padding: 0;
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+    @media (min-width: 32rem) {
+      ul.beach-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 48rem) {
+      ul.beach-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    }
+    .card {
       display: flex;
       flex-direction: column;
-      gap: 0.4rem;
-    }
-    .row {
-      display: grid;
-      grid-template-columns: minmax(0, 1fr) auto auto;
-      grid-template-areas:
-        "name hint temp"
-        "maps maps maps"
-        "mar  mar  mar";
-      gap: 0.5rem;
-      align-items: center;
-      width: 100%;
-      padding: 0.75rem 0.85rem;
+      min-width: 0;
+      padding: 0.65rem 0.7rem;
       border-radius: 0.55rem;
       border: 1px solid var(--border);
       background: var(--card);
       color: inherit;
+      height: 100%;
     }
-    .row:hover, .row.active { border-color: var(--accent); }
-    .row { cursor: pointer; }
-    a.row {
-      text-decoration: none;
-      color: inherit;
-      grid-template-columns: minmax(0, 1fr) auto;
-      grid-template-areas: "name score";
+    .card:hover, .card.is-flipped { border-color: var(--accent); }
+    .card.band-calida { border-color: color-mix(in srgb, var(--calida) 55%, var(--border)); }
+    .card.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
+    .card.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
+    .card-face {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.25rem;
     }
-    a.row .geo-name { grid-area: name; font-weight: 550; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    a.row .geo-meta { color: var(--muted); font-size: 0.78rem; font-weight: 400; }
-    a.row .geo-score { grid-area: score; font-variant-numeric: tabular-nums; font-weight: 650; }
-    .row.band-calida { border-color: color-mix(in srgb, var(--calida) 55%, var(--border)); }
-    .row.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
-    .row.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
-    .row-main {
+    .card-flip {
+      flex: 1;
       min-width: 0;
       background: none;
       border: 0;
@@ -185,38 +192,52 @@
       text-align: left;
       cursor: pointer;
     }
-    .row-main.name {
-      grid-area: name;
+    .card-flip:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 2px;
+      border-radius: 0.25rem;
+    }
+    .card-name {
       font-weight: 550;
       min-width: 0;
       overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      line-clamp: 2;
     }
-    .row-main.temp {
-      grid-area: temp;
+    .card-city { color: var(--muted); font-size: 0.78rem; font-weight: 400; }
+    .card-metrics {
+      display: flex;
+      align-items: baseline;
+      gap: 0.55rem;
+      margin-top: 0.3rem;
       font-variant-numeric: tabular-nums;
+    }
+    .card-score {
+      font-weight: 650;
+      font-size: 1.15rem;
+    }
+    .card-temp {
       font-weight: 650;
       white-space: nowrap;
-      cursor: pointer;
     }
-    .mar {
-      grid-area: mar;
-      min-width: 0;
+    .card-more {
+      display: inline-block;
+      margin-top: 0.25rem;
       color: var(--muted);
-      font-size: 0.78rem;
+      font-size: 0.75rem;
     }
     .temp.band-calida { color: var(--calida); }
     .temp.band-templada { color: var(--templada); }
     .temp.band-fria { color: var(--fria); }
     .trend { margin-left: 0.25rem; font-weight: 700; }
     .hint {
-      grid-area: hint;
+      flex: 0 0 auto;
       min-width: 2.75rem;
       min-height: 2.75rem;
       display: grid;
       place-items: center;
-      align-self: center;
       color: var(--warn);
       cursor: help;
       font-weight: 700;
@@ -226,26 +247,34 @@
       font-size: 0.9rem;
       line-height: 1;
     }
-    .accordion {
-      margin: -0.15rem 0 0.35rem;
-      padding: 0.85rem 0.9rem;
-      border-radius: 0.55rem;
-      border: 1px solid var(--border);
-      background: #141b23;
+    .card-back {
+      margin-top: 0.5rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid var(--border);
+      max-height: min(16rem, 70vh);
+      overflow: auto;
     }
-    .accordion h3 { margin: 0 0 0.35rem; font-size: 1.05rem; }
-    .accordion h4 {
-      margin: 0.75rem 0 0.25rem;
-      font-size: 0.9rem;
-      color: var(--muted);
+    .card-facts {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.88rem;
+      font-variant-numeric: tabular-nums;
     }
-    .accordion .src { color: var(--muted); font-size: 0.78rem; margin: 0 0 0.55rem; }
-    .score-break { font-size: 0.95rem; margin: 0 0 0.35rem; }
-    .score-parts { color: var(--muted); font-size: 0.85rem; font-variant-numeric: tabular-nums; margin: 0 0 0.5rem; }
-    .wave-line { margin: 0 0 0.5rem; font-size: 0.9rem; }
-    .uv-warn { color: var(--warn); margin: 0.35rem 0 0.55rem; }
-    .accordion details { margin-top: 0.65rem; }
-    .accordion summary {
+    .card-facts li {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      padding: 0.15rem 0;
+    }
+    .ico {
+      flex: 0 0 1em;
+      width: 1em;
+      height: 1em;
+    }
+    .uv-warn { color: var(--warn); margin: 0.35rem 0 0.45rem; }
+    .card-back details { margin-top: 0.5rem; }
+    .card-back summary {
       min-height: 2.75rem;
       display: flex;
       align-items: center;
@@ -253,36 +282,41 @@
       color: var(--text);
       font-weight: 600;
     }
-    .accordion summary:focus-visible {
+    .card-back summary:focus-visible {
       outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
       outline-offset: 2px;
       border-radius: 0.25rem;
     }
-    .accordion table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .accordion th, .accordion td {
+    .card-back h4 {
+      margin: 0.75rem 0 0.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    .card-back table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    .card-back th, .card-back td {
       text-align: left;
       padding: 0.35rem 0.25rem;
       border-bottom: 1px solid var(--border);
     }
-    .accordion th:not(:first-child),
-    .accordion td:not(:first-child) {
+    .card-back th:not(:first-child),
+    .card-back td:not(:first-child) {
       width: 4.75rem;
       text-align: right;
       font-variant-numeric: tabular-nums;
     }
     .maps {
-      grid-area: maps;
-      justify-self: start;
+      flex: 0 0 auto;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       min-height: 2.75rem;
-      padding: 0.45rem 0.85rem;
+      min-width: 2.75rem;
+      padding: 0.35rem 0.65rem;
       border-radius: 0.55rem;
       border: 1px solid var(--border);
       color: var(--accent);
       text-decoration: none;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
     }
     .maps:hover { border-color: var(--accent); }
     #tip {
@@ -352,17 +386,19 @@
       { id: "fria", title: "Fría", cls: "band-fria" },
     ];
 
-    const WAVE = {
-      calm: "Oleaje calmo",
-      moderate: "Oleaje moderado",
-      strong: "Oleaje fuerte",
-    };
     const SCORE_PARTS = {
       water: "Agua",
       air: "Aire",
       wind: "Viento",
       waves: "Oleaje",
       rain: "Lluvia",
+    };
+    const SCORE_PART_ICONS = {
+      water: "water",
+      air: "air",
+      wind: "wind",
+      waves: "waves",
+      rain: "rain",
     };
     const GEO_RADIUS_KM = 30;
     const GEO_CAP = 10;
@@ -840,44 +876,86 @@
       return `${String(utcHour).padStart(2, "0")}:00`;
     }
 
-    function accordionHtml(beach) {
-      const concello = beachConcelloLabel(beach);
+    function prefersReducedMotion() {
+      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    }
+
+    function scoreColor(score) {
+      const s = Math.max(0, Math.min(100, Number(score))) / 100;
+      const fria = [224, 82, 82];
+      const templada = [232, 196, 48];
+      const calida = [61, 186, 110];
+      const lerp = (a, b, t) => a.map((c, i) => Math.round(c + (b[i] - c) * t));
+      const rgb = s < 0.5 ? lerp(fria, templada, s / 0.5) : lerp(templada, calida, (s - 0.5) / 0.5);
+      return `rgb(${rgb[0]}, ${rgb[1]}, ${rgb[2]})`;
+    }
+
+    function iconSvg(name) {
+      const paths = {
+        indice:
+          '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+        clock:
+          '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l4 2"/>',
+        water:
+          '<path d="M12 3s7 8 7 12a7 7 0 1 1-14 0c0-4 7-12 7-12z"/>',
+        air: '<path d="M14 4v16M10 8h4M10 16h4"/><path d="M14 8a2.5 2.5 0 1 1 0 5"/>',
+        wind: '<path d="M3 10h11a3 3 0 1 0-3-3M3 14h8a2.5 2.5 0 1 1-2.5 2.5"/>',
+        waves: '<path d="M3 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/>',
+        rain: '<path d="M8 6a5 5 0 0 1 9 3h1a3.5 3.5 0 1 1 0 7H7a4 4 0 0 1-1-7.9"/><path d="M8 18v2M12 17v3M16 18v2"/>',
+        sea: '<path d="M3 13c2 2 4 2 6 0s4-2 6 0 4 2 6 0M3 18c2 2 4 2 6 0s4-2 6 0 4 2 6 0"/>',
+      };
+      const d = paths[name];
+      if (!d) return "";
+      return `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
+    }
+
+    function factItem(icon, label, value) {
+      return `<li>${iconSvg(icon)}<span>${label} ${value}</span></li>`;
+    }
+
+    function uvMap(beach) {
+      const mgSrc = (beach.sources || []).find((s) => s.name === "MeteoGalicia");
+      const uvDays = new Map();
+      for (const d of (mgSrc && mgSrc.days) || []) {
+        if (d && d.date && typeof d.uv === "number") uvDays.set(d.date, d.uv);
+      }
+      return uvDays;
+    }
+
+    function cardBackHtml(beach) {
       const costaSrc =
         beach.source && beach.source !== "Copernicus"
           ? (beach.sources || []).find((s) => s.name === beach.source)
           : null;
       const marSrc = (beach.sources || []).find((s) => s.name === "Copernicus");
-      const mgSrc = (beach.sources || []).find((s) => s.name === "MeteoGalicia");
       const costaDays = seriesByDay(costaSrc);
       const marDays = seriesByDay(marSrc);
-      const uvDays = new Map();
-      for (const d of (mgSrc && mgSrc.days) || []) {
-        if (d && d.date && typeof d.uv === "number") uvDays.set(d.date, d.uv);
-      }
+      const uvDays = uvMap(beach);
       const allDates = [
         ...new Set([...costaDays.keys(), ...marDays.keys(), ...uvDays.keys()]),
       ].sort();
       const histDates = allDates.filter((d) => d < refDay);
       const futDates = allDates.filter((d) => d >= refDay);
-      const bits = [`<h3>${beach.name}</h3><p class="src">${concello}</p>`];
+      const facts = [];
       if (typeof beach.score === "number") {
+        facts.push(factItem("indice", "Índice", String(beach.score)));
         const best = madridClock(beach.scoreDay, beach.bestHour);
         const win = beach.scoreWindow
           ? `${madridClock(beach.scoreDay, beach.scoreWindow.from)}–${madridClock(beach.scoreDay, beach.scoreWindow.to)}`
           : "";
-        bits.push(
-          `<p class="score-break">Índice ${beach.score}. Mejor hora: ${best || "—"}. Ventana: ${win || "—"}.</p>`
-        );
+        facts.push(factItem("clock", "Mejor hora", best || "—"));
+        facts.push(factItem("clock", "Ventana", win || "—"));
         const parts = beach.scoreParts || {};
-        const partLine = Object.keys(SCORE_PARTS)
-          .filter((k) => typeof parts[k] === "number")
-          .map((k) => `${SCORE_PARTS[k]} ${parts[k]}`)
-          .join(" · ");
-        if (partLine) bits.push(`<p class="score-parts">${partLine}</p>`);
+        for (const k of Object.keys(SCORE_PARTS)) {
+          if (typeof parts[k] === "number") {
+            facts.push(factItem(SCORE_PART_ICONS[k], SCORE_PARTS[k], String(parts[k])));
+          }
+        }
       }
-      if (beach.wave && WAVE[beach.wave]) {
-        bits.push(`<p class="wave-line">${WAVE[beach.wave]}</p>`);
-      }
+      const mar = marOf(beach);
+      if (mar) facts.push(factItem("sea", "Mar", `${fmtT(mar.t)} °C`));
+      const bits = [];
+      if (facts.length) bits.push(`<ul class="card-facts">${facts.join("")}</ul>`);
       const todayUv = uvDays.get(refDay);
       if (typeof todayUv === "number" && todayUv >= 8) {
         bits.push(`<p class="uv-warn">UV muy alto: usa protección solar.</p>`);
@@ -905,10 +983,11 @@
       return (beach.sources || []).filter((s) => dayEntry(s.days, refDay)).length;
     }
 
-    function rowHtml(beach, { topMode = false } = {}) {
+    function cardHtml(beach, { showConcello = false } = {}) {
       const costa = costaOf(beach);
       const mar = marOf(beach);
       const hasT = typeof beach.t === "number";
+      const hasScore = typeof beach.score === "number";
       const band = hasT ? bandFor(beach.t) : null;
       const bandCls = band ? band.cls : "";
       let tipBtn = "";
@@ -916,7 +995,7 @@
         tipBtn = `<button type="button" class="hint" data-kind="disagree" data-tip="${escapeAttr(
           disagreeText(beach)
         )}" aria-label="Fuentes discrepan">?</button>`;
-      } else if (!hasT) {
+      } else if (!hasT && (beach.sources || []).length) {
         tipBtn = `<button type="button" class="hint" data-kind="nodata" data-tip="${escapeAttr(
           dashTip(beach)
         )}" aria-label="Sin dato de hoy">?</button>`;
@@ -925,11 +1004,11 @@
           "Solo una fuente tiene dato de hoy: no hay con qué comparar."
         )}" aria-label="Una sola fuente">?</button>`;
       }
+      const trendName = hasT ? trendLabel(beach.trend) : "";
       const g = hasT ? trendGlyph(beach.trend) : "";
       const trend = g
-        ? `<span class="trend" title="${trendLabel(beach.trend)}">${g}</span>`
+        ? `<span class="trend" aria-label="${escapeAttr(trendName)}">${g}</span>`
         : "";
-      const active = currentBeach === beach.slug ? " active" : "";
       const open = currentBeach === beach.slug;
       const expanded = open ? "true" : "false";
       const tempText = hasT ? `${fmtT(beach.t)} °C${trend}` : "—";
@@ -940,35 +1019,36 @@
           : "";
       const concello = beachConcelloLabel(beach);
       const q = encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
-      const concelloBit = topMode ? concello : "";
-      let marLine = "";
-      if (costa && mar) {
-        const label = concelloBit
-          ? `${concelloBit} · Mar ${fmtT(mar.t)} °C`
-          : `Mar ${fmtT(mar.t)} °C`;
-        marLine = `<div class="mar" title="Según Copernicus">${label}</div>`;
-      } else if (concelloBit) {
-        marLine = `<div class="mar">${concelloBit}</div>`;
-      }
+      const city = showConcello && concello
+        ? ` <span class="card-city">${concello}</span>`
+        : "";
+      const scoreHtml = hasScore
+        ? `<span class="card-score" style="color:${scoreColor(beach.score)}" title="Índice ${beach.score}" aria-label="Índice ${beach.score}">${beach.score}</span>`
+        : `<span class="card-score" aria-label="Índice —">—</span>`;
+      const btnId = `flip-${beach.slug}`;
+      const backId = `back-${beach.slug}`;
+      const back = open
+        ? `<div class="card-back" id="${backId}" role="region" aria-labelledby="${btnId}">${cardBackHtml(
+            beach
+          )}</div>`
+        : "";
       return `<li>
-        <div class="row ${bandCls}${active}" data-slug="${beach.slug}">
-          <button type="button" class="row-main name" data-slug="${beach.slug}" aria-expanded="${expanded}">${beach.name}</button>
-          ${tipBtn}
-          <span class="row-main temp ${bandCls}"${
-            tempTitle
-              ? ` title="${escapeAttr(tempTitle)}"`
-              : ""
-          }>${tempText}</span>
-          <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Mapa</a>
-          ${marLine}
-        </div>
-        ${
-          open
-            ? `<div class="accordion" data-for="${beach.slug}">${accordionHtml(
-                beach
-              )}</div>`
-            : ""
-        }
+        <article class="card ${bandCls}${open ? " is-flipped" : ""}" data-slug="${beach.slug}">
+          <div class="card-face">
+              <button type="button" class="card-flip" id="${btnId}" data-slug="${beach.slug}" aria-expanded="${expanded}"${
+                open ? ` aria-controls="${backId}"` : ""
+              } aria-label="Detalles, ${escapeAttr(beach.name)}">
+              <span class="card-name">${beach.name}${city}</span>
+              <span class="card-metrics">${scoreHtml}<span class="card-temp temp ${bandCls}"${
+                tempTitle ? ` title="${escapeAttr(tempTitle)}"` : ""
+              }>${tempText}</span></span>
+              <span class="card-more">${open ? "Ocultar detalles" : "Detalles"}</span>
+            </button>
+            ${tipBtn}
+            <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Mapa</a>
+          </div>
+          ${back}
+        </article>
       </li>`;
     }
 
@@ -981,10 +1061,10 @@
       });
     }
 
-    function renderBanded(beaches, { topMode = false } = {}) {
+    function renderBanded(beaches, { showConcello = false } = {}) {
       const withT = beaches.filter((b) => typeof b.t === "number");
       const withoutT = beaches.filter(
-        (b) => typeof b.t !== "number" && (b.sources || []).length
+        (b) => typeof b.t !== "number" && ((b.sources || []).length || typeof b.score === "number")
       );
       const parts = [];
       for (const band of BANDS) {
@@ -993,8 +1073,8 @@
         );
         if (!items.length) continue;
         parts.push(
-          `<section><h2>${band.title}</h2><ul class="beach-list">${items
-            .map((b) => rowHtml(b, { topMode }))
+          `<section><h3>${band.title}</h3><ul class="beach-list">${items
+            .map((b) => cardHtml(b, { showConcello }))
             .join("")}</ul></section>`
         );
       }
@@ -1003,8 +1083,8 @@
           a.name.localeCompare(b.name, "es")
         );
         parts.push(
-          `<section><h2>Sin dato de hoy</h2><ul class="beach-list">${items
-            .map((b) => rowHtml(b, { topMode }))
+          `<section><h3>Sin dato de hoy</h3><ul class="beach-list">${items
+            .map((b) => cardHtml(b, { showConcello }))
             .join("")}</ul></section>`
         );
       }
@@ -1012,23 +1092,12 @@
     }
 
     function bindList(root) {
-      root.querySelectorAll("div.row").forEach((row) => {
-        row.addEventListener("click", (e) => {
-          if (e.target.closest(".hint, a.maps")) return;
-          const slug = row.dataset.slug;
+      root.querySelectorAll("button.card-flip").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slug = btn.dataset.slug;
           if (!slug) return;
           if (currentBeach === slug) closeBeach();
-          else openBeach(slug);
-        });
-      });
-      root.querySelectorAll("a.row").forEach((a) => {
-        a.addEventListener("click", async (e) => {
-          if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
-          e.preventDefault();
-          geoMode = false;
-          setGeoStatus("");
-          currentConcello = a.dataset.concello;
-          await openBeach(a.dataset.slug, { from: "geo" });
+          else openBeach(slug, { from: geoMode ? "geo" : undefined });
         });
       });
       root.querySelectorAll("button.hint").forEach(bindHint);
@@ -1064,11 +1133,14 @@
       const root = document.getElementById("lists");
 
       if (geoMode) {
+        if (currentBeach) {
+          const idx = geoResults.findIndex((b) => b.slug === currentBeach);
+          if (idx >= 0) {
+            geoResults[idx] = await enrichTopBeach(geoResults[idx]);
+          }
+        }
         const items = geoResults
-          .map(
-            (b) =>
-              `<li><a class="row" href="?c=${encodeURIComponent(b.concelloSlug)}&amp;b=${encodeURIComponent(b.slug)}" data-slug="${escapeAttr(b.slug)}" data-concello="${escapeAttr(b.concelloSlug)}"><span class="geo-name">${escapeAttr(b.name)} <span class="geo-meta">${escapeAttr(concelloName(b.concelloSlug))}</span></span><span class="geo-score">${b.score}</span></a></li>`
-          )
+          .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
         root.innerHTML = `<h2>Playas cercanas</h2><ul class="beach-list">${items}</ul>`;
         bindList(root);
@@ -1083,7 +1155,7 @@
             top[idx] = await enrichTopBeach(top[idx]);
           }
         }
-        const parts = renderBanded(top, { topMode: true });
+        const parts = renderBanded(top, { showConcello: true });
         root.innerHTML = parts.length
           ? `<h2>Las más cálidas</h2>${parts.join("")}`
           : '<p class="empty">Sin destacadas.</p>';
@@ -1103,38 +1175,33 @@
         return;
       }
       const beaches = payload.beaches || [];
-      const parts = renderBanded(beaches, { topMode: false });
+      const parts = renderBanded(beaches, { showConcello: false });
       root.innerHTML =
         parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
       bindList(root);
     }
 
     async function openBeach(slug, { push = true, from } = {}) {
-      const mapped = index.beachConcello[slug];
-      if (currentConcello === null) {
-        currentBeach = slug;
-        if (push) track("beach_open", { slug, from: from || "top" });
-        await renderLists();
-        const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
-        if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
-        return;
-      }
-      if (mapped) currentConcello = mapped;
       currentBeach = slug;
-      setConcelloInput();
       if (push) {
-        setUrl({ c: currentConcello, b: slug });
-        track("beach_open", { slug, from: from || "concello" });
+        const src = from || (geoMode ? "geo" : currentConcello ? "concello" : "top");
+        track("beach_open", { slug, from: src });
+        if (currentConcello && !geoMode) setUrl({ c: currentConcello, b: slug });
       }
       await renderLists();
-      const acc = document.querySelector(`.accordion[data-for="${slug}"]`);
-      if (acc) acc.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      const card = document.querySelector(`.card[data-slug="${CSS.escape(slug)}"]`);
+      if (card) {
+        card.scrollIntoView({
+          block: "nearest",
+          behavior: prefersReducedMotion() ? "auto" : "smooth",
+        });
+      }
     }
 
     function closeBeach({ push = true } = {}) {
       currentBeach = null;
       hideTip();
-      if (push) {
+      if (push && !geoMode) {
         if (currentConcello === null) setUrl({});
         else setUrl({ c: currentConcello });
       }
@@ -1172,6 +1239,7 @@
         setGeoStatus("No se pudo obtener tu ubicación.");
         return;
       }
+      setGeoStatus("Obteniendo ubicación…");
       navigator.geolocation.getCurrentPosition(
         async (pos) => {
           const near = nearbyBeaches(pos.coords.latitude, pos.coords.longitude);
@@ -1182,6 +1250,8 @@
             await renderLists();
             return;
           }
+          currentConcello = null;
+          setConcelloInput();
           setGeoStatus("");
           geoMode = true;
           geoResults = near;
@@ -1278,7 +1348,9 @@
     });
 
     document.addEventListener("keydown", (e) => {
-      if (e.key === "Escape") hideTip();
+      if (e.key !== "Escape") return;
+      hideTip();
+      if (currentBeach) closeBeach();
     });
     document.addEventListener("pointerdown", (e) => {
       if (e.target.closest(".combo")) return;
