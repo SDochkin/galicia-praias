@@ -2,6 +2,7 @@ name: Update beaches
 
 on:
   schedule:
+    - cron: "0 7 * * *"
     - cron: "0 15 * * *"
   workflow_dispatch:
 
@@ -22,6 +23,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
+        if: github.event.schedule != '0 7 * * *'
         run: pip install copernicusmarine
 
       - name: Fetch temperatures
@@ -29,7 +31,7 @@ jobs:
           AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
           COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUSMARINE_SERVICE_USERNAME }}
           COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUSMARINE_SERVICE_PASSWORD }}
-        run: python3 scripts/update_beaches.py
+        run: python3 scripts/update_beaches.py ${{ github.event.schedule == '0 7 * * *' && '--skip-copernicus' || '' }}
 
       - name: Commit data
         run: |
