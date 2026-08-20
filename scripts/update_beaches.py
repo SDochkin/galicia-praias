@@ -479,6 +479,34 @@ def fetch_meteosix_payload(
     return data
 
 
+def _probe_raw_vars(feat: dict) -> None:
+    """Print name/model/grid and non-null value counts. No values, no key."""
+    props = feat.get("properties") if isinstance(feat, dict) else None
+    days = props.get("days") if isinstance(props, dict) else None
+    if not isinstance(days, list) or not days or not isinstance(days[0], dict):
+        print("MeteoSIX probe raw: no days", flush=True)
+        return
+    variables = days[0].get("variables")
+    if not isinstance(variables, list):
+        print("MeteoSIX probe raw: variables not list", flush=True)
+        return
+    bits: list[str] = []
+    for var in variables:
+        if not isinstance(var, dict):
+            continue
+        vals = var.get("values")
+        n_ok = 0
+        field = "moduleValue" if var.get("name") == "wind" else "value"
+        if isinstance(vals, list):
+            for row in vals:
+                if isinstance(row, dict) and _num(row.get(field)) is not None:
+                    n_ok += 1
+        bits.append(
+            f"{var.get('name')}/{var.get('model')}/{var.get('grid')} non_null={n_ok}"
+        )
+    print("MeteoSIX probe raw: " + "; ".join(bits), flush=True)
+
+
 def probe_meteosix_models(api_key: str, lon: float, lat: float) -> str | None:
     """Live USWAN vs SWAN vs WW3. Prefer a string that returns wave values."""
     fallback: str | None = None
@@ -493,6 +521,7 @@ def probe_meteosix_models(api_key: str, lon: float, lat: float) -> str | None:
         if feat.get("exception"):
             print(f"MeteoSIX probe {tag}: {feat.get('exception')}", flush=True)
             continue
+        _probe_raw_vars(feat)
         hours, days = parse_meteosix_feature(feat)
         n_water = sum(1 for h in hours if isinstance(h.get("water"), float))
         n_wave = sum(1 for h in hours if isinstance(h.get("h"), float))
@@ -573,6 +602,43 @@ def fetch_all_meteosix(
     while len(out) < len(entries):
         out.append(None)
     return out
+
+
+def meteosix_hourly(mx: dict | None) -> list[dict] | None:
+    if not mx:
+        return None
+    hours = mx.get("hours")
+    return hours if isinstance(hours, list) else None
+
+
+def append_meteosix_source(
+    sources: list[dict],
+    *,
+    mx: dict | None,
+    fetched_hourly: bool,
+    today: str,
+    prev: dict | None,
+) -> None:
+    """Write MeteoSIX into sources[] only when days have a t for today."""
+    if fetched_hourly and mx:
+        days_mx = mx.get("days") or []
+        today_point = day_for_date(days_mx, today) if days_mx else None
+        if today_point:
+            old_mx = previous_source(prev, "MeteoSIX")
+            old_days = (old_mx or {}).get("days") or []
+            prev_d0 = old_days[0] if old_days else None
+            hist = merge_history(
+                (old_mx or {}).get("history"),
+                today_point,
+                prev_day0=prev_d0 if isinstance(prev_d0, dict) else None,
+            )
+            sources.append(
+                {"name": "MeteoSIX", "days": days_mx, "history": hist}
+            )
+            return
+    old = previous_source(prev, "MeteoSIX")
+    if old and source_fresh(old):
+        sources.append(dict(old))
 
 
 def hour_parts(rec: dict) -> dict[str, float]:
@@ -1403,6 +1469,37 @@ def run_selfcheck() -> int:
         "score": 96,
     }
 
+    # hours without days: score still written; no MeteoSIX source
+    mx_no_t = {"hours": hours, "days": []}
+    srcs_no_t: list[dict] = []
+    append_meteosix_source(
+        srcs_no_t,
+        mx=mx_no_t,
+        fetched_hourly=True,
+        today="2026-08-20",
+        prev=None,
+    )
+    b3 = {"t": 20.0, "sources": srcs_no_t}
+    apply_score_fields(
+        b3,
+        hourly=meteosix_hourly(mx_no_t),
+        fetched_hourly=True,
+        now=now,
+        prev=None,
+    )
+    assert b3["score"] == 96, b3
+    assert srcs_no_t == []
+    srcs_with_t: list[dict] = []
+    append_meteosix_source(
+        srcs_with_t,
+        mx={"hours": hours, "days": [{"date": "2026-08-20", "t": 18.0}]},
+        fetched_hourly=True,
+        today="2026-08-20",
+        prev=None,
+    )
+    assert srcs_with_t[0]["name"] == "MeteoSIX"
+    assert srcs_with_t[0]["days"][0]["t"] == 18.0
+
     print("selfcheck OK")
     return 0
 
@@ -1491,6 +1588,12 @@ def main(argv: list[str] | None = None) -> int:
             print(f"fetching MeteoSIX models={meteosix_models}…", flush=True)
             meteosix_got = fetch_all_meteosix(entries, meteosix_key, meteosix_models)
             fetched_hourly = True
+            n_days = sum(1 for x in meteosix_got if x and x.get("days"))
+            n_hours = sum(1 for x in meteosix_got if x and x.get("hours"))
+            print(
+                f"MeteoSIX days={n_days} hours={n_hours} / {len(entries)}",
+                flush=True,
+            )
         else:
             print("MeteoSIX probe failed; carrying stale", file=sys.stderr)
     elif not args.skip_meteosix and not meteosix_key:
@@ -1568,31 +1671,14 @@ def main(argv: list[str] | None = None) -> int:
                 sources.append(dict(old))
 
         mx = meteosix_got[idx] if idx < len(meteosix_got) else None
-        hourly: list[dict] | None = None
-        if fetched_hourly and mx and mx.get("days"):
-            old_mx = previous_source(prev, "MeteoSIX")
-            today_point = day_for_date(mx["days"], today)
-            if today_point:
-                old_days = (old_mx or {}).get("days") or []
-                prev_d0 = old_days[0] if old_days else None
-                hist = merge_history(
-                    (old_mx or {}).get("history"),
-                    today_point,
-                    prev_day0=prev_d0 if isinstance(prev_d0, dict) else None,
-                )
-                sources.append(
-                    {"name": "MeteoSIX", "days": mx["days"], "history": hist}
-                )
-                hourly = mx.get("hours") or []
-            else:
-                old = previous_source(prev, "MeteoSIX")
-                if old and source_fresh(old):
-                    sources.append(dict(old))
-                hourly = mx.get("hours") or []
-        else:
-            old = previous_source(prev, "MeteoSIX")
-            if old and source_fresh(old):
-                sources.append(dict(old))
+        hourly = meteosix_hourly(mx) if fetched_hourly else None
+        append_meteosix_source(
+            sources,
+            mx=mx,
+            fetched_hourly=fetched_hourly,
+            today=today,
+            prev=prev,
+        )
 
         sources = [s for s in sources if source_fresh(s)]
 
