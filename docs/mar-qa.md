@@ -122,5 +122,19 @@ Rande валидирует воду риа, не IBI (у placeres Mar нет: я
 
 Схема JSON ответа — [docs/meteosix-api.md](meteosix-api.md) §Ответ JSON (мануал v5 / v4 §6.4). Ключи bake: `features[]` (порядок как `coords`), `exception`, `properties.days[].variables[].values[]` (`value` / `moduleValue`, `timeInstant`).
 
-Доли пляжей по переменным — stdout `--coverage` (`var: N/615 (p%)`). В этом сеансе ключа в env не было; секрет есть в GitHub Actions (`METEOSIX_API_KEY`, 2026-08-20). Прогон с ключом дописывает числа в эту секцию, заголовки §Шаг 0/1/2 не трогать.
+Доли пляжей по переменным — stdout `--coverage` (`var: N/615 (p%)`). `--coverage` в этом прогоне не вызывали.
+
+Прогон ingest: GitHub Actions `workflow_dispatch` [32395244413](https://github.com/SDochkin/galicia-praias/actions/runs/32395244413) (2026-08-20), код `1d53c02`, `data/` `9d4b8b0`. Команда: `python3 scripts/update_beaches.py` без skip. Лог шага Fetch temperatures.
+
+Проба `praia-de-bens` (сырой `name/model/grid` + `non_null` за первый день, затем парсер):
+
+- USWAN: `temperature/WRF/1km non_null=4`; `precipitation_amount/WRF/1km non_null=4`; `wind/WRF/1km non_null=4`; `sea_water_temperature/ROMS/None non_null=0`; `significative_wave_height/USWAN/None non_null=0`; `relative_peak_period/USWAN/None non_null=0`. Парсер: `hours=79 water=0 waves=0 days_t=0`.
+- SWAN: `no features`.
+- WW3: `temperature/WRF/1km non_null=4`; `precipitation_amount/WRF/1km non_null=4`; `wind/WRF/1km non_null=4`; `sea_water_temperature/ROMS/None non_null=0`; `significative_wave_height/WW3/atlanticonorte non_null=4`; `relative_peak_period/WW3/atlanticonorte non_null=4`. Парсер: `hours=79 water=0 waves=79 days_t=0`.
+
+Победитель: `ROMS,WRF,WRF,WW3,WW3,WRF`. ROMS в том же ответе есть (`sea_water_temperature/ROMS`); на точке пробы все `value` null. Отдельный запрос только ROMS не делали.
+
+После `fetch_all_meteosix`: `MeteoSIX days=212 hours=575 / 615`. `wrote data/ … meteosix=yes`.
+
+В залитом `data/` (`9d4b8b0`, `fetchedAt` `2026-08-20T17:40:01Z`): `"name": "MeteoSIX"` у 212 пляжей; `beach.source` ни у кого не MeteoSIX (все `MeteoGalicia`); числовой `score` у 575; поле `wave` у 471; `index.geo[].score` число у 575.
 
