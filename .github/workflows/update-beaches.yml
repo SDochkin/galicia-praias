@@ -3,6 +3,7 @@ name: Update beaches
 on:
   schedule:
     - cron: "0 7 * * *"
+    - cron: "0 10 * * *"
     - cron: "0 15 * * *"
   workflow_dispatch:
 
@@ -23,7 +24,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        if: github.event.schedule != '0 7 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *'
         run: pip install copernicusmarine
 
       - name: Fetch temperatures
@@ -31,7 +32,18 @@ jobs:
           AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
           COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUSMARINE_SERVICE_USERNAME }}
           COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUSMARINE_SERVICE_PASSWORD }}
-        run: python3 scripts/update_beaches.py ${{ github.event.schedule == '0 7 * * *' && '--skip-copernicus' || '' }}
+          METEOSIX_API_KEY: ${{ secrets.METEOSIX_API_KEY }}
+        run: |
+          set -e
+          if [ "${{ github.event.schedule }}" = "0 7 * * *" ]; then
+            python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix
+          elif [ "${{ github.event.schedule }}" = "0 10 * * *" ]; then
+            python3 scripts/update_beaches.py --skip-copernicus --skip-mg --skip-aemet
+          elif [ "${{ github.event.schedule }}" = "0 15 * * *" ]; then
+            python3 scripts/update_beaches.py --skip-meteosix
+          else
+            python3 scripts/update_beaches.py
+          fi
 
       - name: Commit data
         run: |

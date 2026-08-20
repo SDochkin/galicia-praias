@@ -1,5 +1,7 @@
 # Mar/Costa QA — 2026-08-19
 
+Decision: [ADR-0001](adr/0001-cmems-product-and-radius.md)
+
 Приоритет: вода у берега (costa). Вопрос: есть ли данные точнее MG-прогноза + IBI 0.027° (~3 км)?
 
 **Вердикт: оставить как есть.** Bake и UI не менять. `scripts/update_beaches.py` в этом прогоне не трогаем (временный хук диагностики откатан).
@@ -103,3 +105,22 @@ Rande валидирует воду риа, не IBI (у placeres Mar нет: я
 5. Сузить радиус — потеря 41% при `radius=1`.
 
 Уточнить costa на 615 пляжах нечем: три мооринга не сеть, ODYSSEA не зона купания, IBI у берега прыгает в мокрую клетку, но это цена 3 км, а не повод резать покрытие.
+
+## MeteoSIX покрытие — 2026-08-20
+
+Метод: `python3 scripts/update_beaches.py --coverage` ([scripts/update_beaches.py](../scripts/update_beaches.py)). `data/` не пишет. Ключ: env `METEOSIX_API_KEY`.
+
+Точка пробы: первая запись [catalog.json](../catalog.json) (`praia-de-bens`, lon/lat из каталога). `models=` по очереди (вода ROMS, не MOHID; ветер/воздух/дождь WRF):
+
+1. `ROMS,WRF,WRF,USWAN,USWAN,WRF` (v5 приложение A1: SWAN → USWAN)
+2. `ROMS,WRF,WRF,SWAN,SWAN,WRF`
+3. `ROMS,WRF,WRF,WW3,WW3,WRF`
+
+Победитель — первая строка, у которой в ответе есть значения волн (иначе первая с любыми часами). Тот же `models=` идёт в ingest 10:00 UTC.
+
+Переменные запроса: `sea_water_temperature`, `temperature`, `wind` (`units` `ms_deg`), `significative_wave_height`, `relative_peak_period`, `precipitation_amount`. Пачки `coords` по 20. Имена `/findPlaces` не матчим.
+
+Схема JSON ответа — [docs/meteosix-api.md](meteosix-api.md) §Ответ JSON (мануал v5 / v4 §6.4). Ключи bake: `features[]` (порядок как `coords`), `exception`, `properties.days[].variables[].values[]` (`value` / `moduleValue`, `timeInstant`).
+
+Доли пляжей по переменным — stdout `--coverage` (`var: N/615 (p%)`). В этом сеансе ключа в env не было; секрет есть в GitHub Actions (`METEOSIX_API_KEY`, 2026-08-20). Прогон с ключом дописывает числа в эту секцию, заголовки §Шаг 0/1/2 не трогать.
+
