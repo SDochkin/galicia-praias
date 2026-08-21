@@ -36,3 +36,16 @@
 - 2141 | Praia de Estrepeiros | Praia do Estripeiro | osm
 - 2262 | Praia de Lauxiñas (Sur) | Praia das Lousiñas (Sur) | osm
 - 2527 | Praia de Vidueiros | Praia de Bidueiro | osm
+- DOGS_ALLOW marked (5):
+-   - 2073 Praia da Calzoa, Vigo
+-   - 2089 Praia de Cesantes, Redondela
+-   - 2240 Praia O Espiño, O Grove
+-   - 2295 Praia de Castelete, Vilagarcía de Arousa
+-   - 2498 Praia de Ares, Ares
+- DOGS_ALLOW unmatched blog names:
+-   - Areal (Pobra do Caramiñal) — no catalog match by id+concello
+-   - Punta Corveira (Barreiros) — no catalog match by id+concello
+-   - O Portiño (O Grove) — no catalog match by id+concello
+-   - Cunchiña / Cheminea / Massó (Cangas) — no catalog match by id+concello
+-   - Arealonga (Redondela) — no catalog match by id+concello
+-   - A Foz (Vigo) — no catalog match by id+concello

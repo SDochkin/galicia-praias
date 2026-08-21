@@ -27,6 +27,18 @@ FORCE_CONCELLO = {
     2099: "Vilaboa",
 }
 
+# Designated dog beaches from Turismo de Galicia blog, matched by id + concello.
+DOGS_ALLOW = {2498, 2240, 2089, 2295, 2073}
+
+DOGS_UNMATCHED = (
+    "Areal (Pobra do Caramiñal) — no catalog match by id+concello",
+    "Punta Corveira (Barreiros) — no catalog match by id+concello",
+    "O Portiño (O Grove) — no catalog match by id+concello",
+    "Cunchiña / Cheminea / Massó (Cangas) — no catalog match by id+concello",
+    "Arealonga (Redondela) — no catalog match by id+concello",
+    "A Foz (Vigo) — no catalog match by id+concello",
+)
+
 # Map-facing names (OSM / local spelling). Slug is recomputed from the new name.
 NAME_OVERRIDES: dict[int, str] = {
     2453: "Praia de Durmideiras",  # was Adormideiras; OSM
@@ -379,6 +391,22 @@ def match_aemet(beaches: list[dict], aemet: list[dict], notes: list[str]) -> Non
     notes.extend(f"  - {x}" for x in rejected_name)
 
 
+def apply_dogs_allow(beaches: list[dict], notes: list[str]) -> None:
+    by_id = {b["id"]: b for b in beaches}
+    marked: list[str] = []
+    for bid in sorted(DOGS_ALLOW):
+        b = by_id.get(bid)
+        if not b:
+            notes.append(f"DOGS_ALLOW missing beach {bid}")
+            continue
+        b["dogs"] = True
+        marked.append(f"{bid} {b['name']}, {b['concello']}")
+    notes.append(f"DOGS_ALLOW marked ({len(marked)}):")
+    notes.extend(f"  - {x}" for x in marked)
+    notes.append("DOGS_ALLOW unmatched blog names:")
+    notes.extend(f"  - {x}" for x in DOGS_UNMATCHED)
+
+
 def apply_name_overrides(beaches: list[dict], notes: list[str]) -> None:
     by_id = {b["id"]: b for b in beaches}
     for bid, new_name in NAME_OVERRIDES.items():
@@ -391,7 +419,6 @@ def apply_name_overrides(beaches: list[dict], notes: list[str]) -> None:
             continue
         b["name"] = new_name
         notes.append(f"{bid} | {old} | {new_name} | osm")
-
 
 
 def unique_slugs(beaches: list[dict]) -> None:
@@ -431,6 +458,7 @@ def main() -> None:
     match_aemet(beaches, aemet, notes)
     apply_name_overrides(beaches, notes)
     unique_slugs(beaches)
+    apply_dogs_allow(beaches, notes)
 
     concellos = sorted({b["concello"] for b in beaches})
     catalog = {
@@ -448,6 +476,7 @@ def main() -> None:
                 "lat": b["lat"],
                 "lon": b["lon"],
                 "aemetId": b.get("aemetId"),
+                **({"dogs": True} if b.get("dogs") else {}),
             }
             for b in beaches
         ],
