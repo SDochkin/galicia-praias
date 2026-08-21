@@ -224,11 +224,12 @@ def fetch_aemet(aemet_id: str, api_key: str) -> list[dict] | None:
     return None
 
 
-def load_previous_state() -> dict[int, dict]:
+def load_previous_state(data_dir: Path | None = None) -> dict[int, dict]:
     """beach_id → previous beach record (from data/*.json or legacy beaches.json)."""
+    root = DATA_DIR if data_dir is None else data_dir
     by_id: dict[int, dict] = {}
-    if DATA_DIR.is_dir():
-        for path in DATA_DIR.glob("*.json"):
+    if root.is_dir():
+        for path in root.glob("*.json"):
             if path.name == "index.json":
                 continue
             payload = load_json(path)
@@ -236,6 +237,8 @@ def load_previous_state() -> dict[int, dict]:
                 if "id" in b:
                     by_id[b["id"]] = b
     if by_id:
+        return by_id
+    if data_dir is not None:
         return by_id
     legacy = load_json(BEACHES_LEGACY)
     for b in legacy.get("beaches", []):
@@ -1156,6 +1159,89 @@ def write_data_split(fetched_at: str, beaches: list[dict]) -> None:
         print("removed beaches.json")
 
 
+def parse_replace_names(raw: str) -> set[str]:
+    return {part.strip() for part in raw.split(",") if part.strip()}
+
+
+def merge_overlay_sources(
+    overlay_rec: dict | None,
+    disk_rec: dict | None,
+    replace: set[str],
+) -> list[dict]:
+    overlay_by = {
+        s["name"]: s
+        for s in (overlay_rec or {}).get("sources") or []
+        if isinstance(s, dict) and s.get("name")
+    }
+    disk_by = {
+        s["name"]: s
+        for s in (disk_rec or {}).get("sources") or []
+        if isinstance(s, dict) and s.get("name")
+    }
+    out: list[dict] = []
+    for name in set(overlay_by) | set(disk_by):
+        src = overlay_by.get(name) if name in replace else disk_by.get(name)
+        if src:
+            out.append(dict(src))
+    return [s for s in out if source_fresh(s)]
+
+
+def build_overlay_beach(
+    entry: dict,
+    overlay_rec: dict | None,
+    disk_rec: dict | None,
+    replace: set[str],
+    today: str,
+    now: datetime,
+) -> dict:
+    beach = {
+        "id": entry["id"],
+        "slug": entry["slug"],
+        "name": entry["name"],
+        "concello": entry["concello"],
+        "concelloSlug": entry["concelloSlug"],
+        "lat": entry["lat"],
+        "lon": entry["lon"],
+        "sources": merge_overlay_sources(overlay_rec, disk_rec, replace),
+    }
+    attach_primary_fields(beach, today)
+    score_prev = overlay_rec if "MeteoSIX" in replace else disk_rec
+    apply_score_fields(
+        beach,
+        hourly=None,
+        fetched_hourly=False,
+        now=now,
+        prev=score_prev,
+    )
+    return beach
+
+
+def run_overlay(overlay_dir: Path, replace_raw: str) -> int:
+    catalog = load_json(CATALOG)
+    if not catalog.get("beaches"):
+        print("catalog.json missing beaches", file=sys.stderr)
+        return 1
+    replace = parse_replace_names(replace_raw)
+    overlay_by = load_previous_state(overlay_dir)
+    disk_by = load_previous_state()
+    today = today_utc().isoformat()
+    now = datetime.now(MADRID_TZ)
+    beaches = [
+        build_overlay_beach(
+            entry,
+            overlay_by.get(entry["id"]),
+            disk_by.get(entry["id"]),
+            replace,
+            today,
+            now,
+        )
+        for entry in catalog["beaches"]
+    ]
+    fetched_at = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+    write_data_split(fetched_at, beaches)
+    return 0
+
+
 def run_selfcheck() -> int:
     today = "2026-08-18"
     yesterday = "2026-08-17"
@@ -1560,6 +1646,53 @@ def run_selfcheck() -> int:
     assert srcs_with_t[0]["name"] == "MeteoSIX"
     assert srcs_with_t[0]["days"][0]["t"] == 18.0
 
+    today_ov = today_utc().isoformat()
+    now_ov = datetime.now(MADRID_TZ)
+    today_madrid = now_ov.date().isoformat()
+    disk_rec = {
+        "id": 1,
+        "sources": [
+            {"name": "Copernicus", "days": [{"date": today_ov, "t": 20.0}]},
+        ],
+    }
+    overlay_rec = {
+        "id": 1,
+        "sources": [
+            {"name": "Copernicus", "days": [{"date": today_ov, "t": 16.0}]},
+            {"name": "MeteoSIX", "days": [{"date": today_ov, "t": 18.0}]},
+        ],
+        "score": 70,
+        "scoreParts": {
+            "water": 50,
+            "air": 60,
+            "wind": 80,
+            "waves": 40,
+            "rain": 100,
+        },
+        "bestHour": 11,
+        "scoreWindow": {"from": 10, "to": 12},
+        "scoreDay": today_madrid,
+        "wave": "calm",
+    }
+    ov_entry = {
+        "id": 1,
+        "slug": "x",
+        "name": "X",
+        "concello": "C",
+        "concelloSlug": "c",
+        "lat": 43.0,
+        "lon": -8.0,
+    }
+    merged = build_overlay_beach(
+        ov_entry, overlay_rec, disk_rec, {"MeteoSIX"}, today_ov, now_ov
+    )
+    by_ov = {s["name"]: s for s in merged["sources"]}
+    assert by_ov["Copernicus"]["days"][0]["t"] == 20.0
+    assert by_ov["MeteoSIX"]["days"][0]["t"] == 18.0
+    assert merged["t"] == 20.0 and merged["source"] == "Copernicus"
+    assert merged["scoreParts"]["water"] == 90
+    assert merged["score"] == score_from_parts(merged["scoreParts"])
+
     print("selfcheck OK")
     return 0
 
@@ -1577,10 +1710,14 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--skip-copernicus", action="store_true")
     parser.add_argument("--skip-meteosix", action="store_true")
     parser.add_argument("--skip-aemet", action="store_true")
+    parser.add_argument("--overlay", type=Path, help="Merge baked DIR onto current data/")
+    parser.add_argument("--replace", default="", help="Comma-separated source names from --overlay")
     args = parser.parse_args(argv)
 
     if args.selfcheck:
         return run_selfcheck()
+    if args.overlay:
+        return run_overlay(args.overlay, args.replace)
 
     catalog = load_json(CATALOG)
     if not catalog.get("beaches"):

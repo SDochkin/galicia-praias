@@ -55,8 +55,20 @@ jobs:
           set -e
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ "${{ github.event.schedule }}" = "0 7 * * *" ]; then
+            REPLACE="MeteoGalicia,AEMET"
+          elif [ "${{ github.event.schedule }}" = "0 10 * * *" ]; then
+            REPLACE="MeteoSIX"
+          elif [ "${{ github.event.schedule }}" = "0 15 * * *" ]; then
+            REPLACE="Copernicus,MeteoGalicia,AEMET"
+          else
+            REPLACE="MeteoGalicia,AEMET,Copernicus,MeteoSIX"
+          fi
+          cp -a data "$RUNNER_TEMP/baked"
           git fetch origin main
           git reset --mixed origin/main
+          git checkout origin/main -- data
+          python3 scripts/update_beaches.py --overlay "$RUNNER_TEMP/baked" --replace "$REPLACE"
           git add -A data
           if git diff --staged --quiet; then
             echo "No changes"
@@ -66,6 +78,8 @@ jobs:
           git push origin HEAD:main || {
             git fetch origin main
             git reset --mixed origin/main
+            git checkout origin/main -- data
+            python3 scripts/update_beaches.py --overlay "$RUNNER_TEMP/baked" --replace "$REPLACE"
             git add -A data
             if git diff --staged --quiet; then
               echo "No changes"
