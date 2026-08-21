@@ -86,12 +86,19 @@ Goal и Scope от пользователя проверять кодом не �
 | `scripts/build_catalog.py` / поля каталога | `catalog.json` → `scripts/update_beaches.py` |
 | `scripts/update_beaches.py` (логика/выход) | `write_data_split`, `run_selfcheck`, `data/*.json`, `index.html`, `.github/workflows/update-beaches.yml` |
 | форма `data/index.json` / `data/<slug>.json` | `index.html`: `fetchedAt`, `concellos`, `beachConcello`, `top`; у пляжа `t`, `source`, `trend`, `sources` |
-| только `index.html` | обычно локально; всё равно проверить, что поля данных не выдуманы |
+| только `index.html` | depth-1 callers в `index.html`, включая другие функции того же файла; поля data не выдумывать |
 | workflow / флаги bake | README cron, `--skip-copernicus`, secrets |
 | символы Gate trigger в ADR | не кодить — см. Before writing |
 
 Локальная правка без других потребителей — одна строка (`low risk: …`).
 Много потребителей — группировать по флоу, сценарий не выкидывать.
+
+При записи заголовка: для каждого символа, который план называет, и для каждого
+экспорта файла правки — grep вызывающих и импортёров, depth 1, только
+зависимость от контракта (сигнатура, семантика, форма выхода, формат хранения).
+Вызывающий в том же файле — отдельный символ в строке `path:`. Строка
+`index.html: sortBeaches` не закрывает `nearbyBeaches`. Вызывающих у
+caller-only строк не грепать.
 
 ## Done
 

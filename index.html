@@ -408,6 +408,16 @@
     .card-score-label {
       color: var(--muted);
     }
+    .hint.card-score-label {
+      color: var(--muted);
+      font-size: var(--fs-xs);
+      font-weight: 600;
+    }
+    .hint.card-score-label::after {
+      content: "";
+      position: absolute;
+      inset: -0.4rem -0.2rem;
+    }
     .card-score,
     .card-temp {
       font-size: var(--fs-sm);
@@ -480,17 +490,30 @@
       align-items: center;
     }
     .bar-hint {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 0.5rem;
+      width: 100%;
       min-width: 0;
       min-height: 0;
-      justify-self: start;
-      place-items: start;
+      justify-self: stretch;
       color: inherit;
       font-weight: 650;
       font-size: inherit;
     }
-    .score-bar .bar {
+    .bar-qual {
+      flex-shrink: 0;
+      font-weight: 400;
+      color: var(--text);
+    }
+    .score-bar .bar-track {
+      --bar-mark: 0.75rem;
+      display: grid;
+      align-items: center;
       margin-left: calc(1em + 0.4rem);
       width: auto;
+      line-height: 0;
     }
     .hint:focus-visible,
     .bar-hint:focus-visible {
@@ -498,6 +521,8 @@
       outline-offset: 1px;
     }
     .bar {
+      display: block;
+      grid-area: 1 / 1;
       width: 100%;
       min-width: 0;
       height: 0.45rem;
@@ -509,6 +534,15 @@
       display: block;
       height: 100%;
       border-radius: inherit;
+    }
+    .bar-mark {
+      grid-area: 1 / 1;
+      position: relative;
+      justify-self: start;
+      width: var(--bar-mark);
+      height: var(--bar-mark);
+      border-radius: 50%;
+      left: calc(var(--pos) * (100% - var(--bar-mark)) / 100);
     }
     .ico {
       flex: 0 0 1em;
@@ -696,6 +730,7 @@
       { id: "fria", cls: "band-fria" },
     ];
     const SCORE_PART_KEYS = ["water", "air", "wind", "waves", "rain"];
+    const SCORE_PART_LESS_BETTER = ["wind", "waves", "rain"];
     const SCORE_PART_ICONS = {
       water: "water",
       air: "air",
@@ -742,7 +777,9 @@
         tipWaves: "Menos oleaje es mejor.",
         tipRain: "Menos lluvia es mejor.",
         partBien: "Bien",
+        partAbove: "Por encima",
         partRegular: "Regular",
+        partBelow: "Por debajo",
         partMal: "Mal",
         uvBajo: "bajo",
         uvModerado: "moderado",
@@ -791,6 +828,7 @@
         indiceLabel: "Confort",
         indiceAria: "Confort {n}",
         indiceNa: "Confort no disponible",
+        tipIndice: "Cuánto de agradable está el baño ahora. Agua, aire, viento, oleaje y lluvia. No mide higiene.",
         caninasTitle: "Playas caninas",
         caninasEmpty: "Sin playas caninas en el catálogo.",
         dogsBadge: "Canina",
@@ -835,7 +873,9 @@
         tipWaves: "Less swell is better.",
         tipRain: "Less rain is better.",
         partBien: "Good",
+        partAbove: "Above average",
         partRegular: "Fair",
+        partBelow: "Below average",
         partMal: "Poor",
         uvBajo: "low",
         uvModerado: "moderate",
@@ -884,6 +924,7 @@
         indiceLabel: "Comfort",
         indiceAria: "Comfort {n}",
         indiceNa: "Comfort not available",
+        tipIndice: "How pleasant it is to swim now. Water, air, wind, swell and rain. It does not measure hygiene.",
         caninasTitle: "Dog beaches",
         caninasEmpty: "No dog beaches in the catalogue.",
         dogsBadge: "Dogs",
@@ -928,7 +969,9 @@
         tipWaves: "Меньше волнения — лучше.",
         tipRain: "Меньше дождя — лучше.",
         partBien: "Хорошо",
+        partAbove: "Выше среднего",
         partRegular: "Средне",
+        partBelow: "Ниже среднего",
         partMal: "Плохо",
         uvBajo: "низкий",
         uvModerado: "умеренный",
@@ -977,6 +1020,7 @@
         indiceLabel: "Комфорт",
         indiceAria: "Комфорт {n}",
         indiceNa: "Комфорт недоступен",
+        tipIndice: "Насколько сейчас приятно купаться. Вода, воздух, ветер, волны и дождь. Не измеряет гигиену.",
         caninasTitle: "Пляжи для собак",
         caninasEmpty: "В каталоге нет пляжей для собак.",
         dogsBadge: "Собаки",
@@ -1593,8 +1637,10 @@
     }
 
     function partQual(n) {
-      if (n >= 67) return t("partBien");
-      if (n >= 34) return t("partRegular");
+      if (n >= 80) return t("partBien");
+      if (n >= 60) return t("partAbove");
+      if (n >= 40) return t("partRegular");
+      if (n >= 20) return t("partBelow");
       return t("partMal");
     }
 
@@ -1624,14 +1670,14 @@
       const label = scorePartLabel(key);
       const q = partQual(value);
       const tip = scorePartTip(key);
+      const pct = Math.max(0, Math.min(100, value));
+      const pos = SCORE_PART_LESS_BETTER.includes(key) ? 100 - pct : pct;
+      const color = scoreColor(value);
       return `<li class="score-bar"><div class="bar-label">${iconSvg(icon)}<button type="button" class="hint bar-hint" data-kind="part-${key}" data-tip="${escapeAttr(
         tip
-      )}" aria-label="${escapeAttr(label)}">${label}</button></div><span class="bar" role="img" aria-label="${escapeAttr(
+      )}" aria-label="${escapeAttr(label)}">${label} <span class="bar-qual">${q}</span></button></div><span class="bar-track"><span class="bar" role="img" aria-label="${escapeAttr(
         `${label}: ${q}`
-      )}"><span class="bar-fill" style="width:${Math.max(
-        0,
-        Math.min(100, value)
-      )}%;background:${scoreColor(value)}"></span></span></li>`;
+      )}"><span class="bar-fill" style="width:${pos}%;background:${color}"></span></span><span class="bar-mark" style="--pos:${pos};background:${color}"></span></span></li>`;
     }
 
     function uvMap(beach) {
@@ -1767,11 +1813,14 @@
           ? `<span class="card-city">${concello}</span>`
           : "";
       const nameId = `name-${beach.slug}`;
+      const scoreLabel = `<button type="button" class="hint card-score-label" data-kind="indice" data-tip="${escapeAttr(
+        t("tipIndice")
+      )}" aria-label="${escapeAttr(t("indiceLabel"))}">${t("indiceLabel")}</button>`;
       const scoreHtml = hasScore
-        ? `<span class="card-score-label">${t("indiceLabel")}</span><span class="card-score" style="color:${scoreColor(
+        ? `${scoreLabel}<span class="card-score" style="color:${scoreColor(
             beach.score
           )}" aria-label="${escapeAttr(t("indiceAria", { n: beach.score }))}">${beach.score}</span>`
-        : `<span class="card-score-label">${t("indiceLabel")}</span><span class="card-score" aria-label="${escapeAttr(
+        : `${scoreLabel}<span class="card-score" aria-label="${escapeAttr(
             t("indiceNa")
           )}">—</span>`;
       const dogs = beachHasDogs(beach)
