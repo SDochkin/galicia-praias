@@ -146,6 +146,39 @@
       text-transform: uppercase;
       letter-spacing: 0.04em;
     }
+    #sort-bar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 0 0 0.75rem;
+    }
+    #sort-legend {
+      font-size: 0.85rem;
+      color: var(--muted);
+      margin-right: 0.25rem;
+    }
+    #sort-bar button {
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+      padding: 0 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
+    }
+    #sort-bar button:hover { border-color: var(--accent); }
+    #sort-bar button[aria-checked="true"] {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+    #sort-bar button:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+    }
     ul.beach-list {
       list-style: none;
       margin: 0;
@@ -153,6 +186,7 @@
       display: grid;
       grid-template-columns: 1fr;
       gap: 0.5rem;
+      align-items: stretch;
     }
     @media (min-width: 32rem) {
       ul.beach-list { grid-template-columns: repeat(2, minmax(0, 1fr)); }
@@ -161,8 +195,12 @@
       ul.beach-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
     }
     .card {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      grid-template-rows: auto auto;
+      align-items: start;
+      gap: 0.35rem 0.5rem;
+      position: relative;
       min-width: 0;
       padding: 0.65rem 0.7rem;
       border-radius: 0.55rem;
@@ -171,31 +209,32 @@
       color: inherit;
       height: 100%;
     }
-    .card:hover, .card.is-flipped { border-color: var(--accent); }
+    .card:hover, .card.is-open { border-color: var(--accent); }
     .card.band-calida { border-color: color-mix(in srgb, var(--calida) 55%, var(--border)); }
     .card.band-templada { border-color: color-mix(in srgb, var(--templada) 45%, var(--border)); }
     .card.band-fria { border-color: color-mix(in srgb, var(--fria) 55%, var(--border)); }
-    .card-face {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.25rem;
-    }
-    .card-flip {
-      flex: 1;
-      min-width: 0;
-      background: none;
-      border: 0;
-      padding: 0;
+    .card-hit {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
       margin: 0;
-      color: inherit;
-      font: inherit;
-      text-align: left;
+      padding: 0;
+      border: 0;
+      border-radius: inherit;
+      background: none;
       cursor: pointer;
     }
-    .card-flip:focus-visible {
+    .card-hit:focus-visible {
       outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
       outline-offset: 2px;
-      border-radius: 0.25rem;
+    }
+    .card-ident {
+      grid-column: 1;
+      grid-row: 1;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
     }
     .card-name {
       font-weight: 550;
@@ -208,11 +247,36 @@
     }
     .card-city { color: var(--muted); font-size: 0.78rem; font-weight: 400; }
     .card-metrics {
+      grid-column: 1 / -1;
+      grid-row: 2;
       display: flex;
       align-items: baseline;
-      gap: 0.55rem;
-      margin-top: 0.3rem;
+      justify-content: space-between;
+      gap: 0.5rem;
+      min-width: 0;
+      position: relative;
+      z-index: 1;
+      pointer-events: none;
       font-variant-numeric: tabular-nums;
+    }
+    .card-temp-cluster {
+      display: flex;
+      align-items: baseline;
+      position: relative;
+      min-width: 0;
+    }
+    .card-score-cluster {
+      display: flex;
+      align-items: baseline;
+      gap: 0.35rem;
+      margin-left: auto;
+    }
+    .card-score-label {
+      color: var(--muted);
+      font-weight: 600;
+      font-size: 0.72rem;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
     }
     .card-score {
       font-weight: 650;
@@ -222,18 +286,12 @@
       font-weight: 650;
       white-space: nowrap;
     }
-    .card-more {
-      display: inline-block;
-      margin-top: 0.25rem;
-      color: var(--muted);
-      font-size: 0.75rem;
-    }
     .temp.band-calida { color: var(--calida); }
     .temp.band-templada { color: var(--templada); }
     .temp.band-fria { color: var(--fria); }
     .trend { margin-left: 0.25rem; font-weight: 700; }
     .hint {
-      flex: 0 0 auto;
+      pointer-events: auto;
       min-width: 2.75rem;
       min-height: 2.75rem;
       display: grid;
@@ -247,12 +305,12 @@
       font-size: 0.9rem;
       line-height: 1;
     }
-    .card-back {
-      margin-top: 0.5rem;
-      padding-top: 0.5rem;
-      border-top: 1px solid var(--border);
-      max-height: min(16rem, 70vh);
-      overflow: auto;
+    .card-temp-cluster .hint {
+      position: absolute;
+      left: 100%;
+      top: 50%;
+      transform: translateY(-50%);
+      z-index: 2;
     }
     .card-facts {
       list-style: none;
@@ -267,45 +325,81 @@
       gap: 0.4rem;
       padding: 0.15rem 0;
     }
+    .card-facts li.score-bar {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.35rem;
+      padding: 0.55rem 0;
+    }
+    .bar-label {
+      display: grid;
+      grid-template-columns: 1em minmax(0, 1fr);
+      column-gap: 0.4rem;
+      align-items: center;
+    }
+    .bar-hint {
+      min-width: 0;
+      min-height: 0;
+      justify-self: start;
+      place-items: start;
+      color: inherit;
+      font-weight: 650;
+      font-size: inherit;
+    }
+    .score-bar .bar {
+      margin-left: calc(1em + 0.4rem);
+      width: auto;
+    }
+    .bar-hint:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+    }
+    .bar {
+      width: 100%;
+      min-width: 0;
+      height: 0.45rem;
+      border-radius: 999px;
+      background: var(--border);
+      overflow: hidden;
+    }
+    .bar-fill {
+      display: block;
+      height: 100%;
+      border-radius: inherit;
+    }
     .ico {
       flex: 0 0 1em;
       width: 1em;
       height: 1em;
     }
     .uv-warn { color: var(--warn); margin: 0.35rem 0 0.45rem; }
-    .card-back details { margin-top: 0.5rem; }
-    .card-back summary {
+    .show-more {
+      display: block;
+      width: 100%;
+      margin-top: 0.65rem;
       min-height: 2.75rem;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
+      padding: 0 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
       color: var(--text);
-      font-weight: 600;
+      font: inherit;
+      font-size: 0.85rem;
+      cursor: pointer;
     }
-    .card-back summary:focus-visible {
+    .show-more:hover { border-color: var(--accent); }
+    .show-more:focus-visible {
       outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
-      outline-offset: 2px;
-      border-radius: 0.25rem;
-    }
-    .card-back h4 {
-      margin: 0.75rem 0 0.25rem;
-      font-size: 0.9rem;
-      color: var(--muted);
-    }
-    .card-back table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
-    .card-back th, .card-back td {
-      text-align: left;
-      padding: 0.35rem 0.25rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .card-back th:not(:first-child),
-    .card-back td:not(:first-child) {
-      width: 4.75rem;
-      text-align: right;
-      font-variant-numeric: tabular-nums;
+      outline-offset: 1px;
     }
     .maps {
-      flex: 0 0 auto;
+      grid-column: 2;
+      grid-row: 1;
+      align-self: start;
+      justify-self: end;
+      position: relative;
+      z-index: 2;
       display: inline-flex;
       align-items: center;
       justify-content: center;
@@ -319,6 +413,86 @@
       font-size: 0.85rem;
     }
     .maps:hover { border-color: var(--accent); }
+    .maps:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+    }
+    #beach-dialog {
+      width: min(36rem, calc(100vw - 1.5rem));
+      max-height: min(80vh, 40rem);
+      overflow: auto;
+      scrollbar-width: none;
+      -ms-overflow-style: none;
+      overscroll-behavior: contain;
+      margin: auto;
+      padding: 1rem max(1rem, env(safe-area-inset-right)) max(1rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+      border: 1px solid var(--border);
+      border-radius: 0.55rem;
+      background: var(--card);
+      color: var(--text);
+      color-scheme: dark;
+    }
+    #beach-dialog::-webkit-scrollbar { display: none; }
+    #beach-dialog::backdrop { background: rgba(0, 0, 0, 0.55); }
+    @media (prefers-reduced-motion: reduce) {
+      #beach-dialog, #beach-dialog::backdrop {
+        animation: none;
+        transition: none;
+      }
+    }
+    .dialog-head {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+    }
+    .dialog-title {
+      flex: 1;
+      min-width: 0;
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 650;
+      text-transform: none;
+      letter-spacing: 0;
+      color: var(--text);
+    }
+    .dialog-head .maps { grid-column: auto; grid-row: auto; justify-self: auto; }
+    #beach-dialog-close {
+      flex: 0 0 auto;
+      min-height: 2.75rem;
+      min-width: 2.75rem;
+      padding: 0 0.7rem;
+      border-radius: 0.5rem;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      font: inherit;
+      font-size: 1.25rem;
+      line-height: 1;
+      cursor: pointer;
+    }
+    #beach-dialog-close:hover { border-color: var(--accent); }
+    #beach-dialog-close:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+    }
+    #beach-dialog h4 {
+      margin: 0.75rem 0 0.25rem;
+      font-size: 0.9rem;
+      color: var(--muted);
+    }
+    #beach-dialog table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+    #beach-dialog th, #beach-dialog td {
+      text-align: left;
+      padding: 0.35rem 0.25rem;
+      border-bottom: 1px solid var(--border);
+    }
+    #beach-dialog th:not(:first-child),
+    #beach-dialog td:not(:first-child) {
+      width: 4.75rem;
+      text-align: right;
+      font-variant-numeric: tabular-nums;
+    }
     #tip {
       position: fixed;
       z-index: 40;
@@ -346,7 +520,7 @@
 <body>
   <main>
     <h1>Temperatura del agua</h1>
-    <p class="sub">Temperatura del agua en playas de Galicia. No son mediciones in situ en la orilla.</p>
+    <p class="sub">No son mediciones in situ en la orilla.</p>
     <label for="concello">Concello</label>
     <div class="combo-row">
     <div class="combo">
@@ -365,7 +539,20 @@
     <button type="button" id="geo-near" aria-label="Playas cercanas">Cerca</button>
     </div>
     <p id="geo-status" class="empty" aria-live="polite" hidden></p>
+    <div id="sort-bar" role="radiogroup" aria-labelledby="sort-legend">
+      <span id="sort-legend">Ordenar</span>
+      <button type="button" role="radio" data-ord="agua" aria-checked="true">Agua</button>
+      <button type="button" role="radio" data-ord="indice" aria-checked="false">Índice</button>
+    </div>
     <div id="lists"></div>
+    <dialog id="beach-dialog" aria-labelledby="beach-dialog-title">
+      <div class="dialog-head">
+        <h2 class="dialog-title" id="beach-dialog-title"></h2>
+        <a class="maps" id="beach-dialog-maps" target="_blank" rel="noopener">Mapa</a>
+        <button type="button" id="beach-dialog-close" aria-label="Cerrar">×</button>
+      </div>
+      <div id="beach-dialog-body"></div>
+    </dialog>
     <footer>
       Datos:
       <a href="https://marine.copernicus.eu/" rel="noopener">E.U. Copernicus Marine Service</a>,
@@ -400,8 +587,17 @@
       waves: "waves",
       rain: "rain",
     };
+    const SCORE_PART_TIPS = {
+      water:
+        "Cuánto de agradable está el agua para bañarse. No mide transparencia ni higiene.",
+      air: "Cuánto de agradable está el aire.",
+      wind: "Menos viento es mejor.",
+      waves: "Menos oleaje es mejor.",
+      rain: "Menos lluvia es mejor.",
+    };
     const GEO_RADIUS_KM = 30;
     const GEO_CAP = 10;
+    const CONCELLO_FACE_CAP = 9;
 
     let index = { fetchedAt: "", concellos: [], beachConcello: {}, top: [], geo: [] };
     let refDay = "";
@@ -409,6 +605,9 @@
     let currentBeach = null;
     let geoMode = false;
     let geoResults = [];
+    let lastGeo = null;
+    let listOrd = "agua";
+    let concelloShowAll = false;
     const concelloCache = new Map();
     let tipOpen = false;
     let tipOwner = null;
@@ -425,6 +624,8 @@
       for (const [k, v] of Object.entries(params || {})) {
         if (v != null && v !== "") clean[k] = v;
       }
+      if (listOrd === "indice") clean.ord = "indice";
+      else delete clean.ord;
       const q = new URLSearchParams(clean).toString();
       const url = q ? `?${q}` : location.pathname;
       if (replace) history.replaceState(null, "", url);
@@ -433,7 +634,30 @@
 
     function parseQuery() {
       const p = new URLSearchParams(location.search);
-      return { c: p.get("c"), b: p.get("b") };
+      return {
+        c: p.get("c"),
+        b: p.get("b"),
+        ord: p.get("ord") === "indice" ? "indice" : "agua",
+      };
+    }
+
+    function applyListOrd(ord) {
+      listOrd = ord === "indice" ? "indice" : "agua";
+      const bar = document.getElementById("sort-bar");
+      if (!bar) return;
+      bar.querySelectorAll("[role='radio']").forEach((btn) => {
+        btn.setAttribute(
+          "aria-checked",
+          btn.dataset.ord === listOrd ? "true" : "false"
+        );
+      });
+    }
+
+    function currentUrlParams() {
+      const params = {};
+      if (currentConcello && !geoMode) params.c = currentConcello;
+      if (currentBeach && currentConcello && !geoMode) params.b = currentBeach;
+      return params;
     }
 
     function dayOf(iso) {
@@ -447,14 +671,13 @@
       return dt.toLocaleDateString("es-ES", { day: "numeric", month: "long" });
     }
 
-    const dayFmt = new Intl.DateTimeFormat("es-ES", {
-      weekday: "short",
-      day: "numeric",
-    });
-
     function formatDay(iso) {
       const [y, m, d] = iso.split("-").map(Number);
-      return dayFmt.format(new Date(y, m - 1, d));
+      const raw = new Intl.DateTimeFormat("es-ES", {
+        weekday: "long",
+        day: "numeric",
+      }).format(new Date(y, m - 1, d));
+      return raw.charAt(0).toLocaleUpperCase("es") + raw.slice(1);
     }
 
     function fmtT(t) {
@@ -639,6 +862,7 @@
     async function selectConcello(slug) {
       geoMode = false;
       setGeoStatus("");
+      concelloShowAll = false;
       if (!slug || slug === currentConcello) {
         setConcelloInput();
         closeCombo();
@@ -662,6 +886,7 @@
       currentConcello = null;
       currentBeach = null;
       geoMode = false;
+      concelloShowAll = false;
       hideTip();
       setConcelloInput();
       closeCombo();
@@ -685,6 +910,9 @@
       const tip = document.getElementById("tip");
       tip.hidden = true;
       tip.textContent = "";
+      if (tip.parentElement !== document.body) {
+        document.body.appendChild(tip);
+      }
       document.querySelectorAll(".hint[aria-describedby='tip']").forEach((el) => {
         el.removeAttribute("aria-describedby");
       });
@@ -692,6 +920,9 @@
 
     function showTip(btn, text, clientX, clientY) {
       const tip = document.getElementById("tip");
+      const dlg = document.getElementById("beach-dialog");
+      const host = dlg && dlg.open && dlg.contains(btn) ? dlg : document.body;
+      if (tip.parentElement !== host) host.appendChild(tip);
       tip.textContent = text;
       tip.hidden = false;
       tipOpen = true;
@@ -777,15 +1008,15 @@
     }
 
     function nearbyBeaches(lat, lon) {
-      const rows = (index.geo || []).filter((b) => typeof b.score === "number");
       const hit = [];
-      for (const b of rows) {
+      for (const b of index.geo || []) {
         if (typeof b.lat !== "number" || typeof b.lon !== "number") continue;
         const km = haversineKm(lat, lon, b.lat, b.lon);
-        if (km <= GEO_RADIUS_KM) hit.push({ ...b, km });
+        if (km > GEO_RADIUS_KM) continue;
+        if (listOrd === "agua" && typeof b.t !== "number") continue;
+        hit.push({ ...b, km });
       }
-      hit.sort((a, b) => b.score - a.score || a.name.localeCompare(b.name, "es"));
-      return hit.slice(0, GEO_CAP);
+      return sortBeaches(hit).slice(0, GEO_CAP);
     }
 
     function beachConcelloLabel(beach) {
@@ -815,42 +1046,23 @@
 
     function accordionTable(title, dates, costaDays, marDays, uvDays, costaName) {
       if (!dates.length) return "";
-      const showCosta = costaDays.size > 0;
-      const showMar = marDays.size > 0;
-      const showUV = dates.some((d) => uvDays.has(d));
-      if (!showCosta && !showMar && !showUV) return "";
       const costaTitle = costaName ? `Según ${costaName}` : "";
-      const heads = ["<th>Día</th>"];
-      if (showCosta) {
-        heads.push(`<th title="${escapeAttr(costaTitle)}">Costa</th>`);
-      }
-      if (showMar) {
-        heads.push(
-          `<th title="${escapeAttr("Según Copernicus")}">Mar</th>`
-        );
-      }
-      if (showUV) {
-        heads.push(
-          `<th title="${escapeAttr("Índice UV máximo del día (OMS)")}">UV</th>`
-        );
-      }
+      const heads = [
+        "<th>Día</th>",
+        `<th title="${escapeAttr(costaTitle)}">Costa</th>`,
+        `<th title="${escapeAttr("Según Copernicus")}">Mar</th>`,
+        `<th title="${escapeAttr("Índice UV máximo del día (OMS)")}">UV</th>`,
+      ];
       const rows = dates.map((d) => {
-        const cells = [`<td>${formatDay(d)}</td>`];
-        if (showCosta) {
-          const t = costaDays.get(d);
-          cells.push(`<td>${t == null ? "—" : `${fmtT(t)} °C`}</td>`);
-        }
-        if (showMar) {
-          const t = marDays.get(d);
-          cells.push(`<td>${t == null ? "—" : `${fmtT(t)} °C`}</td>`);
-        }
-        if (showUV) {
-          const uv = uvDays.get(d);
-          cells.push(
-            `<td>${typeof uv === "number" ? `${uv} ${uvLabel(uv)}` : "—"}</td>`
-          );
-        }
-        return `<tr>${cells.join("")}</tr>`;
+        const tC = costaDays.get(d);
+        const tM = marDays.get(d);
+        const uv = uvDays.get(d);
+        return (
+          `<tr><td>${formatDay(d)}</td>` +
+          `<td>${tC == null ? "—" : `${fmtT(tC)} °C`}</td>` +
+          `<td>${tM == null ? "—" : `${fmtT(tM)} °C`}</td>` +
+          `<td>${typeof uv === "number" ? `${uv} ${uvLabel(uv)}` : "—"}</td></tr>`
+        );
       });
       return (
         `<h4>${title}</h4><table><thead><tr>${heads.join("")}</tr></thead>` +
@@ -874,10 +1086,6 @@
         }
       }
       return `${String(utcHour).padStart(2, "0")}:00`;
-    }
-
-    function prefersReducedMotion() {
-      return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     }
 
     function scoreColor(score) {
@@ -909,8 +1117,24 @@
       return `<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" width="1em" height="1em" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${d}</svg>`;
     }
 
-    function factItem(icon, label, value) {
-      return `<li>${iconSvg(icon)}<span>${label} ${value}</span></li>`;
+    function partQual(n) {
+      if (n >= 67) return "Bien";
+      if (n >= 34) return "Regular";
+      return "Mal";
+    }
+
+    function scoreBar(icon, key, value) {
+      const label = SCORE_PARTS[key];
+      const q = partQual(value);
+      const tip = SCORE_PART_TIPS[key] || "";
+      return `<li class="score-bar"><div class="bar-label">${iconSvg(icon)}<button type="button" class="hint bar-hint" data-kind="part-${key}" data-tip="${escapeAttr(
+        tip
+      )}" aria-label="${escapeAttr(label)}">${label}</button></div><span class="bar" role="img" aria-label="${escapeAttr(
+        `${label}: ${q}`
+      )}"><span class="bar-fill" style="width:${Math.max(
+        0,
+        Math.min(100, value)
+      )}%;background:${scoreColor(value)}"></span></span></li>`;
     }
 
     function uvMap(beach) {
@@ -938,19 +1162,18 @@
       const futDates = allDates.filter((d) => d >= refDay);
       const facts = [];
       if (typeof beach.score === "number") {
-        facts.push(factItem("indice", "Índice", String(beach.score)));
+        const parts = beach.scoreParts || {};
+        for (const k of Object.keys(SCORE_PARTS)) {
+          if (typeof parts[k] === "number") {
+            facts.push(scoreBar(SCORE_PART_ICONS[k], k, parts[k]));
+          }
+        }
         const best = madridClock(beach.scoreDay, beach.bestHour);
         const win = beach.scoreWindow
           ? `${madridClock(beach.scoreDay, beach.scoreWindow.from)}–${madridClock(beach.scoreDay, beach.scoreWindow.to)}`
           : "";
         facts.push(factItem("clock", "Mejor hora", best || "—"));
         facts.push(factItem("clock", "Ventana", win || "—"));
-        const parts = beach.scoreParts || {};
-        for (const k of Object.keys(SCORE_PARTS)) {
-          if (typeof parts[k] === "number") {
-            facts.push(factItem(SCORE_PART_ICONS[k], SCORE_PARTS[k], String(parts[k])));
-          }
-        }
       }
       const mar = marOf(beach);
       if (mar) facts.push(factItem("sea", "Mar", `${fmtT(mar.t)} °C`));
@@ -964,12 +1187,12 @@
         accordionTable("Histórico", histDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
         accordionTable("Pronóstico", futDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
       ].join("");
-      if (tables) {
-        bits.push(
-          `<details><summary>Histórico y pronóstico</summary>${tables}</details>`
-        );
-      }
+      if (tables) bits.push(tables);
       return bits.join("");
+    }
+
+    function factItem(icon, label, value) {
+      return `<li>${iconSvg(icon)}<span>${label} ${value}</span></li>`;
     }
 
     function escapeAttr(s) {
@@ -983,9 +1206,20 @@
       return (beach.sources || []).filter((s) => dayEntry(s.days, refDay)).length;
     }
 
+    function withScore(beach) {
+      if (typeof beach.score === "number") return beach;
+      const g = (index.geo || []).find((x) => x.slug === beach.slug);
+      if (g && typeof g.score === "number") return { ...beach, score: g.score };
+      return beach;
+    }
+
+    function mapsQuery(beach) {
+      const concello = beachConcelloLabel(beach);
+      return encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
+    }
+
     function cardHtml(beach, { showConcello = false } = {}) {
-      const costa = costaOf(beach);
-      const mar = marOf(beach);
+      beach = withScore(beach);
       const hasT = typeof beach.t === "number";
       const hasScore = typeof beach.score === "number";
       const band = hasT ? bandFor(beach.t) : null;
@@ -1010,72 +1244,83 @@
         ? `<span class="trend" aria-label="${escapeAttr(trendName)}">${g}</span>`
         : "";
       const open = currentBeach === beach.slug;
-      const expanded = open ? "true" : "false";
-      const tempText = hasT ? `${fmtT(beach.t)} °C${trend}` : "—";
-      const tempTitle = costa
-        ? `Según ${costa.name}`
-        : mar
-          ? "Según Copernicus"
-          : "";
+      const tempText = hasT ? `${fmtT(beach.t)} °C` : "—";
       const concello = beachConcelloLabel(beach);
-      const q = encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
-      const city = showConcello && concello
-        ? ` <span class="card-city">${concello}</span>`
-        : "";
+      const q = mapsQuery(beach);
+      const city =
+        showConcello && concello
+          ? `<div class="card-city">${concello}</div>`
+          : "";
+      const nameId = `name-${beach.slug}`;
       const scoreHtml = hasScore
-        ? `<span class="card-score" style="color:${scoreColor(beach.score)}" title="Índice ${beach.score}" aria-label="Índice ${beach.score}">${beach.score}</span>`
-        : `<span class="card-score" aria-label="Índice —">—</span>`;
-      const btnId = `flip-${beach.slug}`;
-      const backId = `back-${beach.slug}`;
-      const back = open
-        ? `<div class="card-back" id="${backId}" role="region" aria-labelledby="${btnId}">${cardBackHtml(
-            beach
-          )}</div>`
-        : "";
+        ? `<span class="card-score-label">Índice</span><span class="card-score" style="color:${scoreColor(
+            beach.score
+          )}" aria-label="Índice ${beach.score}">${beach.score}</span>`
+        : `<span class="card-score-label">Índice</span><span class="card-score" aria-label="Índice no disponible">—</span>`;
       return `<li>
-        <article class="card ${bandCls}${open ? " is-flipped" : ""}" data-slug="${beach.slug}">
-          <div class="card-face">
-              <button type="button" class="card-flip" id="${btnId}" data-slug="${beach.slug}" aria-expanded="${expanded}"${
-                open ? ` aria-controls="${backId}"` : ""
-              } aria-label="Detalles, ${escapeAttr(beach.name)}">
-              <span class="card-name">${beach.name}${city}</span>
-              <span class="card-metrics">${scoreHtml}<span class="card-temp temp ${bandCls}"${
-                tempTitle ? ` title="${escapeAttr(tempTitle)}"` : ""
-              }>${tempText}</span></span>
-              <span class="card-more">${open ? "Ocultar detalles" : "Detalles"}</span>
-            </button>
-            ${tipBtn}
-            <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Mapa</a>
+        <article class="card ${bandCls}${open ? " is-open" : ""}" data-slug="${beach.slug}">
+          <button type="button" class="card-hit" data-slug="${beach.slug}" aria-labelledby="${nameId}" aria-haspopup="dialog" aria-expanded="${
+            open ? "true" : "false"
+          }"></button>
+          <div class="card-ident">
+            <div class="card-name" id="${nameId}">${beach.name}</div>
+            ${city}
           </div>
-          ${back}
+          <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">Mapa</a>
+          <div class="card-metrics">
+            <div class="card-temp-cluster">
+              <span class="card-temp temp ${bandCls}">${tempText}${trend}</span>
+              ${tipBtn}
+            </div>
+            <div class="card-score-cluster">${scoreHtml}</div>
+          </div>
         </article>
       </li>`;
     }
 
     function sortBeaches(items) {
-      return [...items].sort((a, b) => {
-        if (typeof a.t === "number" && typeof b.t === "number" && b.t !== a.t) {
-          return b.t - a.t;
-        }
+      const key = listOrd === "indice" ? "score" : "t";
+      return [...items].map(withScore).sort((a, b) => {
+        const av = a[key];
+        const bv = b[key];
+        const aOk = typeof av === "number";
+        const bOk = typeof bv === "number";
+        if (aOk && bOk && bv !== av) return bv - av;
+        if (aOk !== bOk) return aOk ? -1 : 1;
         return a.name.localeCompare(b.name, "es");
       });
     }
 
-    function renderBanded(beaches, { showConcello = false } = {}) {
+    function renderBanded(beaches, { showConcello = false, cap = null } = {}) {
       const withT = beaches.filter((b) => typeof b.t === "number");
       const withoutT = beaches.filter(
-        (b) => typeof b.t !== "number" && ((b.sources || []).length || typeof b.score === "number")
+        (b) =>
+          typeof b.t !== "number" &&
+          ((b.sources || []).length || typeof b.score === "number")
       );
+      const sorted = sortBeaches(withT);
+      let shown = sorted;
+      let hidden = 0;
+      if (cap && sorted.length > cap && !concelloShowAll) {
+        const openIdx = currentBeach
+          ? sorted.findIndex((b) => b.slug === currentBeach)
+          : -1;
+        if (openIdx < cap) {
+          shown = sorted.slice(0, cap);
+          hidden = sorted.length - cap;
+        }
+      }
       const parts = [];
-      for (const band of BANDS) {
-        const items = sortBeaches(
-          withT.filter((b) => bandFor(b.t)?.id === band.id)
-        );
-        if (!items.length) continue;
+      if (shown.length) {
         parts.push(
-          `<section><h3>${band.title}</h3><ul class="beach-list">${items
+          `<ul class="beach-list">${shown
             .map((b) => cardHtml(b, { showConcello }))
-            .join("")}</ul></section>`
+            .join("")}</ul>`
+        );
+      }
+      if (hidden) {
+        parts.push(
+          `<button type="button" class="show-more" id="show-more">Mostrar las demás (${hidden})</button>`
         );
       }
       if (withoutT.length) {
@@ -1092,7 +1337,7 @@
     }
 
     function bindList(root) {
-      root.querySelectorAll("button.card-flip").forEach((btn) => {
+      root.querySelectorAll("button.card-hit").forEach((btn) => {
         btn.addEventListener("click", () => {
           const slug = btn.dataset.slug;
           if (!slug) return;
@@ -1106,6 +1351,45 @@
           track("maps_open", { slug: a.dataset.slug });
         });
       });
+      const more = root.querySelector("#show-more");
+      if (more) {
+        more.addEventListener("click", () => {
+          concelloShowAll = true;
+          renderLists();
+        });
+      }
+    }
+
+    function findOpenBeach() {
+      if (!currentBeach) return null;
+      if (geoMode) {
+        return geoResults.find((b) => b.slug === currentBeach) || null;
+      }
+      if (currentConcello) {
+        const payload = concelloCache.get(currentConcello);
+        return (
+          (payload && payload.beaches || []).find((b) => b.slug === currentBeach) ||
+          null
+        );
+      }
+      return (index.top || []).find((b) => b.slug === currentBeach) || null;
+    }
+
+    function fillBeachDialog(beach) {
+      const title = document.getElementById("beach-dialog-title");
+      const maps = document.getElementById("beach-dialog-maps");
+      const body = document.getElementById("beach-dialog-body");
+      title.textContent = beach.name;
+      maps.href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery(beach)}`;
+      maps.dataset.slug = beach.slug;
+      body.innerHTML = cardBackHtml(beach);
+      body.querySelectorAll("button.hint").forEach(bindHint);
+    }
+
+    function showBeachDialog(beach) {
+      fillBeachDialog(beach);
+      const dlg = document.getElementById("beach-dialog");
+      if (!dlg.open) dlg.showModal();
     }
 
     async function enrichTopBeach(beach) {
@@ -1131,6 +1415,8 @@
 
     async function renderLists() {
       const root = document.getElementById("lists");
+      const dlg = document.getElementById("beach-dialog");
+      if (!currentBeach && dlg.open) dlg.close();
 
       if (geoMode) {
         if (currentBeach) {
@@ -1139,7 +1425,7 @@
             geoResults[idx] = await enrichTopBeach(geoResults[idx]);
           }
         }
-        const items = geoResults
+        const items = sortBeaches(geoResults)
           .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
         root.innerHTML = `<h2>Playas cercanas</h2><ul class="beach-list">${items}</ul>`;
@@ -1148,16 +1434,17 @@
       }
 
       if (currentConcello === null) {
-        let top = [...(index.top || [])];
         if (currentBeach) {
-          const idx = top.findIndex((b) => b.slug === currentBeach);
+          const idx = (index.top || []).findIndex((b) => b.slug === currentBeach);
           if (idx >= 0) {
-            top[idx] = await enrichTopBeach(top[idx]);
+            index.top[idx] = await enrichTopBeach(index.top[idx]);
           }
         }
-        const parts = renderBanded(top, { showConcello: true });
+        const parts = renderBanded(index.top || [], { showConcello: true });
+        const title =
+          listOrd === "indice" ? "Mejor índice hoy" : "Las más cálidas";
         root.innerHTML = parts.length
-          ? `<h2>Las más cálidas</h2>${parts.join("")}`
+          ? `<h2>${title}</h2>${parts.join("")}`
           : '<p class="empty">Sin destacadas.</p>';
         bindList(root);
         return;
@@ -1175,7 +1462,10 @@
         return;
       }
       const beaches = payload.beaches || [];
-      const parts = renderBanded(beaches, { showConcello: false });
+      const parts = renderBanded(beaches, {
+        showConcello: false,
+        cap: CONCELLO_FACE_CAP,
+      });
       root.innerHTML =
         parts.join("") || '<p class="empty">Sin datos para este concello.</p>';
       bindList(root);
@@ -1189,27 +1479,32 @@
         if (currentConcello && !geoMode) setUrl({ c: currentConcello, b: slug });
       }
       await renderLists();
-      const card = document.querySelector(`.card[data-slug="${CSS.escape(slug)}"]`);
-      if (card) {
-        card.scrollIntoView({
-          block: "nearest",
-          behavior: prefersReducedMotion() ? "auto" : "smooth",
-        });
-      }
+      const beach = findOpenBeach();
+      if (beach) showBeachDialog(beach);
     }
 
     function closeBeach({ push = true } = {}) {
+      const slug = currentBeach;
       currentBeach = null;
       hideTip();
       if (push && !geoMode) {
         if (currentConcello === null) setUrl({});
         else setUrl({ c: currentConcello });
       }
+      const dlg = document.getElementById("beach-dialog");
+      if (dlg.open) dlg.close();
       renderLists();
+      if (slug) {
+        const hit = document.querySelector(
+          `.card[data-slug="${CSS.escape(slug)}"] .card-hit`
+        );
+        if (hit) hit.focus();
+      }
     }
 
     async function bootFromQuery() {
-      const { c, b } = parseQuery();
+      const { c, b, ord } = parseQuery();
+      applyListOrd(ord);
       if (b && index.beachConcello[b]) {
         currentConcello = index.beachConcello[b];
       } else if (c) {
@@ -1232,6 +1527,49 @@
       clearConcello();
     });
 
+    const beachDialog = document.getElementById("beach-dialog");
+    document.getElementById("beach-dialog-close").addEventListener("click", () => {
+      closeBeach();
+    });
+    document.getElementById("beach-dialog-maps").addEventListener("click", () => {
+      track("maps_open", { slug: document.getElementById("beach-dialog-maps").dataset.slug });
+    });
+    beachDialog.addEventListener("click", (e) => {
+      if (e.target === beachDialog) closeBeach();
+    });
+    beachDialog.addEventListener("close", () => {
+      if (currentBeach) closeBeach();
+    });
+
+    function changeListOrd(ord) {
+      applyListOrd(ord);
+      if (geoMode && lastGeo) {
+        geoResults = nearbyBeaches(lastGeo.lat, lastGeo.lon);
+      }
+      setUrl(currentUrlParams());
+      renderLists();
+    }
+
+    document.getElementById("sort-bar").addEventListener("click", (e) => {
+      const btn = e.target.closest("[role='radio']");
+      if (!btn || !btn.dataset.ord) return;
+      changeListOrd(btn.dataset.ord);
+    });
+    document.getElementById("sort-bar").addEventListener("keydown", (e) => {
+      if (e.key !== "ArrowRight" && e.key !== "ArrowLeft" && e.key !== "ArrowDown" && e.key !== "ArrowUp") {
+        return;
+      }
+      const radios = [
+        ...document.getElementById("sort-bar").querySelectorAll("[role='radio']"),
+      ];
+      if (!radios.length) return;
+      e.preventDefault();
+      const i = radios.findIndex((b) => b.dataset.ord === listOrd);
+      const next = radios[(i + (e.key === "ArrowLeft" || e.key === "ArrowUp" ? radios.length - 1 : 1)) % radios.length];
+      next.focus();
+      changeListOrd(next.dataset.ord);
+    });
+
     document.getElementById("geo-near").addEventListener("click", () => {
       if (!navigator.geolocation) {
         geoMode = false;
@@ -1246,10 +1584,15 @@
           if (!near.length) {
             geoMode = false;
             geoResults = [];
-            setGeoStatus("No hay playas con índice a menos de 30 km.");
+            lastGeo = null;
+            setGeoStatus("No hay playas a menos de 30 km.");
             await renderLists();
             return;
           }
+          lastGeo = {
+            lat: pos.coords.latitude,
+            lon: pos.coords.longitude,
+          };
           currentConcello = null;
           setConcelloInput();
           setGeoStatus("");
@@ -1261,6 +1604,7 @@
         async () => {
           geoMode = false;
           geoResults = [];
+          lastGeo = null;
           setGeoStatus("No se pudo obtener tu ubicación.");
           await renderLists();
         }
@@ -1333,7 +1677,8 @@
     window.addEventListener("popstate", async () => {
       geoMode = false;
       setGeoStatus("");
-      const { c, b } = parseQuery();
+      const { c, b, ord } = parseQuery();
+      applyListOrd(ord);
       if (b && index.beachConcello[b]) currentConcello = index.beachConcello[b];
       else if (c) currentConcello = c;
       else currentConcello = null;

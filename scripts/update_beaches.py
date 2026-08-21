@@ -84,6 +84,8 @@ SCORE_RAIN = ((0.0, 100.0), (0.2, 70.0), (1.0, 30.0), (3.0, 0.0))
 H_EFF_PERIOD_S = 8.0
 H_EFF_ADD_M = 0.3
 SCORE_WINDOW_DROP = 5
+SCORE_HOUR_START = 10
+SCORE_HOUR_END = 20
 WAVE_CALM_M = 0.5
 WAVE_STRONG_M = 1.2
 SCORE_FIELD_KEYS = (
@@ -658,16 +660,15 @@ def hour_parts(rec: dict) -> dict[str, float]:
 def filter_score_hours(
     hours: list[dict], now: datetime
 ) -> list[dict]:
-    """Keep hours on now's Madrid calendar day, hour >= current hour."""
+    """Keep hours on now's Madrid calendar day in [SCORE_HOUR_START, SCORE_HOUR_END)."""
     now_m = now.astimezone(MADRID_TZ)
     day = now_m.date()
-    hour0 = now_m.replace(minute=0, second=0, microsecond=0)
     out = []
     for rec in hours:
         dt = rec["dt"].astimezone(MADRID_TZ)
         if dt.date() != day:
             continue
-        if dt.replace(minute=0, second=0, microsecond=0) < hour0:
+        if not (SCORE_HOUR_START <= dt.hour < SCORE_HOUR_END):
             continue
         out.append(rec)
     return out
@@ -745,6 +746,17 @@ def compute_score(
     }
 
 
+def resolve_copernicus_source(
+    csrc: dict | None, prev: dict | None
+) -> dict | None:
+    if csrc:
+        return csrc
+    old = previous_source(prev, "Copernicus")
+    if old and source_fresh(old):
+        return old
+    return None
+
+
 def apply_score_fields(
     beach: dict,
     *,
@@ -756,17 +768,18 @@ def apply_score_fields(
     today_madrid = now.astimezone(MADRID_TZ).date().isoformat()
     if fetched_hourly:
         result = compute_score(hourly or [], beach.get("t"), now)
-        beach["score"] = result["score"]
-        beach["scoreParts"] = result["scoreParts"]
-        beach["bestHour"] = result["bestHour"]
-        beach["scoreWindow"] = result["scoreWindow"]
-        beach["scoreDay"] = today_madrid
-        w = wave_at_noon(
-            hourly or [], datetime.now(timezone.utc).date().isoformat()
-        )
-        if w is not None:
-            beach["wave"] = w
-        return
+        if result["score"] is not None:
+            beach["score"] = result["score"]
+            beach["scoreParts"] = result["scoreParts"]
+            beach["bestHour"] = result["bestHour"]
+            beach["scoreWindow"] = result["scoreWindow"]
+            beach["scoreDay"] = today_madrid
+            w = wave_at_noon(
+                hourly or [], datetime.now(timezone.utc).date().isoformat()
+            )
+            if w is not None:
+                beach["wave"] = w
+            return
     if not prev:
         return
     has_any = any(k in prev for k in SCORE_FIELD_KEYS)
@@ -1387,7 +1400,7 @@ def run_selfcheck() -> int:
             **kw,
         }
 
-    # 11:00 Madrid excluded; 12/13/14 compete. wind=2 at 13 → 96, others wind=5 → 93
+    # 11:00 Madrid is in 10–20 and ties 13:00; earlier slot wins.
     hours = [
         hr(11, wind=2.0),
         hr(12, wind=5.0),
@@ -1397,9 +1410,13 @@ def run_selfcheck() -> int:
     got = compute_score(hours, water, now)
     # 90*0.4 + 100*0.2 + 100*0.15 + 100*0.15 + 100*0.10 = 96
     assert got["score"] == 96, got
-    assert got["bestHour"] == 11, got  # 13:00 Madrid = 11:00 UTC
-    assert got["scoreWindow"] == {"from": 10, "to": 12}, got
+    assert got["bestHour"] == 9, got  # 11:00 Madrid = 09:00 UTC
+    assert got["scoreWindow"] == {"from": 9, "to": 12}, got
     assert got["scoreParts"]["water"] == 90
+
+    now_eve = datetime(2026, 8, 20, 18, 0, tzinfo=MADRID_TZ)
+    got_morn = compute_score([hr(11, wind=2.0), hr(18, wind=5.0)], water, now_eve)
+    assert got_morn["bestHour"] == 9, got_morn
 
     # holey 13:00 (no wind) cannot win; window does not jump the hole
     hours_hole = [
@@ -1436,6 +1453,45 @@ def run_selfcheck() -> int:
     assert b2["scoreParts"]["water"] == 100, b2["scoreParts"]
     assert b2["bestHour"] == 11
     assert b2["score"] == score_from_parts(b2["scoreParts"])
+
+    b_empty = {"t": 22.0}
+    apply_score_fields(
+        b_empty, hourly=[], fetched_hourly=True, now=now, prev=prev_t
+    )
+    assert b_empty["scoreParts"]["water"] == 100, b_empty["scoreParts"]
+    assert b_empty["bestHour"] == 11
+    assert b_empty["score"] == score_from_parts(b_empty["scoreParts"])
+    assert b_empty["scoreDay"] == "2026-08-20"
+
+    ae_today = {"date": "2026-08-20", "t": 19.5}
+    old_ae = {
+        "name": "AEMET",
+        "days": [{"date": "2026-08-19", "t": 18.0}, {"date": "2026-08-20", "t": 19.0}],
+        "history": [],
+    }
+    ae_hist = merge_history(
+        old_ae.get("history"),
+        ae_today,
+        prev_day0=old_ae["days"][0],
+    )
+    assert any(h["date"] == "2026-08-19" for h in ae_hist), ae_hist
+
+    fresh_day = today_utc().isoformat()
+    stale_day = (today_utc() - timedelta(days=10)).isoformat()
+    fresh_cop = {
+        "name": "Copernicus",
+        "days": [{"date": fresh_day, "t": 16.0}],
+    }
+    stale_cop = {
+        "name": "Copernicus",
+        "days": [{"date": stale_day, "t": 16.0}],
+    }
+    live = {"name": "Copernicus", "days": [{"date": fresh_day, "t": 17.0}]}
+    assert resolve_copernicus_source(live, {"sources": [fresh_cop]}) is live
+    assert (
+        resolve_copernicus_source(None, {"sources": [fresh_cop]}) is fresh_cop
+    )
+    assert resolve_copernicus_source(None, {"sources": [stale_cop]}) is None
 
     rec = concello_beach_record(
         {
@@ -1646,7 +1702,18 @@ def main(argv: list[str] | None = None) -> int:
             ae_days = fetch_aemet(str(aemet_id), api_key)
             time.sleep(2.0)
             if ae_days and day_for_date(ae_days, today):
-                sources.append({"name": "AEMET", "days": ae_days})
+                old_ae = previous_source(prev, "AEMET")
+                today_point = day_for_date(ae_days, today)
+                old_days = (old_ae or {}).get("days") or []
+                prev_d0 = old_days[0] if old_days else None
+                hist = merge_history(
+                    (old_ae or {}).get("history"),
+                    today_point,  # type: ignore[arg-type]
+                    prev_day0=prev_d0 if isinstance(prev_d0, dict) else None,
+                )
+                sources.append(
+                    {"name": "AEMET", "days": ae_days, "history": hist}
+                )
             else:
                 old = previous_source(prev, "AEMET")
                 if old and source_fresh(old):
@@ -1667,6 +1734,7 @@ def main(argv: list[str] | None = None) -> int:
                     float(entry["lon"]),
                     today,
                 )
+            csrc = resolve_copernicus_source(csrc, prev)
             if csrc:
                 sources.append(csrc)
         else:
