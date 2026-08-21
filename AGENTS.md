@@ -41,6 +41,10 @@ Do not hand-edit `catalog.json`, `NOTES.md`, or `data/*.json` (exception: owner 
 
 Catalog name / AEMET / concello overrides live only in `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`, `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`).
 
+## Analytics
+
+Do not rename events passed to `track` in [`index.html`](index.html) (comment on `track`). Those names are accumulated Umami series. New field values inside an event are safe. Do not copy the name list here.
+
 ## Definition of Done (bake)
 
 After changing bake logic:
