@@ -30,6 +30,7 @@ ADR conflict → stop, quote the ADR, do not patch. Code only after explicit `su
 | [`docs/adr/README.md`](docs/adr/README.md) | Decisions; gate trigger; when to write ADR |
 | [`docs/mar-qa.md`](docs/mar-qa.md) | Evidence for ADR-0001 |
 | [`docs/meteosix-api.md`](docs/meteosix-api.md) | MeteoSIX v5 extract (URL, limits, variables, model run times) |
+| [`docs/ui-chrome.md`](docs/ui-chrome.md) | when adding a hero figure or editing chrome in `index.html` |
 | [`DATA-LICENSE.md`](DATA-LICENSE.md) | Per-source data licences |
 | [`NOTES.md`](NOTES.md) | Generated catalog notes |
 

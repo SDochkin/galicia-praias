@@ -51,14 +51,16 @@ METEOSIX_VARS = (
     "significative_wave_height",
     "relative_peak_period",
     "precipitation_amount",
+    "sky_state",
 )
 # 1:1 with METEOSIX_VARS. Wind units ms_deg (score is m/s; API default km/h).
-METEOSIX_UNITS = ",,ms_deg,,,"
+# sky_state slot empty: docs/meteosix-api.md §sky_state.
+METEOSIX_UNITS = ",,ms_deg,,,,"
 # Wave model: v5 A1 says SWAN → USWAN. Try live, first that returns wave values wins.
 METEOSIX_MODEL_CANDIDATES = (
-    "ROMS,WRF,WRF,USWAN,USWAN,WRF",
-    "ROMS,WRF,WRF,SWAN,SWAN,WRF",
-    "ROMS,WRF,WRF,WW3,WW3,WRF",
+    "ROMS,WRF,WRF,USWAN,USWAN,WRF,WRF",
+    "ROMS,WRF,WRF,SWAN,SWAN,WRF,WRF",
+    "ROMS,WRF,WRF,WW3,WW3,WRF,WRF",
 )
 
 # Display score. 17/20 must match bandFor in index.html.
@@ -68,6 +70,7 @@ SCORE_WEIGHTS = {
     "wind": 15,
     "waves": 15,
     "rain": 10,
+    "sky": 10,
 }
 SCORE_WATER = ((14.0, 0.0), (17.0, 50.0), (20.0, 90.0), (22.0, 100.0))
 SCORE_AIR = (
@@ -81,6 +84,30 @@ SCORE_AIR = (
 SCORE_WIND = ((2.0, 100.0), (5.0, 80.0), (8.0, 40.0), (12.0, 0.0))
 SCORE_WAVES = ((0.3, 100.0), (0.5, 80.0), (1.2, 30.0), (2.0, 0.0))
 SCORE_RAIN = ((0.0, 100.0), (0.2, 70.0), (1.0, 30.0), (3.0, 0.0))
+# Codes: docs/meteosix-api.md §sky_state. Higher = clearer.
+SCORE_SKY = {
+    "SUNNY": 100.0,
+    "HIGH_CLOUDS": 85.0,
+    "MID_CLOUDS": 70.0,
+    "PARTLY_CLOUDY": 60.0,
+    "CLOUDY": 40.0,
+    "OVERCAST": 25.0,
+    "MIST": 35.0,
+    "FOG_BANK": 30.0,
+    "FOG": 20.0,
+    "WEAK_RAIN": 25.0,
+    "WEAK_SHOWERS": 25.0,
+    "DRIZZLE": 20.0,
+    "SHOWERS": 15.0,
+    "STORM_THEN_CLOUDY": 15.0,
+    "OVERCAST_AND_SHOWERS": 10.0,
+    "RAIN": 10.0,
+    "INTERMITENT_SNOW": 10.0,
+    "MELTED_SNOW": 10.0,
+    "RAIN_HAIL": 5.0,
+    "SNOW": 5.0,
+    "STORMS": 0.0,
+}
 H_EFF_PERIOD_S = 8.0
 H_EFF_ADD_M = 0.3
 SCORE_WINDOW_DROP = 5
@@ -94,6 +121,7 @@ SCORE_FIELD_KEYS = (
     "bestHour",
     "scoreWindow",
     "scoreDay",
+    "scoreByDay",
     "wave",
 )
 
@@ -299,6 +327,20 @@ def compute_trend(history: list[dict], today_t: float, today: str) -> str | None
     return "flat"
 
 
+def _history_point(pt: dict) -> dict | None:
+    if not isinstance(pt, dict) or "date" not in pt or pt.get("t") is None:
+        return None
+    try:
+        rec = {"date": pt["date"], "t": _round_t(pt["t"])}
+    except (TypeError, ValueError):
+        return None
+    for k, v in pt.items():
+        if k in ("date", "t"):
+            continue
+        rec[k] = v
+    return rec
+
+
 def merge_history(
     old: list[dict] | None,
     today_point: dict,
@@ -308,27 +350,22 @@ def merge_history(
     keep_days: int = HISTORY_DAYS,
 ) -> list[dict]:
     """Keep up to keep_days past points (dates strictly before today_point)."""
-    if replace is not None:
-        pts = {
-            h["date"]: _round_t(h["t"])
-            for h in replace
-            if "date" in h and "t" in h
-        }
-    else:
-        pts = {
-            h["date"]: _round_t(h["t"])
-            for h in (old or [])
-            if "date" in h and "t" in h
-        }
-        if prev_day0 and prev_day0.get("date") and prev_day0.get("t") is not None:
-            if prev_day0["date"] < today_point["date"]:
-                pts[prev_day0["date"]] = _round_t(prev_day0["t"])
+    pts: dict[str, dict] = {}
+    src = replace if replace is not None else list(old or [])
+    for h in src:
+        rec = _history_point(h)
+        if rec:
+            pts[rec["date"]] = rec
+    if replace is None:
+        extra = _history_point(prev_day0) if prev_day0 else None
+        if extra and extra["date"] < today_point["date"]:
+            pts[extra["date"]] = extra
     today = date.fromisoformat(today_point["date"])
     out = []
     for i in range(1, keep_days + 1):
         d = (today - timedelta(days=i)).isoformat()
         if d in pts:
-            out.append({"date": d, "t": pts[d]})
+            out.append(pts[d])
     out.sort(key=lambda x: x["date"])
     return out
 
@@ -426,6 +463,7 @@ def parse_meteosix_feature(feat: dict) -> tuple[list[dict], list[dict]]:
             "h": _var_values(variables, "significative_wave_height"),
             "period": _var_values(variables, "relative_peak_period"),
             "rain": _var_values(variables, "precipitation_amount"),
+            "sky": _var_values(variables, "sky_state"),
         }
         for key, rows in buckets.items():
             field = "moduleValue" if key == "wind" else "value"
@@ -436,7 +474,12 @@ def parse_meteosix_feature(feat: dict) -> tuple[list[dict], list[dict]]:
                 if dt is None:
                     continue
                 rec = by_dt.setdefault(dt, {"dt": dt})
-                rec[key] = _num(row.get(field))
+                if key == "sky":
+                    raw = row.get("value")
+                    if isinstance(raw, str) and raw.strip():
+                        rec[key] = raw.strip()
+                else:
+                    rec[key] = _num(row.get(field))
     hours = [by_dt[k] for k in sorted(by_dt)]
     by_date: dict[str, list[tuple[datetime, float]]] = defaultdict(list)
     for rec in hours:
@@ -504,7 +547,13 @@ def _probe_raw_vars(feat: dict) -> None:
         field = "moduleValue" if var.get("name") == "wind" else "value"
         if isinstance(vals, list):
             for row in vals:
-                if isinstance(row, dict) and _num(row.get(field)) is not None:
+                if not isinstance(row, dict):
+                    continue
+                if var.get("name") == "sky_state":
+                    raw = row.get("value")
+                    if isinstance(raw, str) and raw.strip():
+                        n_ok += 1
+                elif _num(row.get(field)) is not None:
                     n_ok += 1
         bits.append(
             f"{var.get('name')}/{var.get('model')}/{var.get('grid')} non_null={n_ok}"
@@ -646,6 +695,13 @@ def append_meteosix_source(
         sources.append(dict(old))
 
 
+def _sky_code(raw: Any) -> str | None:
+    if not isinstance(raw, str):
+        return None
+    code = raw.strip().upper().replace("-", "_").replace(" ", "_")
+    return code or None
+
+
 def hour_parts(rec: dict) -> dict[str, float]:
     parts: dict[str, float] = {}
     if isinstance(rec.get("air"), float):
@@ -657,15 +713,14 @@ def hour_parts(rec: dict) -> dict[str, float]:
         parts["waves"] = piecewise(h_eff(rec["h"], period), SCORE_WAVES)
     if isinstance(rec.get("rain"), float):
         parts["rain"] = piecewise(rec["rain"], SCORE_RAIN)
+    sky = _sky_code(rec.get("sky"))
+    if sky in SCORE_SKY:
+        parts["sky"] = SCORE_SKY[sky]
     return parts
 
 
-def filter_score_hours(
-    hours: list[dict], now: datetime
-) -> list[dict]:
-    """Keep hours on now's Madrid calendar day in [SCORE_HOUR_START, SCORE_HOUR_END)."""
-    now_m = now.astimezone(MADRID_TZ)
-    day = now_m.date()
+def filter_score_hours(hours: list[dict], day: date) -> list[dict]:
+    """Keep hours on the Madrid calendar day in [SCORE_HOUR_START, SCORE_HOUR_END)."""
     out = []
     for rec in hours:
         dt = rec["dt"].astimezone(MADRID_TZ)
@@ -691,6 +746,8 @@ def compute_score(
     hours: list[dict],
     water_t: float | None,
     now: datetime,
+    *,
+    day: date | None = None,
 ) -> dict[str, Any]:
     empty = {
         "score": None,
@@ -701,7 +758,8 @@ def compute_score(
     if not isinstance(water_t, (int, float)):
         return empty
     water_s = piecewise(float(water_t), SCORE_WATER)
-    remaining = filter_score_hours(hours, now)
+    target = day if day is not None else now.astimezone(MADRID_TZ).date()
+    remaining = filter_score_hours(hours, target)
     if not remaining:
         return empty
     rows = [(rec, hour_parts(rec)) for rec in remaining]
@@ -760,6 +818,43 @@ def resolve_copernicus_source(
     return None
 
 
+def source_day_t(beach: dict, day: str) -> float | None:
+    name = beach.get("source")
+    if not name:
+        return None
+    for s in beach.get("sources") or []:
+        if s.get("name") != name:
+            continue
+        d = day_for_date(s.get("days") or [], day)
+        return float(d["t"]) if d else None
+    return None
+
+
+def build_score_by_day(
+    hours: list[dict], beach: dict, now: datetime
+) -> dict[str, dict]:
+    days = sorted(
+        {
+            rec["dt"].astimezone(MADRID_TZ).date()
+            for rec in hours
+            if rec.get("dt")
+        }
+    )
+    out: dict[str, dict] = {}
+    for d in days:
+        iso = d.isoformat()
+        result = compute_score(hours, source_day_t(beach, iso), now, day=d)
+        if result["score"] is None:
+            continue
+        out[iso] = {
+            "score": result["score"],
+            "scoreParts": result["scoreParts"],
+            "bestHour": result["bestHour"],
+            "scoreWindow": result["scoreWindow"],
+        }
+    return out
+
+
 def apply_score_fields(
     beach: dict,
     *,
@@ -769,6 +864,11 @@ def apply_score_fields(
     prev: dict | None,
 ) -> None:
     today_madrid = now.astimezone(MADRID_TZ).date().isoformat()
+    by_day = (
+        build_score_by_day(hourly or [], beach, now)
+        if fetched_hourly and hourly
+        else {}
+    )
     if fetched_hourly:
         result = compute_score(hourly or [], beach.get("t"), now)
         if result["score"] is not None:
@@ -782,26 +882,24 @@ def apply_score_fields(
             )
             if w is not None:
                 beach["wave"] = w
+            if by_day:
+                beach["scoreByDay"] = by_day
             return
-    if not prev:
-        return
-    has_any = any(k in prev for k in SCORE_FIELD_KEYS)
-    if not has_any:
-        return
-    for k in SCORE_FIELD_KEYS:
-        if k in prev:
-            beach[k] = prev[k]
-    if prev.get("scoreDay") != today_madrid:
-        return
-    if not isinstance(beach.get("t"), (int, float)):
-        return
-    parts = beach.get("scoreParts")
-    if not isinstance(parts, dict) or "water" not in parts:
-        return
-    new_parts = dict(parts)
-    new_parts["water"] = round(piecewise(float(beach["t"]), SCORE_WATER))
-    beach["scoreParts"] = new_parts
-    beach["score"] = score_from_parts(new_parts)
+    if prev and any(k in prev for k in SCORE_FIELD_KEYS):
+        for k in SCORE_FIELD_KEYS:
+            if k in prev:
+                beach[k] = prev[k]
+        if prev.get("scoreDay") == today_madrid and isinstance(
+            beach.get("t"), (int, float)
+        ):
+            parts = beach.get("scoreParts")
+            if isinstance(parts, dict) and "water" in parts:
+                new_parts = dict(parts)
+                new_parts["water"] = round(piecewise(float(beach["t"]), SCORE_WATER))
+                beach["scoreParts"] = new_parts
+                beach["score"] = score_from_parts(new_parts)
+    if fetched_hourly and by_day:
+        beach["scoreByDay"] = by_day
 
 
 def concello_beach_record(b: dict) -> dict:
@@ -841,6 +939,7 @@ def feature_var_presence(feat: dict) -> dict[str, bool]:
         "significative_wave_height": any(isinstance(h.get("h"), float) for h in hours),
         "relative_peak_period": any(isinstance(h.get("period"), float) for h in hours),
         "precipitation_amount": any(isinstance(h.get("rain"), float) for h in hours),
+        "sky_state": any(isinstance(h.get("sky"), str) for h in hours),
     }
 
 
@@ -1337,6 +1436,17 @@ def run_selfcheck() -> int:
     assert len(merged) <= HISTORY_DAYS
     assert all(h["date"] < today for h in merged)
     assert all(h["t"] == 18.4 for h in merged)
+    uv_merged = merge_history(
+        [{"date": yesterday, "t": 13.0, "uv": 7}],
+        {"date": today, "t": 15.0, "uv": 8},
+    )
+    assert uv_merged == [{"date": yesterday, "t": 13.0, "uv": 7}], uv_merged
+    uv_from_d0 = merge_history(
+        [],
+        {"date": today, "t": 15.0},
+        prev_day0={"date": yesterday, "t": 14.0, "uv": 6},
+    )
+    assert uv_from_d0 == [{"date": yesterday, "t": 14.0, "uv": 6}], uv_from_d0
 
     # top: ≤2 per concello
     sample = [
@@ -1514,6 +1624,49 @@ def run_selfcheck() -> int:
     got_h = compute_score(hours_hole, water, now)
     assert got_h["bestHour"] == 12, got_h  # 14:00 Madrid = 12:00 UTC
     assert got_h["scoreWindow"] == {"from": 12, "to": 12}, got_h
+
+    h21 = {
+        "dt": datetime(2026, 8, 21, 11, 0, tzinfo=MADRID_TZ).astimezone(
+            timezone.utc
+        ),
+        "air": 24.0,
+        "wind": 2.0,
+        "h": 0.3,
+        "period": 10.0,
+        "rain": 0.0,
+    }
+    only_today = filter_score_hours([hr(11), h21], now.date())
+    assert len(only_today) == 1, only_today
+    assert only_today[0]["dt"].astimezone(MADRID_TZ).date() == now.date()
+
+    hours_sky = [hr(11, sky="SUNNY"), hr(12), hr(13, sky="SUNNY")]
+    got_sky = compute_score(hours_sky, water, now)
+    assert got_sky["bestHour"] == 9, got_sky
+    assert got_sky["scoreWindow"] == {"from": 9, "to": 9}, got_sky
+    assert "sky" in got_sky["scoreParts"], got_sky
+
+    b_day = {
+        "t": 20.0,
+        "source": "MeteoGalicia",
+        "sources": [
+            {
+                "name": "MeteoGalicia",
+                "days": [
+                    {"date": "2026-08-20", "t": 20.0},
+                    {"date": "2026-08-21", "t": 22.0},
+                ],
+            }
+        ],
+    }
+    apply_score_fields(
+        b_day,
+        hourly=[hr(11), h21],
+        fetched_hourly=True,
+        now=now,
+        prev=None,
+    )
+    assert b_day["scoreByDay"]["2026-08-20"]["scoreParts"]["water"] == 90
+    assert b_day["scoreByDay"]["2026-08-21"]["scoreParts"]["water"] == 100
 
     # carry: yesterday scoreDay + skip keeps fields; today + skip + new t updates water
     prev_y = {

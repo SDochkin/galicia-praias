@@ -40,6 +40,19 @@
 | `relative_peak_period` | период волны | WW3, SWAN | целое | `s` |
 | `temperature` | температура воздуха | WRF | целое | `degC` |
 | `precipitation_amount` | осадки за предыдущий час | WRF | вещественное с 2 знаками | `lm2` (л/м²) |
+| `sky_state` | состояние неба | WRF | категориальный код (строка) | нет единицы |
+
+## `sky_state` (§6.1)
+
+Мануал v5, таблица переменных `/getNumericForecastInfo`: `value` — строковый код, не число. Колонка единиц для этой переменной пустая. Сноска той же таблицы: если в запросе задан параметр `units`, слот для `sky_state` должен быть пустой строкой без пробелов. В JSON у переменной поле `units` — пустая строка; у `sky_state` и `wind` поле `units` в описании ответа не несет физической единицы ([§Ответ JSON](#ответ-json-getnumericforecastinfo)).
+
+Коды из той же таблицы §6.1 (порядок как в мануале):
+
+`SUNNY`, `HIGH_CLOUDS`, `PARTLY_CLOUDY`, `OVERCAST`, `CLOUDY`, `FOG`, `SHOWERS`, `OVERCAST_AND_SHOWERS`, `INTERMITENT_SNOW`, `DRIZZLE`, `RAIN`, `SNOW`, `STORMS`, `MIST`, `FOG_BANK`, `MID_CLOUDS`, `WEAK_RAIN`, `WEAK_SHOWERS`, `STORM_THEN_CLOUDY`, `MELTED_SNOW`, `RAIN_HAIL`.
+
+Bake не переводит код в физическую величину. Часть комфорта для каждого кода — `SCORE_SKY` в [`scripts/update_beaches.py`](../scripts/update_beaches.py). Выше по шкале — яснее. Неизвестный код в часть не входит.
+
+Пример значения в мануале (раздел ответа JSON, переменная `sky_state`): `value` = `CLOUDY` на `timeInstant`.
 
 Волновые переменные в v5 **есть**. Приложение A1 при этом говорит, что запросы к модели `SWAN` в v5 нужно менять на `USWAN` / сетку `Galicia`; таблица §6.1 по-прежнему перечисляет SWAN. Что именно отправлять в `models=` — проверять живым запросом, не этой выпиской.
 

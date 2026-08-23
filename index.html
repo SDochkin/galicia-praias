@@ -374,7 +374,7 @@
       margin-top: auto;
       padding-top: 1rem;
       display: flex;
-      align-items: baseline;
+      align-items: flex-start;
       justify-content: space-between;
       gap: 0.5rem;
       min-width: 0;
@@ -387,11 +387,15 @@
     .card-temp-cluster,
     .card-score-cluster {
       display: flex;
-      align-items: baseline;
-      gap: 0.25rem;
+      flex-direction: column;
+      gap: 0.45rem;
       min-width: 0;
     }
+    .card-temp-cluster {
+      align-items: flex-start;
+    }
     .card-score-cluster {
+      align-items: flex-end;
       margin-left: auto;
     }
     .card-metrics .temp {
@@ -432,6 +436,12 @@
       font-size: var(--fs-sm);
       line-height: 1;
     }
+    .card-temp-cluster .hint.card-score-label,
+    .card-facts .hint.card-score-label {
+      font-size: var(--fs-xs);
+      font-weight: 600;
+      color: var(--muted);
+    }
     .temp.band-calida { color: var(--calida); }
     .temp.band-templada { color: var(--templada); }
     .temp.band-fria { color: var(--fria); }
@@ -470,6 +480,15 @@
       align-items: center;
       gap: 0.45rem;
       padding: 0.3rem 0;
+    }
+    .card-facts li.fact-figure {
+      align-items: flex-start;
+    }
+    .fact-figure-body {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.45rem;
     }
     .card-facts .hint::after {
       content: "";
@@ -624,6 +643,8 @@
       color: var(--muted);
     }
     #beach-dialog table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
+    #beach-dialog col.col-day { width: 28%; }
+    #beach-dialog col.col-metric { width: 18%; }
     #beach-dialog th, #beach-dialog td {
       text-align: left;
       padding: 0.35rem 0.25rem;
@@ -631,7 +652,6 @@
     }
     #beach-dialog th:not(:first-child),
     #beach-dialog td:not(:first-child) {
-      width: 4.75rem;
       text-align: right;
       font-variant-numeric: tabular-nums;
     }
@@ -729,7 +749,7 @@
       { id: "templada", cls: "band-templada" },
       { id: "fria", cls: "band-fria" },
     ];
-    const SCORE_PART_KEYS = ["water", "air", "wind", "waves", "rain"];
+    const SCORE_PART_KEYS = ["water", "air", "wind", "waves", "rain", "sky"];
     const SCORE_PART_LESS_BETTER = ["wind", "waves", "rain"];
     const SCORE_PART_ICONS = {
       water: "water",
@@ -737,6 +757,7 @@
       wind: "wind",
       waves: "waves",
       rain: "rain",
+      sky: "sky",
     };
     const LOCALES = { es: "es-ES", en: "en-GB", ru: "ru-RU" };
     const DOGS_POST = "https://blog.turismo.gal/playas-para-perros-en-galicia/";
@@ -771,11 +792,14 @@
         scoreWind: "Viento",
         scoreWaves: "Oleaje",
         scoreRain: "Lluvia",
+        scoreSky: "Cielo",
+        tempNature: "Modelo",
         tipWater: "Cuánto de agradable está el agua para bañarse. No mide transparencia ni higiene.",
         tipAir: "Cuánto de agradable está el aire.",
         tipWind: "Menos viento es mejor.",
         tipWaves: "Menos oleaje es mejor.",
         tipRain: "Menos lluvia es mejor.",
+        tipSky: "Más claro es mejor.",
         partBien: "Bien",
         partAbove: "Por encima",
         partRegular: "Regular",
@@ -824,6 +848,7 @@
         geoFail: "No se pudo obtener tu ubicación.",
         geoGetting: "Obteniendo ubicación…",
         geoNone: "No hay playas a menos de 30 km.",
+        kmAway: "{n} km",
         noIndex: "No se pudo cargar data/index.json ({err}).",
         indiceLabel: "Confort",
         indiceAria: "Confort {n}",
@@ -867,11 +892,14 @@
         scoreWind: "Wind",
         scoreWaves: "Waves",
         scoreRain: "Rain",
+        scoreSky: "Sky",
+        tempNature: "Model",
         tipWater: "How pleasant the water is for swimming. It does not measure clarity or hygiene.",
         tipAir: "How pleasant the air is.",
         tipWind: "Less wind is better.",
         tipWaves: "Less swell is better.",
         tipRain: "Less rain is better.",
+        tipSky: "Clearer is better.",
         partBien: "Good",
         partAbove: "Above average",
         partRegular: "Fair",
@@ -920,6 +948,7 @@
         geoFail: "Could not get your location.",
         geoGetting: "Getting location…",
         geoNone: "No beaches within 30 km.",
+        kmAway: "{n} km",
         noIndex: "Could not load data/index.json ({err}).",
         indiceLabel: "Comfort",
         indiceAria: "Comfort {n}",
@@ -963,11 +992,14 @@
         scoreWind: "Ветер",
         scoreWaves: "Волны",
         scoreRain: "Дождь",
+        scoreSky: "Небо",
+        tempNature: "Модель",
         tipWater: "Насколько вода приятна для купания. Не измеряет прозрачность и гигиену.",
         tipAir: "Насколько приятен воздух.",
         tipWind: "Меньше ветра — лучше.",
         tipWaves: "Меньше волнения — лучше.",
         tipRain: "Меньше дождя — лучше.",
+        tipSky: "Яснее — лучше.",
         partBien: "Хорошо",
         partAbove: "Выше среднего",
         partRegular: "Средне",
@@ -1016,6 +1048,7 @@
         geoFail: "Не удалось определить местоположение.",
         geoGetting: "Определяем местоположение…",
         geoNone: "Нет пляжей ближе 30 км.",
+        kmAway: "{n} км",
         noIndex: "Не удалось загрузить data/index.json ({err}).",
         indiceLabel: "Комфорт",
         indiceAria: "Комфорт {n}",
@@ -1530,7 +1563,8 @@
         if (listOrd === "agua" && typeof b.t !== "number") continue;
         hit.push({ ...b, km });
       }
-      return sortBeaches(hit).slice(0, GEO_CAP);
+      hit.sort((a, b) => a.km - b.km);
+      return hit.slice(0, GEO_CAP);
     }
 
     function beachConcelloLabel(beach) {
@@ -1558,11 +1592,15 @@
       return t("uvExtremo");
     }
 
-    function accordionTable(title, dates, costaDays, marDays, uvDays, costaName) {
+    function accordionTable(title, dates, costaDays, marDays, uvDays, costaName, scoreByDay) {
       if (!dates.length) return "";
       const costaTitle = costaName ? t("segun", { name: costaName }) : "";
+      const showScore = Boolean(scoreByDay);
       const heads = [
         `<th>${t("tableDay")}</th>`,
+        showScore
+          ? `<th>${t("indiceLabel")}</th>`
+          : `<th aria-hidden="true"></th>`,
         `<th title="${escapeAttr(costaTitle)}">${t("tableCosta")}</th>`,
         `<th title="${escapeAttr(t("segunCopernicus"))}">${t("tableMar")}</th>`,
         `<th title="${escapeAttr(t("uvTitle"))}">${t("tableUv")}</th>`,
@@ -1571,15 +1609,22 @@
         const tC = costaDays.get(d);
         const tM = marDays.get(d);
         const uv = uvDays.get(d);
+        const sc = scoreByDay && scoreByDay[d];
+        const scoreCell = showScore
+          ? `<td>${sc && typeof sc.score === "number" ? sc.score : "—"}</td>`
+          : `<td aria-hidden="true"></td>`;
         return (
           `<tr><td>${formatDay(d)}</td>` +
+          `${scoreCell}` +
           `<td>${tC == null ? "—" : `${fmtT(tC)} °C`}</td>` +
           `<td>${tM == null ? "—" : `${fmtT(tM)} °C`}</td>` +
           `<td>${typeof uv === "number" ? `${uv} ${uvLabel(uv)}` : "—"}</td></tr>`
         );
       });
+      const cols = `<col class="col-day">${"<col class=\"col-metric\">".repeat(4)}`;
       return (
-        `<h4>${title}</h4><table><thead><tr>${heads.join("")}</tr></thead>` +
+        `<h4>${title}</h4><table><colgroup>${cols}</colgroup>` +
+        `<thead><tr>${heads.join("")}</tr></thead>` +
         `<tbody>${rows.join("")}</tbody></table>`
       );
     }
@@ -1624,6 +1669,7 @@
         wind: '<path d="M3 10h11a3 3 0 1 0-3-3M3 14h8a2.5 2.5 0 1 1-2.5 2.5"/>',
         waves: '<path d="M3 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/>',
         rain: '<path d="M8 6a5 5 0 0 1 9 3h1a3.5 3.5 0 1 1 0 7H7a4 4 0 0 1-1-7.9"/><path d="M8 18v2M12 17v3M16 18v2"/>',
+        sky: '<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
         sea: '<path d="M3 13c2 2 4 2 6 0s4-2 6 0 4 2 6 0M3 18c2 2 4 2 6 0s4-2 6 0 4 2 6 0"/>',
         dogs:
           '<path d="M180-475q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm240 0q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180 160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM266-75q-45 0-75.5-34.5T160-191q0-53 36-91.5t88-53.5q41-10 81.5-14.5T446-355q41 0 81 4.5T608-336q52 15 88 53.5T732-191q0 47-30.5 81.5T626-75H266Z"/>',
@@ -1651,6 +1697,7 @@
         wind: "scoreWind",
         waves: "scoreWaves",
         rain: "scoreRain",
+        sky: "scoreSky",
       };
       return t(map[key] || key);
     }
@@ -1662,6 +1709,7 @@
         wind: "tipWind",
         waves: "tipWaves",
         rain: "tipRain",
+        sky: "tipSky",
       };
       return t(map[key] || key);
     }
@@ -1683,7 +1731,8 @@
     function uvMap(beach) {
       const mgSrc = (beach.sources || []).find((s) => s.name === "MeteoGalicia");
       const uvDays = new Map();
-      for (const d of (mgSrc && mgSrc.days) || []) {
+      if (!mgSrc) return uvDays;
+      for (const d of [...(mgSrc.history || []), ...(mgSrc.days || [])]) {
         if (d && d.date && typeof d.uv === "number") uvDays.set(d.date, d.uv);
       }
       return uvDays;
@@ -1702,7 +1751,7 @@
         ...new Set([...costaDays.keys(), ...marDays.keys(), ...uvDays.keys()]),
       ].sort();
       const histDates = allDates.filter((d) => d < refDay);
-      const futDates = allDates.filter((d) => d >= refDay);
+      const futDates = allDates.filter((d) => d > refDay);
       const facts = [];
       if (typeof beach.score === "number") {
         const parts = beach.scoreParts || {};
@@ -1712,14 +1761,24 @@
           }
         }
         const best = madridClock(beach.scoreDay, beach.bestHour);
-        const win = beach.scoreWindow
-          ? `${madridClock(beach.scoreDay, beach.scoreWindow.from)}–${madridClock(beach.scoreDay, beach.scoreWindow.to)}`
-          : "";
         facts.push(factItem("clock", t("mejorHora"), best || "—", "tipMejorHora", "mejorHora"));
-        facts.push(factItem("clock", t("ventana"), win || "—", "tipVentana", "ventana"));
+        if (
+          beach.scoreWindow &&
+          beach.scoreWindow.from !== beach.scoreWindow.to
+        ) {
+          const win = `${madridClock(beach.scoreDay, beach.scoreWindow.from)}–${madridClock(beach.scoreDay, beach.scoreWindow.to)}`;
+          facts.push(factItem("clock", t("ventana"), win || "—", "tipVentana", "ventana"));
+        }
       }
       const mar = marOf(beach);
-      if (mar) facts.push(factItem("sea", t("mar"), `${fmtT(mar.t)} °C`));
+      if (mar) {
+        facts.push(
+          `<li class="fact-figure">${iconSvg("sea")}<span class="fact-figure-body"><span>${t("mar")} ${fmtT(mar.t)} °C</span>${natureBtn(
+            beach,
+            "Copernicus"
+          )}</span></li>`
+        );
+      }
       const bits = [];
       if (facts.length) bits.push(`<ul class="card-facts">${facts.join("")}</ul>`);
       const todayUv = uvDays.get(refDay);
@@ -1728,10 +1787,31 @@
       }
       const tables = [
         accordionTable(t("hist"), histDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
-        accordionTable(t("forecast"), futDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
+        accordionTable(t("forecast"), futDates, costaDays, marDays, uvDays, costaSrc ? beach.source : "", beach.scoreByDay || {}),
       ].join("");
       if (tables) bits.push(tables);
       return bits.join("");
+    }
+
+    function figureChrome(beach, sourceName) {
+      if (disagree(beach)) {
+        return { kind: "status", tip: disagreeText(beach), aria: t("hintDisagree") };
+      }
+      if (typeof beach.t !== "number" && (beach.sources || []).length) {
+        return { kind: "status", tip: dashTip(beach), aria: t("hintNodata") };
+      }
+      return {
+        kind: "nature",
+        tip: t("segun", { name: sourceName || "—" }),
+        aria: t("tempNature"),
+      };
+    }
+
+    function natureBtn(beach, sourceName) {
+      const c = figureChrome(beach, sourceName);
+      return `<button type="button" class="hint card-score-label" data-kind="${c.kind}" data-tip="${escapeAttr(
+        c.tip
+      )}" aria-label="${escapeAttr(c.aria)}">${t("tempNature")}</button>`;
     }
 
     function factItem(icon, label, value, tipKey, kind) {
@@ -1750,10 +1830,6 @@
         .replace(/</g, "&lt;");
     }
 
-    function todaySourceCount(beach) {
-      return (beach.sources || []).filter((s) => dayEntry(s.days, refDay)).length;
-    }
-
     function withScore(beach) {
       if (typeof beach.score === "number") return beach;
       const g = (index.geo || []).find((x) => x.slug === beach.slug);
@@ -1762,6 +1838,13 @@
     }
 
     function mapsQuery(beach) {
+      if (typeof beach.lat === "number" && typeof beach.lon === "number") {
+        return encodeURIComponent(`${beach.lat},${beach.lon}`);
+      }
+      const g = (index.geo || []).find((x) => x.slug === beach.slug);
+      if (g && typeof g.lat === "number" && typeof g.lon === "number") {
+        return encodeURIComponent(`${g.lat},${g.lon}`);
+      }
       const concello = beachConcelloLabel(beach);
       return encodeURIComponent(`${beach.name}, ${concello}, Galicia`);
     }
@@ -1784,18 +1867,12 @@
       const band = hasT ? bandFor(beach.t) : null;
       const bandCls = band ? band.cls : "";
       let tipBtn = "";
-      if (hasT && disagree(beach)) {
-        tipBtn = `<button type="button" class="hint" data-kind="disagree" data-tip="${escapeAttr(
-          disagreeText(beach)
-        )}" aria-label="${escapeAttr(t("hintDisagree"))}">?</button>`;
-      } else if (!hasT && (beach.sources || []).length) {
-        tipBtn = `<button type="button" class="hint" data-kind="nodata" data-tip="${escapeAttr(
+      if (hasT) {
+        tipBtn = natureBtn(beach, beach.source);
+      } else if ((beach.sources || []).length) {
+        tipBtn = `<button type="button" class="hint" data-kind="status" data-tip="${escapeAttr(
           dashTip(beach)
         )}" aria-label="${escapeAttr(t("hintNodata"))}">?</button>`;
-      } else if (todaySourceCount(beach) === 1) {
-        tipBtn = `<button type="button" class="hint" data-kind="single" data-tip="${escapeAttr(
-          t("singleSource")
-        )}" aria-label="${escapeAttr(t("hintSingle"))}">?</button>`;
       }
       const trendName = hasT ? trendLabel(beach.trend) : "";
       const g = hasT ? trendGlyph(beach.trend) : "";
@@ -1808,21 +1885,25 @@
         : `<span class="card-temp">—</span>`;
       const concello = beachConcelloLabel(beach);
       const q = mapsQuery(beach);
-      const city =
-        showConcello && concello
-          ? `<span class="card-city">${concello}</span>`
-          : "";
+      let city = "";
+      if (showConcello && concello) {
+        const kmBit =
+          typeof beach.km === "number"
+            ? ` · ${t("kmAway", { n: Number(beach.km).toLocaleString(localeTag(), { minimumFractionDigits: 1, maximumFractionDigits: 1 }) })}`
+            : "";
+        city = `<span class="card-city">${concello}${kmBit}</span>`;
+      }
       const nameId = `name-${beach.slug}`;
       const scoreLabel = `<button type="button" class="hint card-score-label" data-kind="indice" data-tip="${escapeAttr(
         t("tipIndice")
       )}" aria-label="${escapeAttr(t("indiceLabel"))}">${t("indiceLabel")}</button>`;
       const scoreHtml = hasScore
-        ? `${scoreLabel}<span class="card-score" style="color:${scoreColor(
+        ? `<span class="card-score" style="color:${scoreColor(
             beach.score
-          )}" aria-label="${escapeAttr(t("indiceAria", { n: beach.score }))}">${beach.score}</span>`
-        : `${scoreLabel}<span class="card-score" aria-label="${escapeAttr(
+          )}" aria-label="${escapeAttr(t("indiceAria", { n: beach.score }))}">${beach.score}</span>${scoreLabel}`
+        : `<span class="card-score" aria-label="${escapeAttr(
             t("indiceNa")
-          )}">—</span>`;
+          )}">—</span>${scoreLabel}`;
       const dogs = beachHasDogs(beach)
         ? `<button type="button" class="hint dogs-badge" data-kind="dogs" data-tip="${escapeAttr(
             t("dogsTip")
@@ -2085,13 +2166,10 @@
       }
 
       if (geoMode) {
-        if (currentBeach) {
-          const idx = geoResults.findIndex((b) => b.slug === currentBeach);
-          if (idx >= 0) {
-            geoResults[idx] = await enrichTopBeach(geoResults[idx]);
-          }
-        }
-        const items = sortBeaches(geoResults)
+        geoResults = await Promise.all(
+          geoResults.map((b) => enrichTopBeach(b))
+        );
+        const items = geoResults
           .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
         root.innerHTML = `<h2>${t("playasCercanas")}</h2><ul class="beach-list">${items}</ul>`;
