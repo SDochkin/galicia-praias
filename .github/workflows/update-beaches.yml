@@ -17,7 +17,12 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
-    timeout-minutes: 90
+    timeout-minutes: 180
+    env:
+      AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
+      COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUSMARINE_SERVICE_USERNAME }}
+      COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUSMARINE_SERVICE_PASSWORD }}
+      METEOSIX_API_KEY: ${{ secrets.METEOSIX_API_KEY }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -32,59 +37,71 @@ jobs:
         if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *'
         run: pip install copernicusmarine
 
-      - name: Fetch temperatures
-        env:
-          AEMET_API_KEY: ${{ secrets.AEMET_API_KEY }}
-          COPERNICUSMARINE_SERVICE_USERNAME: ${{ secrets.COPERNICUSMARINE_SERVICE_USERNAME }}
-          COPERNICUSMARINE_SERVICE_PASSWORD: ${{ secrets.COPERNICUSMARINE_SERVICE_PASSWORD }}
-          METEOSIX_API_KEY: ${{ secrets.METEOSIX_API_KEY }}
-        run: |
-          set -e
-          if [ "${{ github.event.schedule }}" = "0 7 * * *" ]; then
-            python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix
-          elif [ "${{ github.event.schedule }}" = "0 10 * * *" ]; then
-            python3 scripts/update_beaches.py --skip-copernicus --skip-mg --skip-aemet
-          elif [ "${{ github.event.schedule }}" = "0 15 * * *" ]; then
-            python3 scripts/update_beaches.py --skip-meteosix
-          else
-            python3 scripts/update_beaches.py
-          fi
+      - name: Fetch Copernicus
+        id: fetch_copernicus
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *'
+        run: python3 scripts/update_beaches.py --skip-meteosix --skip-mg --skip-aemet
 
-      - name: Commit data
-        run: |
-          set -e
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          if [ "${{ github.event.schedule }}" = "0 7 * * *" ]; then
-            REPLACE="MeteoGalicia,AEMET"
-          elif [ "${{ github.event.schedule }}" = "0 10 * * *" ]; then
-            REPLACE="MeteoSIX"
-          elif [ "${{ github.event.schedule }}" = "0 15 * * *" ]; then
-            REPLACE="Copernicus,MeteoGalicia,AEMET"
-          else
-            REPLACE="MeteoGalicia,AEMET,Copernicus,MeteoSIX"
-          fi
-          cp -a data "$RUNNER_TEMP/baked"
-          git fetch origin main
-          git reset --mixed origin/main
-          git checkout origin/main -- data
-          python3 scripts/update_beaches.py --overlay "$RUNNER_TEMP/baked" --replace "$REPLACE"
-          git add -A data
-          if git diff --staged --quiet; then
-            echo "No changes"
-            exit 0
-          fi
-          git commit -m "data: update beach temperatures"
-          git push origin HEAD:main || {
-            git fetch origin main
-            git reset --mixed origin/main
-            git checkout origin/main -- data
-            python3 scripts/update_beaches.py --overlay "$RUNNER_TEMP/baked" --replace "$REPLACE"
-            git add -A data
-            if git diff --staged --quiet; then
-              echo "No changes"
-              exit 0
-            fi
-            git commit -m "data: update beach temperatures"
-            git push origin HEAD:main
-          }
+      - name: Commit Copernicus
+        if: >-
+          (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *')
+          && steps.fetch_copernicus.outcome == 'success'
+        env:
+          REPLACE: Copernicus
+        run: bash .github/scripts/commit-data.sh
+
+      - name: Fetch MeteoSIX
+        id: fetch_meteosix
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10 * * *')
+        run: python3 scripts/update_beaches.py --skip-copernicus --skip-mg --skip-aemet
+
+      - name: Commit MeteoSIX
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10 * * *')
+          && steps.fetch_meteosix.outcome == 'success'
+        env:
+          REPLACE: MeteoSIX
+        run: bash .github/scripts/commit-data.sh
+
+      - name: Fetch MG
+        id: fetch_mg
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *'
+          || github.event.schedule == '0 15 * * *')
+        run: python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix --skip-aemet
+
+      - name: Commit MG
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *'
+          || github.event.schedule == '0 15 * * *')
+          && steps.fetch_mg.outcome == 'success'
+        env:
+          REPLACE: MeteoGalicia
+        run: bash .github/scripts/commit-data.sh
+
+      - name: Fetch AEMET
+        id: fetch_aemet
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *'
+          || github.event.schedule == '0 15 * * *')
+        run: python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix --skip-mg
+
+      - name: Commit AEMET
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *'
+          || github.event.schedule == '0 15 * * *')
+          && steps.fetch_aemet.outcome == 'success'
+        env:
+          REPLACE: AEMET
+        run: bash .github/scripts/commit-data.sh

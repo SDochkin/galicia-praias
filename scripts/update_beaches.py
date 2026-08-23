@@ -14,6 +14,7 @@ import urllib.error
 import urllib.parse
 import urllib.request
 from collections import defaultdict
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
@@ -25,6 +26,7 @@ DATA_DIR = ROOT / "data"
 BEACHES_LEGACY = ROOT / "beaches.json"
 
 MG_URL = "https://servizos.meteogalicia.gal/mgrss/predicion/jsonPredPraia.action?idPraia={}"
+MG_WORKERS = 4
 AEMET_URL = "https://opendata.aemet.es/opendata/api/prediccion/especifica/playa/{}"
 METEOSIX_URL = (
     "https://servizos.meteogalicia.gal/apiv5/getNumericForecastInfo"
@@ -174,28 +176,57 @@ def mg_days_from_payload(data: dict) -> list[dict] | None:
     return out
 
 
-def fetch_mg(beach_id: int) -> list[dict] | None:
+def fetch_mg(
+    beach_id: int, attempts: int = 3, timeout: int = 45
+) -> list[dict] | None:
     url = MG_URL.format(beach_id)
-    for attempt in range(3):
+    last = attempts - 1
+    for attempt in range(attempts):
         try:
-            body, _ = http_get(url)
+            body, _ = http_get(url, timeout=timeout)
             data = json.loads(body.decode("utf-8"))
             return mg_days_from_payload(data)
         except Exception:  # noqa: BLE001
-            if attempt == 2:
+            if attempt == last:
                 return None
             time.sleep(1.0 + attempt)
     return None
 
 
-def fetch_aemet(aemet_id: str, api_key: str) -> list[dict] | None:
+def fetch_all_mg(entries: list[dict]) -> dict[int, list[dict] | None]:
+    ids = [entry["id"] for entry in entries]
+    n = len(ids)
+    print(f"fetching MG beaches={n} workers={MG_WORKERS}", flush=True)
+    out: dict[int, list[dict] | None] = {}
+
+    def one(bid: int) -> tuple[int, list[dict] | None]:
+        days = fetch_mg(bid, attempts=1, timeout=25)
+        time.sleep(0.3)
+        return bid, days
+
+    with ThreadPoolExecutor(max_workers=MG_WORKERS) as pool:
+        futs = [pool.submit(one, bid) for bid in ids]
+        done = 0
+        for fut in as_completed(futs):
+            bid, days = fut.result()
+            out[bid] = days
+            done += 1
+            if done % 50 == 0:
+                print(f"MG {done}/{n}", flush=True)
+    return out
+
+
+def fetch_aemet(
+    aemet_id: str, api_key: str, attempts: int = 3, timeout: int = 45
+) -> list[dict] | None:
     headers = {"api_key": api_key, "Accept": "application/json"}
     url = AEMET_URL.format(aemet_id)
     remaining_pause = 2.0
+    last = attempts - 1
 
-    for attempt in range(3):
+    for attempt in range(attempts):
         try:
-            body, hdrs = http_get(url, headers=headers)
+            body, hdrs = http_get(url, headers=headers, timeout=timeout)
             rem = hdrs.get("remaining-request-endpoint")
             if rem is not None:
                 try:
@@ -209,7 +240,7 @@ def fetch_aemet(aemet_id: str, api_key: str) -> list[dict] | None:
             if meta.get("estado") != 200 or not meta.get("datos"):
                 return None
             time.sleep(remaining_pause)
-            body2, hdrs2 = http_get(meta["datos"], headers=headers)
+            body2, hdrs2 = http_get(meta["datos"], headers=headers, timeout=timeout)
             rem2 = hdrs2.get("remaining-request-endpoint")
             if rem2 is not None:
                 try:
@@ -242,11 +273,11 @@ def fetch_aemet(aemet_id: str, api_key: str) -> list[dict] | None:
                 remaining_pause = min(remaining_pause * 2, 30)
                 time.sleep(remaining_pause)
                 continue
-            if attempt == 2:
+            if attempt == last:
                 return None
             time.sleep(1.0 + attempt)
         except Exception:  # noqa: BLE001
-            if attempt == 2:
+            if attempt == last:
                 return None
             time.sleep(1.0 + attempt)
     return None
@@ -1952,6 +1983,9 @@ def main(argv: list[str] | None = None) -> int:
     beaches_out: list[dict] = []
     fresh_mg = 0
     cat_ids = []
+    mg_got: dict[int, list[dict] | None] = {}
+    if not args.skip_mg:
+        mg_got = fetch_all_mg(entries)
 
     for idx, entry in enumerate(entries):
         bid = entry["id"]
@@ -1960,8 +1994,7 @@ def main(argv: list[str] | None = None) -> int:
         sources: list[dict] = []
 
         if not args.skip_mg:
-            mg_days = fetch_mg(bid)
-            time.sleep(0.3)
+            mg_days = mg_got.get(bid)
             if _mg_has_today(mg_days, today):
                 fresh_mg += 1
                 old_mg = previous_source(prev, "MeteoGalicia")
@@ -1989,7 +2022,7 @@ def main(argv: list[str] | None = None) -> int:
 
         aemet_id = entry.get("aemetId")
         if aemet_id and api_key and not args.skip_aemet:
-            ae_days = fetch_aemet(str(aemet_id), api_key)
+            ae_days = fetch_aemet(str(aemet_id), api_key, attempts=1, timeout=25)
             time.sleep(2.0)
             if ae_days and day_for_date(ae_days, today):
                 old_ae = previous_source(prev, "AEMET")

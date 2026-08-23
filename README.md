@@ -41,12 +41,12 @@ python3 scripts/update_beaches.py --limit 5
 python3 scripts/update_beaches.py --coverage   # MeteoSIX only; does not write data/
 ```
 
-Cron (`.github/workflows/update-beaches.yml`):
+Cron (`.github/workflows/update-beaches.yml`), one fetch+commit pair per source:
 
-- **07:00 UTC** — MG/AEMET (`--skip-copernicus --skip-meteosix`)
+- **07:00 UTC** — MG (`--skip-copernicus --skip-meteosix --skip-aemet`), then AEMET (`--skip-copernicus --skip-meteosix --skip-mg`)
 - **10:00 UTC** — MeteoSIX (`--skip-copernicus --skip-mg --skip-aemet`); ROMS ~09:30 UTC
-- **15:00 UTC** — Copernicus + MG/AEMET (`--skip-meteosix`); IBI ~14:00 UTC
-- **workflow_dispatch** — all sources, no skips
+- **15:00 UTC** — Copernicus (`--skip-meteosix --skip-mg --skip-aemet`), then MG, then AEMET; IBI ~14:00 UTC
+- **workflow_dispatch** — Copernicus, MeteoSIX, MG, AEMET in that order
 
 Datos servidos: `data/index.json` + `data/<concelloSlug>.json`.
 
