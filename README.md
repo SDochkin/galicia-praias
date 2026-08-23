@@ -21,7 +21,7 @@ Sitio estático: Copernicus IBI (+ MeteoGalicia / AEMET / MeteoSIX).
 python3 scripts/build_catalog.py
 ```
 
-Overrides de nombres / AEMET / concello van en `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`, `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`). No editar `catalog.json` / `NOTES.md` a mano.
+Overrides de nombres / AEMET / concello / coords van en `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`, `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`, `COORD_OVERRIDES`). No editar `catalog.json` / `NOTES.md` a mano.
 
 ## Manual data refresh
 
@@ -43,10 +43,10 @@ python3 scripts/update_beaches.py --coverage   # MeteoSIX only; does not write d
 
 Cron (`.github/workflows/update-beaches.yml`), one fetch+commit pair per source:
 
-- **07:00 UTC** — MG (`--skip-copernicus --skip-meteosix --skip-aemet`), then AEMET (`--skip-copernicus --skip-meteosix --skip-mg`)
+- **07:00 UTC** — layers (`--skip-mg --skip-aemet --skip-meteosix --skip-copernicus`), then MG (`--skip-copernicus --skip-meteosix --skip-aemet`), then AEMET (`--skip-copernicus --skip-meteosix --skip-mg`)
 - **10:00 UTC** — MeteoSIX (`--skip-copernicus --skip-mg --skip-aemet`); ROMS ~09:30 UTC
 - **15:00 UTC** — Copernicus (`--skip-meteosix --skip-mg --skip-aemet`), then MG, then AEMET; IBI ~14:00 UTC
-- **workflow_dispatch** — Copernicus, MeteoSIX, MG, AEMET in that order
+- **workflow_dispatch** — Copernicus, MeteoSIX, layers, MG, AEMET in that order
 
 Datos servidos: `data/index.json` + `data/<concelloSlug>.json`.
 

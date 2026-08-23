@@ -20,6 +20,14 @@ from pathlib import Path
 from typing import Any
 from zoneinfo import ZoneInfo
 
+from beach_layers import (
+    FILTER_FIELD_KEYS,
+    LAYER_FIELD_KEYS,
+    apply_layer_fields,
+    collect_layers,
+    copy_layer_fields,
+)
+
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG = ROOT / "catalog.json"
 DATA_DIR = ROOT / "data"
@@ -946,11 +954,12 @@ def concello_beach_record(b: dict) -> dict:
     for k in SCORE_FIELD_KEYS:
         if k in b:
             rec[k] = b[k]
+    copy_layer_fields(rec, b)
     return rec
 
 
 def geo_entry(b: dict) -> dict:
-    return {
+    rec = {
         "slug": b["slug"],
         "name": b["name"],
         "concelloSlug": b["concelloSlug"],
@@ -959,6 +968,8 @@ def geo_entry(b: dict) -> dict:
         "t": b.get("t"),
         "score": b.get("score"),
     }
+    copy_layer_fields(rec, b, FILTER_FIELD_KEYS)
+    return rec
 
 
 def feature_var_presence(feat: dict) -> dict[str, bool]:
@@ -1231,19 +1242,19 @@ def build_top(beaches: list[dict], cap: int = TOP_CAP) -> list[dict]:
             sources_slim.append(
                 {"name": s["name"], "days": s.get("days") or []}
             )
-        out.append(
-            {
-                "slug": b["slug"],
-                "name": b["name"],
-                "concello": b["concello"],
-                "concelloSlug": b["concelloSlug"],
-                "t": b["t"],
-                "score": b.get("score"),
-                "source": b.get("source"),
-                "trend": b.get("trend"),
-                "sources": sources_slim,
-            }
-        )
+        top_rec = {
+            "slug": b["slug"],
+            "name": b["name"],
+            "concello": b["concello"],
+            "concelloSlug": b["concelloSlug"],
+            "t": b["t"],
+            "score": b.get("score"),
+            "source": b.get("source"),
+            "trend": b.get("trend"),
+            "sources": sources_slim,
+        }
+        copy_layer_fields(top_rec, b, FILTER_FIELD_KEYS)
+        out.append(top_rec)
         if len(out) >= cap:
             break
     return out
@@ -1343,6 +1354,8 @@ def build_overlay_beach(
         now=now,
         prev=score_prev,
     )
+    layer_src = overlay_rec if "Layers" in replace else disk_rec
+    copy_layer_fields(beach, layer_src)
     return beach
 
 
@@ -1877,6 +1890,61 @@ def run_selfcheck() -> int:
     assert merged["scoreParts"]["water"] == 90
     assert merged["score"] == score_from_parts(merged["scoreParts"])
 
+    disk_layer = {
+        "id": 1,
+        "sources": [
+            {"name": "Copernicus", "days": [{"date": today_ov, "t": 20.0}]},
+        ],
+        "flagYear": 2026,
+        "sinHumo": True,
+        "tramo": "natural",
+    }
+    overlay_layer = {
+        "id": 1,
+        "sources": [
+            {"name": "Copernicus", "days": [{"date": today_ov, "t": 16.0}]},
+        ],
+        "flagYear": 2026,
+        "sinHumo": True,
+        "tramo": "urbano",
+        "tidePort": "Vigo",
+    }
+    weather_ov = build_overlay_beach(
+        ov_entry, overlay_layer, disk_layer, {"MeteoGalicia"}, today_ov, now_ov
+    )
+    assert weather_ov.get("tramo") == "natural"
+    assert weather_ov.get("flagYear") == 2026
+    layer_ov = build_overlay_beach(
+        ov_entry, overlay_layer, disk_layer, {"Layers"}, today_ov, now_ov
+    )
+    assert layer_ov.get("tramo") == "urbano"
+    assert layer_ov.get("tidePort") == "Vigo"
+    rec_layer = concello_beach_record(
+        {
+            "id": 1,
+            "slug": "x",
+            "name": "X",
+            "t": 20.0,
+            "source": "MeteoGalicia",
+            "trend": None,
+            "sources": [],
+            "flagYear": 2026,
+            "higiene": 100,
+        }
+    )
+    assert rec_layer["flagYear"] == 2026 and rec_layer["higiene"] == 100
+    b_keep = {"id": 1}
+    apply_layer_fields(b_keep, {"flagYear": 2026, "tramo": "urbano"}, set(), {})
+    assert b_keep["flagYear"] == 2026 and b_keep["tramo"] == "urbano"
+    b_new = {"id": 1}
+    apply_layer_fields(
+        b_new,
+        {"flagYear": 2025, "tramo": "urbano"},
+        {"flagYear", "tramo"},
+        {"flagYear": 2026},
+    )
+    assert b_new["flagYear"] == 2026 and "tramo" not in b_new
+
     print("selfcheck OK")
     return 0
 
@@ -2095,7 +2163,33 @@ def main(argv: list[str] | None = None) -> int:
             now=now_madrid,
             prev=prev,
         )
+        apply_layer_fields(beach, prev, set(), {})
         beaches_out.append(beach)
+
+    do_layers = args.skip_mg and args.skip_aemet and args.skip_meteosix and args.skip_copernicus
+    if do_layers and not args.limit:
+        print("fetching layers…", flush=True)
+        layer_by_id, replaced_layers = collect_layers(
+            [  # type: ignore[arg-type]
+                {
+                    "id": b["id"],
+                    "name": b["name"],
+                    "concello": b["concello"],
+                    "lat": b["lat"],
+                    "lon": b["lon"],
+                }
+                for b in beaches_out
+            ],
+            prev_by_id,
+            today_d.year,
+        )
+        for beach in beaches_out:
+            apply_layer_fields(
+                beach,
+                prev_by_id.get(beach["id"]),
+                replaced_layers,
+                layer_by_id.get(beach["id"]) or {},
+            )
 
     # id-set guards (skip when --limit)
     if not args.limit:

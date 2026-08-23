@@ -66,6 +66,24 @@ jobs:
           REPLACE: MeteoSIX
         run: bash .github/scripts/commit-data.sh
 
+      - name: Fetch layers
+        id: fetch_layers
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *')
+        run: python3 scripts/update_beaches.py --skip-mg --skip-aemet --skip-meteosix --skip-copernicus
+
+      - name: Commit layers
+        if: >-
+          always()
+          && (github.event_name == 'workflow_dispatch'
+          || github.event.schedule == '0 7 * * *')
+          && steps.fetch_layers.outcome == 'success'
+        env:
+          REPLACE: Layers
+        run: bash .github/scripts/commit-data.sh
+
       - name: Fetch MG
         id: fetch_mg
         if: >-

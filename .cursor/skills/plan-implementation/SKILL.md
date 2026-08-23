@@ -20,7 +20,7 @@ description: >-
 3. Scope — эффект для пользователя или продукта. Секция «Не делаем» не обязательна; писать её только по тесту забора ниже.
 4. `catalog.json` и `NOTES.md` руками не править — только через
    `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`,
-   `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`).
+   `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`, `COORD_OVERRIDES`).
 5. План правок `index.html` или UI не переименовывает события `track` (комментарий у `track` в [`index.html`](../../../index.html)). Новые значения полей внутри события можно. `PRIMARY_ORDER` и `pick_primary` выбирают только суточное `beach.t`; волны, ветер и `score` в этот кортеж не входят — [AGENTS.md](../../../AGENTS.md) (On ADR, plans, and reports) и [docs/adr/README.md](../../../docs/adr/README.md) п.9.
 
 Неясный запрос (нет дефекта / цели / ограничения) — спросить, не угадывать.

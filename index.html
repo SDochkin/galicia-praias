@@ -66,6 +66,7 @@
     #lang-bar button,
     #sort-bar button,
     #caninas-toggle,
+    #layer-filters button,
     #geo-near,
     #beach-dialog-close,
     #concello-clear,
@@ -92,6 +93,7 @@
     #lang-bar button:hover,
     #sort-bar button:hover,
     #caninas-toggle:hover,
+    #layer-filters button:hover,
     #geo-near:hover,
     #beach-dialog-close:hover,
     #concello-clear:hover,
@@ -101,13 +103,15 @@
     }
     #lang-bar button[aria-checked="true"],
     #sort-bar button[aria-checked="true"],
-    #caninas-toggle[aria-pressed="true"] {
+    #caninas-toggle[aria-pressed="true"],
+    #layer-filters button[aria-pressed="true"] {
       background: color-mix(in srgb, var(--accent) 16%, transparent);
       color: var(--accent);
     }
     #lang-bar button:focus-visible,
     #sort-bar button:focus-visible,
     #caninas-toggle:focus-visible,
+    #layer-filters button:focus-visible,
     #geo-near:focus-visible,
     #beach-dialog-close:focus-visible,
     #concello-clear:focus-visible,
@@ -370,6 +374,39 @@
       color: var(--muted);
     }
     .dialog-dogs a { color: var(--accent); }
+    #layer-filters {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.2rem;
+    }
+    .dialog-layers {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.35rem;
+      margin: 0 0 0.75rem;
+    }
+    .dialog-layers .hint {
+      width: auto;
+      min-width: 2.625rem;
+      min-height: 2.625rem;
+      padding: 0.15rem 0.35rem;
+    }
+    .dialog-layers .ico {
+      flex: 0 0 1.5em;
+      width: 1.5em;
+      height: 1.5em;
+    }
+    .dialog-layers .ficha {
+      font-size: var(--fs-sm);
+      color: var(--accent);
+    }
+    .dialog-layer-note {
+      margin: 0 0 0.55rem;
+      font-size: var(--fs-sm);
+      color: var(--muted);
+    }
     .card-metrics {
       margin-top: auto;
       padding-top: 1rem;
@@ -568,6 +605,9 @@
       width: 1em;
       height: 1em;
     }
+    .ico-flag .flag-cloth {
+      fill: #0b57c4;
+    }
     .uv-warn { color: var(--warn); margin: 0.35rem 0 0.45rem; }
     .show-more {
       display: block;
@@ -717,6 +757,12 @@
         <button type="button" role="radio" data-ord="indice" aria-checked="false" data-i18n="sortIndice">Confort</button>
     </div>
     <button type="button" id="caninas-toggle" aria-pressed="false" data-i18n="caninas">Caninas</button>
+    <div id="layer-filters">
+      <button type="button" id="filter-flag" aria-pressed="false" data-i18n="filterFlag">Bandera azul</button>
+      <button type="button" id="filter-humo" aria-pressed="false" data-i18n="filterHumo">Sin humo</button>
+      <button type="button" id="filter-urbano" aria-pressed="false" data-i18n="filterUrbano">Urbano</button>
+      <button type="button" id="filter-natural" aria-pressed="false" data-i18n="filterNatural">Natural</button>
+    </div>
     </div>
     <div id="lists"></div>
     <dialog id="beach-dialog" aria-labelledby="beach-dialog-title">
@@ -861,6 +907,38 @@
         dogsTip: "Puede ser solo un tramo. La lista no es completa. Comprueba las normas del concello.",
         dogsNote: "Puede ser solo un tramo. La lista no es completa. Comprueba las normas del concello. Fuente: {link}.",
         dogsLink: "Turismo de Galicia",
+        filterFlag: "Bandera azul",
+        filterHumo: "Sin humo",
+        filterUrbano: "Urbano",
+        filterNatural: "Natural",
+        flagAria: "Bandera azul",
+        flagTip: "Bandera azul {year}. Distinción de ese año.",
+        sandLabel: "Arena",
+        humoAria: "Playa sin humo",
+        humoTip: "Está en la red oficial sen fume. Aun así pueden fumar.",
+        stopAria: "Parada de autobús",
+        stopTip: "Parada más cercana: {name}.",
+        parkingAria: "Aparcamiento",
+        parkingTip: "Hay aparcamiento cerca en OpenStreetMap.",
+        toiletAria: "Aseo",
+        toiletTip: "Hay aseo cerca en OpenStreetMap.",
+        rampAria: "Rampa",
+        rampTip: "Hay rampa cerca en OpenStreetMap.",
+        protectedAria: "Espacio protegido",
+        protectedTip: "{name}",
+        ficha: "Ficha",
+        scoreHigiene: "Higiene",
+        tipHigiene: "Control del {date}. E. coli {ecoli}. Enterococo {entero}. No es la nota anual.",
+        tideLabel: "Marea",
+        tipTide: "Hora aproximada en el puerto {port}.",
+        tideLow: "Baixamar",
+        tideHigh: "Preamar",
+        tideApprox: "hora aproximada",
+        sandFina: "Fina",
+        sandGrosa: "Gruesa",
+        sandCantos: "Cantos rodados",
+        tramoUrbano: "Tramo urbano",
+        tramoNatural: "Tramo natural",
       },
       en: {
         docTitle: "Sea temperature — beaches of Galicia",
@@ -961,6 +1039,38 @@
         dogsTip: "It may be only a stretch. The list is not complete. Check the municipality rules.",
         dogsNote: "It may be only a stretch. The list is not complete. Check the municipality rules. Source: {link}.",
         dogsLink: "Turismo de Galicia",
+        filterFlag: "Blue Flag",
+        filterHumo: "Smoke-free",
+        filterUrbano: "Urban",
+        filterNatural: "Natural",
+        flagAria: "Blue Flag",
+        flagTip: "Blue Flag {year}. Award for that year.",
+        sandLabel: "Sand",
+        humoAria: "Smoke-free beach",
+        humoTip: "On the official sen fume network. People may still smoke.",
+        stopAria: "Bus stop",
+        stopTip: "Nearest stop: {name}.",
+        parkingAria: "Parking",
+        parkingTip: "Parking nearby in OpenStreetMap.",
+        toiletAria: "Toilet",
+        toiletTip: "Toilet nearby in OpenStreetMap.",
+        rampAria: "Ramp",
+        rampTip: "Ramp nearby in OpenStreetMap.",
+        protectedAria: "Protected area",
+        protectedTip: "{name}",
+        ficha: "Sheet",
+        scoreHigiene: "Hygiene",
+        tipHigiene: "Sample of {date}. E. coli {ecoli}. Enterococci {entero}. Not the yearly grade.",
+        tideLabel: "Tide",
+        tipTide: "Approximate time at {port}.",
+        tideLow: "Low tide",
+        tideHigh: "High tide",
+        tideApprox: "approximate time",
+        sandFina: "Fine",
+        sandGrosa: "Coarse",
+        sandCantos: "Pebbles",
+        tramoUrbano: "Urban stretch",
+        tramoNatural: "Natural stretch",
       },
       ru: {
         docTitle: "Температура воды — пляжи Галисии",
@@ -1061,6 +1171,38 @@
         dogsTip: "Может быть только участок. Список неполный. Сверьте нормы муниципалитета.",
         dogsNote: "Может быть только участок. Список неполный. Сверьте нормы муниципалитета. Источник: {link}.",
         dogsLink: "Turismo de Galicia",
+        filterFlag: "Синий флаг",
+        filterHumo: "Без дыма",
+        filterUrbano: "Городской",
+        filterNatural: "Природный",
+        flagAria: "Синий флаг",
+        flagTip: "Синий флаг {year}. Награда этого года.",
+        sandLabel: "Песок",
+        humoAria: "Пляж без дыма",
+        humoTip: "В официальной сети sen fume. Курить всё равно могут.",
+        stopAria: "Остановка",
+        stopTip: "Ближайшая остановка: {name}.",
+        parkingAria: "Парковка",
+        parkingTip: "Рядом есть парковка в OpenStreetMap.",
+        toiletAria: "Туалет",
+        toiletTip: "Рядом есть туалет в OpenStreetMap.",
+        rampAria: "Пандус",
+        rampTip: "Рядом есть пандус в OpenStreetMap.",
+        protectedAria: "Охраняемая зона",
+        protectedTip: "{name}",
+        ficha: "Карточка",
+        scoreHigiene: "Гигиена",
+        tipHigiene: "Проба от {date}. E. coli {ecoli}. Энтерококк {entero}. Это не годовая оценка.",
+        tideLabel: "Приливы",
+        tipTide: "Приблизительное время в порту {port}.",
+        tideLow: "Отлив",
+        tideHigh: "Прилив",
+        tideApprox: "примерно",
+        sandFina: "Мелкий",
+        sandGrosa: "Крупный",
+        sandCantos: "Галька",
+        tramoUrbano: "Городской участок",
+        tramoNatural: "Природный участок",
       },
     };
     const GEO_RADIUS_KM = 30;
@@ -1077,6 +1219,9 @@
     let geoResults = [];
     let caninasMode = false;
     let caninasResults = [];
+    let filterFlag = false;
+    let filterHumo = false;
+    let filterTramo = "";
     let lastGeo = null;
     let listOrd = "agua";
     let concelloShowAll = false;
@@ -1150,6 +1295,7 @@
       if (caninas) {
         caninas.setAttribute("aria-pressed", caninasMode ? "true" : "false");
       }
+      syncLayerFilters();
     }
 
     function setUrl(params, { replace = false } = {}) {
@@ -1673,7 +1819,22 @@
         sea: '<path d="M3 13c2 2 4 2 6 0s4-2 6 0 4 2 6 0M3 18c2 2 4 2 6 0s4-2 6 0 4 2 6 0"/>',
         dogs:
           '<path d="M180-475q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm240 0q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180 160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM266-75q-45 0-75.5-34.5T160-191q0-53 36-91.5t88-53.5q41-10 81.5-14.5T446-355q41 0 81 4.5T608-336q52 15 88 53.5T732-191q0 47-30.5 81.5T626-75H266Z"/>',
+        smoke: '<circle cx="12" cy="12" r="9"/><path d="M7 14h7l1.2-2.2M16 9.5c.2-1.2-1-2-2.2-1.6"/><path d="M7.2 7.2l9.6 9.6"/>',
+        stop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 11h18"/><circle cx="7.5" cy="17.6" r="1.7" fill="currentColor"/><circle cx="16.5" cy="17.6" r="1.7" fill="currentColor"/><path d="M7 7h3M12 7h3"/>',
+        parking: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
+        toilet: '<circle cx="8" cy="6" r="2"/><path d="M7 9v5l-2 6M9 14h2"/><circle cx="16" cy="6" r="2"/><path d="M14 22v-6h4l1 6M16 9v4"/>',
+        ramp: '<path d="M4 20h16"/><path d="M5 20V10l14 10"/>',
+        park: '<path d="M12 21V11"/><path d="M8 14a4 4 0 1 1 8 0"/><path d="M12 11a4 4 0 1 1 0-8 4 4 0 0 1 0 8z"/>',
+        higiene: '<path d="M8 3h8M10 3v5L6 18a4 4 0 0 0 12 0L14 8V3"/>',
       };
+      if (name === "flag") {
+        return (
+          '<svg class="ico ico-flag" viewBox="0 0 24 24" aria-hidden="true" width="1em" height="1em">'
+          + '<path d="M5 21V3.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>'
+          + '<path class="flag-cloth" d="M6.2 3.6h12.2l-2.6 4.1 2.6 4.2H6.2z"/>'
+          + "</svg>"
+        );
+      }
       const d = paths[name];
       if (!d) return "";
       if (name === "dogs") {
@@ -1698,6 +1859,7 @@
         waves: "scoreWaves",
         rain: "scoreRain",
         sky: "scoreSky",
+        higiene: "scoreHigiene",
       };
       return t(map[key] || key);
     }
@@ -1710,14 +1872,15 @@
         waves: "tipWaves",
         rain: "tipRain",
         sky: "tipSky",
+        higiene: "tipHigiene",
       };
       return t(map[key] || key);
     }
 
-    function scoreBar(icon, key, value) {
+    function scoreBar(icon, key, value, tipText) {
       const label = scorePartLabel(key);
       const q = partQual(value);
-      const tip = scorePartTip(key);
+      const tip = tipText || scorePartTip(key);
       const pct = Math.max(0, Math.min(100, value));
       const pos = SCORE_PART_LESS_BETTER.includes(key) ? 100 - pct : pct;
       const color = scoreColor(value);
@@ -1738,6 +1901,50 @@
       return uvDays;
     }
 
+    function layerHint(kind, icon, aria, tip) {
+      return `<button type="button" class="hint" data-kind="${kind}" data-tip="${escapeAttr(
+        tip
+      )}" aria-label="${escapeAttr(aria)}">${iconSvg(icon)}</button>`;
+    }
+
+    function layerIconsHtml(beach) {
+      const bits = [];
+      if (beach.flagYear) {
+        bits.push(layerHint("flag", "flag", t("flagAria"), t("flagTip", { year: beach.flagYear })));
+      }
+      if (beach.sinHumo) {
+        bits.push(layerHint("sinHumo", "smoke", t("humoAria"), t("humoTip")));
+      }
+      if (beach.stopName) {
+        bits.push(layerHint("stop", "stop", t("stopAria"), t("stopTip", { name: beach.stopName })));
+      }
+      if (beach.parking) {
+        bits.push(layerHint("parking", "parking", t("parkingAria"), t("parkingTip")));
+      }
+      if (beach.toilet) {
+        bits.push(layerHint("toilet", "toilet", t("toiletAria"), t("toiletTip")));
+      }
+      if (beach.ramp) {
+        bits.push(layerHint("ramp", "ramp", t("rampAria"), t("rampTip")));
+      }
+      if (beach.protectedName) {
+        bits.push(
+          layerHint(
+            "protected",
+            "park",
+            t("protectedAria"),
+            t("protectedTip", { name: beach.protectedName })
+          )
+        );
+        if (beach.protectedUrl) {
+          bits.push(
+            `<a class="ficha" href="${escapeAttr(beach.protectedUrl)}" target="_blank" rel="noopener">${t("ficha")}</a>`
+          );
+        }
+      }
+      return bits.length ? `<div class="dialog-layers">${bits.join("")}</div>` : "";
+    }
+
     function cardBackHtml(beach) {
       const costaSrc =
         beach.source && beach.source !== "Copernicus"
@@ -1753,6 +1960,20 @@
       const histDates = allDates.filter((d) => d < refDay);
       const futDates = allDates.filter((d) => d > refDay);
       const facts = [];
+      if (typeof beach.higiene === "number") {
+        facts.push(
+          scoreBar(
+            "higiene",
+            "higiene",
+            beach.higiene,
+            t("tipHigiene", {
+              date: beach.higieneDate || "—",
+              ecoli: beach.higieneEcoli || "—",
+              entero: beach.higieneEntero || "—",
+            })
+          )
+        );
+      }
       if (typeof beach.score === "number") {
         const parts = beach.scoreParts || {};
         for (const k of SCORE_PART_KEYS) {
@@ -1770,6 +1991,23 @@
           facts.push(factItem("clock", t("ventana"), win || "—", "tipVentana", "ventana"));
         }
       }
+      const tideBits = [];
+      if (Array.isArray(beach.tideLow) && beach.tideLow.length) {
+        tideBits.push(`${t("tideLow")} ${beach.tideLow.join(" ")}`);
+      }
+      if (Array.isArray(beach.tideHigh) && beach.tideHigh.length) {
+        tideBits.push(`${t("tideHigh")} ${beach.tideHigh.join(" ")}`);
+      }
+      if (tideBits.length) {
+        const port = beach.tidePort || "—";
+        facts.push(
+          `<li>${iconSvg("clock")}<span><button type="button" class="hint bar-hint" data-kind="tide" data-tip="${escapeAttr(
+            t("tipTide", { port })
+          )}" aria-label="${escapeAttr(t("tideLabel"))}">${t("tideLabel")}</button> ${escapeAttr(
+            tideBits.join(" · ")
+          )} · ${escapeAttr(port)} · ${escapeAttr(t("tideApprox"))}</span></li>`
+        );
+      }
       const mar = marOf(beach);
       if (mar) {
         facts.push(
@@ -1780,6 +2018,23 @@
         );
       }
       const bits = [];
+      const layerRow = layerIconsHtml(beach);
+      if (layerRow) bits.push(layerRow);
+      if (beach.flagSand) {
+        const sandKey = { Fina: "sandFina", Grosa: "sandGrosa", "Cantos rodados": "sandCantos" }[
+          beach.flagSand
+        ];
+        bits.push(
+          `<p class="dialog-layer-note">${t("sandLabel")}: ${escapeAttr(
+            sandKey ? t(sandKey) : beach.flagSand
+          )}</p>`
+        );
+      }
+      if (beach.tramo === "urbano" || beach.tramo === "natural") {
+        bits.push(
+          `<p class="dialog-layer-note">${beach.tramo === "urbano" ? t("tramoUrbano") : t("tramoNatural")}</p>`
+        );
+      }
       if (facts.length) bits.push(`<ul class="card-facts">${facts.join("")}</ul>`);
       const todayUv = uvDays.get(refDay);
       if (typeof todayUv === "number" && todayUv >= 8) {
@@ -1949,6 +2204,7 @@
     }
 
     function renderBanded(beaches, { showConcello = false, cap = null } = {}) {
+      beaches = applyLayerFilters(beaches);
       const withT = beaches.filter((b) => typeof b.t === "number");
       const withoutT = beaches.filter(
         (b) =>
@@ -2131,6 +2387,9 @@
           scoreParts: g.scoreParts,
           trend: g.trend,
           dogs: true,
+          flagYear: g.flagYear,
+          sinHumo: g.sinHumo,
+          tramo: g.tramo,
         });
       }
       return out;
@@ -2141,14 +2400,43 @@
       if (btn) btn.setAttribute("aria-pressed", caninasMode ? "true" : "false");
     }
 
+    function syncLayerFilters() {
+      const flag = document.getElementById("filter-flag");
+      const humo = document.getElementById("filter-humo");
+      const urbano = document.getElementById("filter-urbano");
+      const natural = document.getElementById("filter-natural");
+      if (flag) flag.setAttribute("aria-pressed", filterFlag ? "true" : "false");
+      if (humo) humo.setAttribute("aria-pressed", filterHumo ? "true" : "false");
+      if (urbano) urbano.setAttribute("aria-pressed", filterTramo === "urbano" ? "true" : "false");
+      if (natural) natural.setAttribute("aria-pressed", filterTramo === "natural" ? "true" : "false");
+    }
+
+    function applyLayerFilters(items) {
+      return items.filter((b) => {
+        if (filterFlag && !b.flagYear) return false;
+        if (filterHumo && !b.sinHumo) return false;
+        if (filterTramo && b.tramo !== filterTramo) return false;
+        return true;
+      });
+    }
+
+    function layerTrackFields() {
+      const extra = {};
+      if (filterFlag) extra.flag = true;
+      if (filterHumo) extra.sinHumo = true;
+      if (filterTramo) extra.tramo = filterTramo;
+      return extra;
+    }
+
     async function renderLists() {
       const root = document.getElementById("lists");
       const dlg = document.getElementById("beach-dialog");
       if (!currentBeach && dlg.open) dlg.close();
       syncCaninasToggle();
+      syncLayerFilters();
 
       if (caninasMode) {
-        caninasResults = buildCaninasResults();
+        caninasResults = applyLayerFilters(buildCaninasResults());
         if (currentBeach) {
           const idx = caninasResults.findIndex((b) => b.slug === currentBeach);
           if (idx >= 0) {
@@ -2169,7 +2457,7 @@
         geoResults = await Promise.all(
           geoResults.map((b) => enrichTopBeach(b))
         );
-        const items = geoResults
+        const items = applyLayerFilters(geoResults)
           .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
         root.innerHTML = `<h2>${t("playasCercanas")}</h2><ul class="beach-list">${items}</ul>`;
@@ -2229,7 +2517,7 @@
               : currentConcello
                 ? "concello"
                 : "top");
-        track("beach_open", { slug, from: src });
+        track("beach_open", { slug, from: src, ...layerTrackFields() });
         if (currentConcello && !geoMode && !caninasMode) {
           setUrl({ c: currentConcello, b: slug });
         }
@@ -2341,6 +2629,20 @@
       const next = radios[(i + (e.key === "ArrowLeft" || e.key === "ArrowUp" ? radios.length - 1 : 1)) % radios.length];
       next.focus();
       changeLang(next.dataset.lang);
+    });
+
+    function onLayerFilterClick(id) {
+      if (id === "filter-flag") filterFlag = !filterFlag;
+      else if (id === "filter-humo") filterHumo = !filterHumo;
+      else if (id === "filter-urbano") filterTramo = filterTramo === "urbano" ? "" : "urbano";
+      else if (id === "filter-natural") filterTramo = filterTramo === "natural" ? "" : "natural";
+      syncLayerFilters();
+      renderLists();
+    }
+    document.getElementById("layer-filters").addEventListener("click", (e) => {
+      const btn = e.target.closest("button");
+      if (!btn || !btn.id) return;
+      onLayerFilterClick(btn.id);
     });
 
     document.getElementById("caninas-toggle").addEventListener("click", async () => {

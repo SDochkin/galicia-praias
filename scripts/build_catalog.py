@@ -39,6 +39,12 @@ DOGS_UNMATCHED = (
     "A Foz (Vigo) — no catalog match by id+concello",
 )
 
+# Owner-named id → (lat, lon) WGS84 degrees. Applied after MG fetch.
+COORD_OVERRIDES: dict[int, tuple[float, float]] = {
+    2446: (43.3724, -8.41866),  # Lino; was swapped with 2447
+    2447: (43.374, -8.41943),  # San Roque; was swapped with 2446
+}
+
 # Map-facing names (OSM / local spelling). Slug is recomputed from the new name.
 NAME_OVERRIDES: dict[int, str] = {
     2453: "Praia de Durmideiras",  # was Adormideiras; OSM
@@ -407,6 +413,21 @@ def apply_dogs_allow(beaches: list[dict], notes: list[str]) -> None:
     notes.extend(f"  - {x}" for x in DOGS_UNMATCHED)
 
 
+def apply_coord_overrides(beaches: list[dict], notes: list[str]) -> None:
+    by_id = {b["id"]: b for b in beaches}
+    for bid, (lat, lon) in COORD_OVERRIDES.items():
+        b = by_id.get(bid)
+        if not b:
+            notes.append(f"COORD_OVERRIDES missing beach {bid}")
+            continue
+        old_lat, old_lon = b.get("lat"), b.get("lon")
+        if old_lat == lat and old_lon == lon:
+            continue
+        b["lat"] = lat
+        b["lon"] = lon
+        notes.append(f"{bid} | coord {old_lat},{old_lon} → {lat},{lon}")
+
+
 def apply_name_overrides(beaches: list[dict], notes: list[str]) -> None:
     by_id = {b["id"]: b for b in beaches}
     for bid, new_name in NAME_OVERRIDES.items():
@@ -451,6 +472,7 @@ def main() -> None:
 
     print("fetching MG coordinates…", flush=True)
     fetch_mg_coords(beaches)
+    apply_coord_overrides(beaches, notes)
     check_concello_distance(beaches, notes)
 
     aemet = load_aemet_galicia(csv_path)

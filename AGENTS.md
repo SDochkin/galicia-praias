@@ -40,7 +40,7 @@ Do not hand-edit `catalog.json`, `NOTES.md`, or `data/*.json` (exception: owner 
 
 `data/` is committed by the workflow (`git add -A data`); commits under `data/` from Actions are expected.
 
-Catalog name / AEMET / concello overrides live only in `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`, `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`).
+Catalog name / AEMET / concello / coord overrides live only in `scripts/build_catalog.py` (`NAME_OVERRIDES`, `AEMET_FORCE_PAIRS`, `AEMET_REJECT_REASONS`, `FORCE_CONCELLO`, `COORD_OVERRIDES`).
 
 ## Analytics
 

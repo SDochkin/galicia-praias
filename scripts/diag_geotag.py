@@ -1,5 +1,14 @@
 #!/usr/bin/env python3
-"""Compare catalog.json points to OSM Nominatim. Does not write catalog or data/.
+"""Does OSM know this beach name in this concello? Does not write catalog or data/.
+
+This script does not judge geotags. Nominatim returns one label point.
+Distance from that point to catalog.json is not a miss: the same beach
+has a Google POI, a catalog pin, and an OSM node in different places.
+
+A row is missing when no natural=beach in the concello has the same
+name_key as the catalog. name_key: casefold, strip accents, drop
+praia/playa/de/da/do/d/as/os/a/o, compare the whole remainder.
+Same name + concello: one OSM label goes to the nearest catalog row.
 
 Evidence 2026-08-23:
 - Policy: https://operations.osmfoundation.org/policies/nominatim/
@@ -8,7 +17,6 @@ Evidence 2026-08-23:
   https://nominatim.openstreetmap.org/search?q=Praia+do+Cabo+Redondela&format=json&limit=3
   HTTP 200. First hit: lat 42.3098872 lon -8.6238043 (degrees WGS84),
   class=natural type=beach name=O Vao do Cabo.
-- Distance unit in this script: km (haversine, R=6371).
 
 Point or name fixes go through NAME_OVERRIDES in scripts/build_catalog.py
 and only when the owner names specific ids.
@@ -19,8 +27,10 @@ from __future__ import annotations
 import argparse
 import json
 import math
+import re
 import sys
 import time
+import unicodedata
 import urllib.parse
 import urllib.request
 from pathlib import Path
@@ -50,32 +60,112 @@ def haversine_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
     return 2 * r * math.asin(math.sqrt(a))
 
 
-def nominatim_search(q: str) -> dict | None:
+def nominatim_search(q: str) -> list[dict]:
     params = {
         "q": q,
         "format": "json",
-        "limit": "1",
+        "limit": "3",
         "countrycodes": "es",
+        "addressdetails": "1",
     }
     url = NOMINATIM + "?" + urllib.parse.urlencode(params)
     req = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
     with urllib.request.urlopen(req, timeout=45) as resp:
         body = json.loads(resp.read().decode("utf-8"))
-    if not isinstance(body, list) or not body:
-        return None
-    hit = body[0]
-    if not isinstance(hit, dict):
-        return None
-    try:
-        lat = float(hit["lat"])
-        lon = float(hit["lon"])
-    except (KeyError, TypeError, ValueError):
-        return None
-    return {
-        "lat": lat,
-        "lon": lon,
-        "name": hit.get("display_name") or hit.get("name") or "",
-    }
+    if not isinstance(body, list):
+        return []
+    out: list[dict] = []
+    for hit in body:
+        if not isinstance(hit, dict):
+            continue
+        if hit.get("class") != "natural" or hit.get("type") != "beach":
+            continue
+        try:
+            lat = float(hit["lat"])
+            lon = float(hit["lon"])
+        except (KeyError, TypeError, ValueError):
+            continue
+        addr = hit.get("address") if isinstance(hit.get("address"), dict) else {}
+        display = hit.get("display_name") or hit.get("name") or ""
+        short = addr.get("beach") or hit.get("name") or display.split(",")[0]
+        out.append(
+            {
+                "lat": lat,
+                "lon": lon,
+                "name": display,
+                "short": str(short),
+                "address": addr,
+            }
+        )
+    return out
+
+
+def name_key(raw: str) -> str:
+    s = unicodedata.normalize("NFD", raw or "")
+    s = "".join(c for c in s if unicodedata.category(c) != "Mn")
+    s = s.casefold()
+    s = re.sub(r"[^a-z0-9\s]", " ", s)
+    s = re.sub(r"\b(praia|playa|de|da|do|d|as|os|a|o)\b", " ", s)
+    return " ".join(s.split())
+
+
+def same_beach_name(osm_name: str, catalog_name: str) -> bool:
+    a, b = name_key(osm_name), name_key(catalog_name)
+    return bool(a) and a == b
+
+
+def _place_key(raw: str) -> str:
+    s = (raw or "").casefold().strip()
+    for prefix in ("as ", "os ", "a ", "o "):
+        if s.startswith(prefix):
+            s = s[len(prefix) :]
+            break
+    return s
+
+
+def same_concello(hit: dict, concello: str) -> bool:
+    want = _place_key(concello)
+    if not want:
+        return False
+    addr = hit.get("address") or {}
+    fields = (
+        addr.get("municipality"),
+        addr.get("city"),
+        addr.get("town"),
+        addr.get("village"),
+        addr.get("city_district"),
+    )
+    return any(_place_key(str(v)) == want for v in fields if v)
+
+
+def drop_sibling_osm(rows: list[dict]) -> None:
+    """Give each OSM point to the nearest same-name catalog row in the concello."""
+    groups: dict[tuple[str, str], list[dict]] = {}
+    for r in rows:
+        if r.get("km") is None or not r.get("osm_lat"):
+            continue
+        osm_short = (r.get("osm_name") or "").split(",")[0]
+        if not same_beach_name(osm_short, r.get("name") or ""):
+            continue
+        key = (name_key(r.get("name") or ""), r.get("concello") or "")
+        groups.setdefault(key, []).append(r)
+    for members in groups.values():
+        members.sort(key=lambda r: float(r["km"]))
+        taken_osm: set[tuple[str, str]] = set()
+        keep_ids: set = set()
+        for r in members:
+            osm = (str(r["osm_lat"]), str(r["osm_lon"]))
+            if r["id"] in keep_ids or osm in taken_osm:
+                continue
+            keep_ids.add(r["id"])
+            taken_osm.add(osm)
+        for r in members:
+            if r["id"] in keep_ids:
+                continue
+            r["km"] = None
+            r["osm_lat"] = ""
+            r["osm_lon"] = ""
+            r["osm_name"] = ""
 
 
 def lookup(name: str, concello: str) -> dict | None:
@@ -87,12 +177,15 @@ def lookup(name: str, concello: str) -> dict | None:
         if i:
             time.sleep(PAUSE_S)
         try:
-            hit = nominatim_search(q)
+            hits = nominatim_search(q)
         except Exception as exc:  # noqa: BLE001
             print(f"WARN {q}: {exc}", file=sys.stderr)
             continue
-        if hit:
-            return hit
+        for hit in hits:
+            if same_concello(hit, concello) and same_beach_name(
+                hit.get("short") or "", name
+            ):
+                return hit
     return None
 
 
@@ -158,7 +251,8 @@ def main(argv: list[str] | None = None) -> int:
             }
         )
         print(f"lookup {i + 1}/{len(beaches)}", file=sys.stderr, flush=True)
-    rows.sort(key=lambda r: (-1.0 if r["km"] is None else -r["km"], r["slug"] or ""))
+    drop_sibling_osm(rows)
+    rows.sort(key=lambda r: (r.get("concello") or "", r.get("name") or "", r.get("slug") or ""))
     print(
         "id\tslug\tname\tconcello\tcat_lat\tcat_lon\tosm_lat\tosm_lon\tkm\tosm_name"
     )
@@ -170,7 +264,10 @@ def main(argv: list[str] | None = None) -> int:
             f"{km}\t{r['osm_name']}"
         )
     missing = sum(1 for r in rows if r["km"] is None)
-    print(f"beaches={len(rows)} missing_osm={missing}", file=sys.stderr)
+    print(
+        f"beaches={len(rows)} osm_has_name={len(rows) - missing} osm_no_name={missing}",
+        file=sys.stderr,
+    )
     return 0
 
 

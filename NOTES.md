@@ -49,3 +49,5 @@
 -   - Cunchiña / Cheminea / Massó (Cangas) — no catalog match by id+concello
 -   - Arealonga (Redondela) — no catalog match by id+concello
 -   - A Foz (Vigo) — no catalog match by id+concello
+- 2446 | coord 43.374,-8.41943 → 43.3724,-8.41866
+- 2447 | coord 43.3724,-8.41866 → 43.374,-8.41943
