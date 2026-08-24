@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-24T08:20:17Z",
+  "fetchedAt": "2026-08-24T10:53:16Z",
   "beaches": [
     {
       "id": 1882,
@@ -9,24 +9,6 @@
       "source": "Copernicus",
       "trend": null,
       "sources": [
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-21",
-              "t": 17.0
-            },
-            {
-              "date": "2026-08-22",
-              "t": 17.0
-            },
-            {
-              "date": "2026-08-23",
-              "t": 15.0
-            }
-          ],
-          "history": []
-        },
         {
           "name": "Copernicus",
           "days": [
@@ -107,21 +89,72 @@
               "t": 15.0
             }
           ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-21",
+              "t": 17.0
+            },
+            {
+              "date": "2026-08-22",
+              "t": 17.0
+            },
+            {
+              "date": "2026-08-23",
+              "t": 15.0
+            }
+          ],
+          "history": []
         }
       ],
-      "score": 50,
+      "score": 79,
       "scoreParts": {
-        "water": 17,
-        "air": 80,
+        "water": 61,
+        "air": 100,
         "wind": 100,
-        "rain": 50
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 11,
+      "bestHour": 13,
       "scoreWindow": {
-        "from": 11,
-        "to": 12
+        "from": 12,
+        "to": 16
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 79,
+          "scoreParts": {
+            "water": 61,
+            "air": 100,
+            "wind": 100,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 13,
+          "scoreWindow": {
+            "from": 12,
+            "to": 16
+          }
+        },
+        "2026-08-25": {
+          "score": 69,
+          "scoreParts": {
+            "water": 59,
+            "air": 70,
+            "wind": 81,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 14,
+            "to": 17
+          }
+        }
+      },
       "higiene": 100,
       "higieneDate": "2026-08-16",
       "higieneEcoli": "10 NMP/100ml",

@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-24T08:20:17Z",
+  "fetchedAt": "2026-08-24T10:53:16Z",
   "beaches": [
     {
       "id": 2013,
@@ -10,22 +10,47 @@
       "trend": null,
       "sources": [
         {
-          "name": "AEMET",
+          "name": "MeteoSIX",
           "days": [
             {
-              "date": "2026-08-21",
+              "date": "2026-08-24",
+              "t": 20.0
+            },
+            {
+              "date": "2026-08-25",
+              "t": 20.0
+            },
+            {
+              "date": "2026-08-26",
               "t": 19.0
             },
             {
+              "date": "2026-08-27",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-28",
+              "t": 18.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-20",
+              "t": 21.0
+            },
+            {
+              "date": "2026-08-21",
+              "t": 21.0
+            },
+            {
               "date": "2026-08-22",
-              "t": 16.0
+              "t": 20.0
             },
             {
               "date": "2026-08-23",
-              "t": 16.0
+              "t": 20.0
             }
-          ],
-          "history": []
+          ]
         },
         {
           "name": "Copernicus",
@@ -109,59 +134,73 @@
           ]
         },
         {
-          "name": "MeteoSIX",
+          "name": "AEMET",
           "days": [
             {
-              "date": "2026-08-23",
-              "t": 20.0
-            },
-            {
-              "date": "2026-08-24",
-              "t": 20.0
-            },
-            {
-              "date": "2026-08-25",
-              "t": 19.0
-            },
-            {
-              "date": "2026-08-26",
-              "t": 19.0
-            },
-            {
-              "date": "2026-08-27",
-              "t": 17.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-20",
-              "t": 21.0
-            },
-            {
               "date": "2026-08-21",
-              "t": 21.0
+              "t": 19.0
             },
             {
               "date": "2026-08-22",
-              "t": 20.0
+              "t": 16.0
+            },
+            {
+              "date": "2026-08-23",
+              "t": 16.0
             }
-          ]
+          ],
+          "history": []
         }
       ],
-      "score": 81,
+      "score": 80,
       "scoreParts": {
-        "water": 90,
+        "water": 83,
         "air": 90,
-        "wind": 99,
-        "waves": 12,
-        "rain": 100
+        "wind": 91,
+        "waves": 23,
+        "rain": 100,
+        "sky": 100
       },
-      "bestHour": 11,
+      "bestHour": 14,
       "scoreWindow": {
         "from": 11,
-        "to": 17
+        "to": 14
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 80,
+          "scoreParts": {
+            "water": 83,
+            "air": 90,
+            "wind": 91,
+            "waves": 23,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 11,
+            "to": 14
+          }
+        },
+        "2026-08-25": {
+          "score": 84,
+          "scoreParts": {
+            "water": 82,
+            "air": 100,
+            "wind": 84,
+            "waves": 44,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 10,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "flagYear": 2026,
       "flagSand": "Fina",
@@ -271,20 +310,55 @@
           ]
         }
       ],
-      "score": 81,
+      "score": 79,
       "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 99,
-        "waves": 13,
-        "rain": 100
+        "water": 94,
+        "air": 70,
+        "wind": 100,
+        "waves": 28,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 12,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 11,
+        "from": 17,
         "to": 17
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 79,
+          "scoreParts": {
+            "water": 94,
+            "air": 70,
+            "wind": 100,
+            "waves": 28,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 17,
+          "scoreWindow": {
+            "from": 17,
+            "to": 17
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 89,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "higiene": 100,
       "higieneDate": "2026-08-12",
@@ -396,18 +470,53 @@
       ],
       "score": 81,
       "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 99,
-        "waves": 13,
-        "rain": 100
+        "water": 94,
+        "air": 80,
+        "wind": 100,
+        "waves": 28,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 11,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 11,
+        "from": 16,
         "to": 17
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 81,
+          "scoreParts": {
+            "water": 94,
+            "air": 80,
+            "wind": 100,
+            "waves": 28,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 17,
+          "scoreWindow": {
+            "from": 16,
+            "to": 17
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 88,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "stopName": "CASA DO MAR (DÁRSENA) (CERVO)",
       "parking": true,
@@ -513,18 +622,53 @@
       ],
       "score": 81,
       "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 99,
-        "waves": 13,
-        "rain": 100
+        "water": 94,
+        "air": 80,
+        "wind": 100,
+        "waves": 28,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 11,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 11,
+        "from": 16,
         "to": 17
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 81,
+          "scoreParts": {
+            "water": 94,
+            "air": 80,
+            "wind": 100,
+            "waves": 28,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 17,
+          "scoreWindow": {
+            "from": 16,
+            "to": 17
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 88,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "higiene": 100,
       "higieneDate": "2026-08-12",
@@ -552,24 +696,6 @@
       "source": "Copernicus",
       "trend": null,
       "sources": [
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-21",
-              "t": 19.0
-            },
-            {
-              "date": "2026-08-22",
-              "t": 16.0
-            },
-            {
-              "date": "2026-08-23",
-              "t": 15.0
-            }
-          ],
-          "history": []
-        },
         {
           "name": "Copernicus",
           "days": [
@@ -650,22 +776,75 @@
               "t": 21.0
             }
           ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-21",
+              "t": 19.0
+            },
+            {
+              "date": "2026-08-22",
+              "t": 16.0
+            },
+            {
+              "date": "2026-08-23",
+              "t": 15.0
+            }
+          ],
+          "history": []
         }
       ],
       "score": 81,
       "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 99,
-        "waves": 13,
-        "rain": 100
+        "water": 94,
+        "air": 80,
+        "wind": 100,
+        "waves": 28,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 11,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 11,
+        "from": 16,
         "to": 17
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 81,
+          "scoreParts": {
+            "water": 94,
+            "air": 80,
+            "wind": 100,
+            "waves": 28,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 17,
+          "scoreWindow": {
+            "from": 16,
+            "to": 17
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 88,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "flagYear": 2026,
       "flagSand": "Fina",
@@ -779,18 +958,53 @@
       ],
       "score": 81,
       "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 99,
-        "waves": 13,
-        "rain": 100
+        "water": 94,
+        "air": 80,
+        "wind": 100,
+        "waves": 28,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 11,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 11,
+        "from": 16,
         "to": 17
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 81,
+          "scoreParts": {
+            "water": 94,
+            "air": 80,
+            "wind": 100,
+            "waves": 28,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 17,
+          "scoreWindow": {
+            "from": 16,
+            "to": 17
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 88,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 10,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "stopName": "CASA DO MAR (DÁRSENA) (CERVO)",
       "parking": true,
@@ -895,20 +1109,55 @@
           ]
         }
       ],
-      "score": 77,
+      "score": 87,
       "scoreParts": {
-        "water": 77,
+        "water": 94,
         "air": 100,
-        "wind": 98,
-        "waves": 13,
-        "rain": 100
+        "wind": 90,
+        "waves": 28,
+        "rain": 100,
+        "sky": 100
       },
       "bestHour": 12,
       "scoreWindow": {
         "from": 11,
-        "to": 17
+        "to": 12
       },
-      "scoreDay": "2026-08-23",
+      "scoreDay": "2026-08-24",
+      "scoreByDay": {
+        "2026-08-24": {
+          "score": 86,
+          "scoreParts": {
+            "water": 94,
+            "air": 100,
+            "wind": 90,
+            "waves": 28,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 12,
+          "scoreWindow": {
+            "from": 11,
+            "to": 12
+          }
+        },
+        "2026-08-25": {
+          "score": 87,
+          "scoreParts": {
+            "water": 92,
+            "air": 100,
+            "wind": 86,
+            "waves": 38,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 9,
+            "to": 12
+          }
+        }
+      },
       "wave": "strong",
       "tidePort": "Ría de Foz",
       "tideLow": [
