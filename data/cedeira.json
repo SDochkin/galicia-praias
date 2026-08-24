@@ -1,48 +1,14 @@
 {
-  "fetchedAt": "2026-08-23T23:54:35Z",
+  "fetchedAt": "2026-08-24T08:12:01Z",
   "beaches": [
     {
       "id": 2534,
       "slug": "praia-de-area-longa",
       "name": "Praia de Area Longa",
-      "t": 15.0,
-      "source": "MeteoGalicia",
+      "t": 17.2,
+      "source": "Copernicus",
       "trend": null,
       "sources": [
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-08-21",
-              "t": 18.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-08-22",
-              "t": 14.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-08-23",
-              "t": 15.0,
-              "uv": 6
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-18",
-              "t": 14.0
-            },
-            {
-              "date": "2026-08-19",
-              "t": 17.0
-            },
-            {
-              "date": "2026-08-20",
-              "t": 18.0
-            }
-          ]
-        },
         {
           "name": "Copernicus",
           "days": [
@@ -87,6 +53,40 @@
             {
               "date": "2026-08-22",
               "t": 16.6
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-08-21",
+              "t": 18.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-08-22",
+              "t": 14.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-08-23",
+              "t": 15.0,
+              "uv": 6
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-18",
+              "t": 14.0
+            },
+            {
+              "date": "2026-08-19",
+              "t": 17.0
+            },
+            {
+              "date": "2026-08-20",
+              "t": 18.0
             }
           ]
         }
@@ -105,34 +105,30 @@
         "to": 17
       },
       "scoreDay": "2026-08-23",
-      "wave": "moderate"
+      "wave": "moderate",
+      "higiene": 100,
+      "higieneDate": "2026-08-10",
+      "higieneEcoli": "<10 NMP/100ml",
+      "higieneEntero": "<10 NMP/100ml",
+      "tidePort": "Ferrol",
+      "tideLow": [
+        "08:55",
+        "21:28"
+      ],
+      "tideHigh": [
+        "02:54",
+        "15:09"
+      ],
+      "tramo": "natural"
     },
     {
       "id": 2535,
       "slug": "praia-da-magdalena",
       "name": "Praia da Magdalena",
-      "t": 15.0,
-      "source": "MeteoGalicia",
+      "t": 17.2,
+      "source": "Copernicus",
       "trend": null,
       "sources": [
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-21",
-              "t": 21.0
-            },
-            {
-              "date": "2026-08-22",
-              "t": 18.0
-            },
-            {
-              "date": "2026-08-23",
-              "t": 17.0
-            }
-          ],
-          "history": []
-        },
         {
           "name": "Copernicus",
           "days": [
@@ -213,6 +209,24 @@
               "t": 18.0
             }
           ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-21",
+              "t": 21.0
+            },
+            {
+              "date": "2026-08-22",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-23",
+              "t": 17.0
+            }
+          ],
+          "history": []
         }
       ],
       "score": 59,
@@ -229,7 +243,22 @@
         "to": 14
       },
       "scoreDay": "2026-08-23",
-      "wave": "moderate"
+      "wave": "moderate",
+      "higiene": 100,
+      "higieneDate": "2026-08-10",
+      "higieneEcoli": "<10 NMP/100ml",
+      "higieneEntero": "<10 NMP/100ml",
+      "stopName": "CEDEIRA E.A. (CEDEIRA)",
+      "tidePort": "Ferrol",
+      "tideLow": [
+        "08:55",
+        "21:28"
+      ],
+      "tideHigh": [
+        "02:54",
+        "15:09"
+      ],
+      "tramo": "urbano"
     }
   ]
 }
