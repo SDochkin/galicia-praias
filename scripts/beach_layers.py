@@ -77,6 +77,30 @@ HIGIENE_EI_BUENA = 200.0
 HIGIENE_EC_LIMITE = 800.0
 HIGIENE_EI_LIMITE = 500.0
 
+# Editorial ramp list. Discapnet «Playas accesibles de Galicia»:
+# https://www.discapnet.es/ocio/turismo/playas-accesibles-de-galicia
+# Only beaches whose entry names a ramp (rampa / acceso mediante rampa),
+# plus Samil, O Vao, and Ladeira from that page. Toilet wheelchair is not a ramp.
+RAMP_ALLOW = {
+    1999,  # A Rapadoira (Foz)
+    2010,  # O Portelo (Burela)
+    2013,  # A Marosa (Cervo)
+    2018,  # O Torno (Cervo)
+    2029,  # Area (Viveiro)
+    2055,  # Ladeira (Baiona)
+    2070,  # O Vao (Vigo)
+    2074,  # Samil (Vigo)
+    2110,  # Xunqueira (Moaña)
+    2119,  # Rodeira (Cangas)
+    2133,  # Nerga (Cangas)
+    2137,  # Area Brava (Cangas)
+    2178,  # Aguete Sur (Marín)
+    2180,  # Aguete Norte (Marín)
+    2217,  # Silgar (Sanxenxo)
+    2448,  # Riazor (A Coruña)
+    2456,  # Oza (A Coruña)
+}
+
 
 def _get(url: str, timeout: int = 90) -> bytes:
     req = urllib.request.Request(url, headers=UA)
@@ -413,13 +437,11 @@ def fetch_stops(beaches: list[dict]) -> dict[int, dict] | None:
     return out
 
 
-def _osm_points(elements: list[dict], amenity: str | None = None, ramp: bool = False) -> list[tuple[float, float]]:
+def _osm_points(elements: list[dict], amenity: str | None = None) -> list[tuple[float, float]]:
     pts = []
     for el in elements:
         tags = el.get("tags") or {}
         if amenity and tags.get("amenity") != amenity:
-            continue
-        if ramp and tags.get("ramp") != "yes":
             continue
         lat = el.get("lat") or (el.get("center") or {}).get("lat")
         lon = el.get("lon") or (el.get("center") or {}).get("lon")
@@ -445,7 +467,6 @@ def fetch_osm(beaches: list[dict]) -> dict[int, dict] | None:
                 "("
                 f'nwr["amenity"="parking"]({lat:.3f},{lon:.3f},{north:.3f},{east:.3f});'
                 f'nwr["amenity"="toilets"]({lat:.3f},{lon:.3f},{north:.3f},{east:.3f});'
-                f'nwr["ramp"="yes"]({lat:.3f},{lon:.3f},{north:.3f},{east:.3f});'
                 ");out center;"
             )
             payload = urllib.parse.urlencode({"data": query}).encode("utf-8")
@@ -473,7 +494,6 @@ def fetch_osm(beaches: list[dict]) -> dict[int, dict] | None:
         print(f"layers osm partial ok={ok}/{tiles}", flush=True)
     parking = _osm_points(elements, amenity="parking")
     toilets = _osm_points(elements, amenity="toilets")
-    ramps = _osm_points(elements, ramp=True)
     out: dict[int, dict] = {}
     for b in beaches:
         rec: dict[str, Any] = {}
@@ -482,16 +502,23 @@ def fetch_osm(beaches: list[dict]) -> dict[int, dict] | None:
             rec["parking"] = True
         if any(haversine_m(blat, blon, lat, lon) <= OSM_M for lat, lon in toilets):
             rec["toilet"] = True
-        if any(haversine_m(blat, blon, lat, lon) <= OSM_M for lat, lon in ramps):
-            rec["ramp"] = True
         if rec:
             out[b["id"]] = rec
     print(
         f"layers osm parking={sum(1 for v in out.values() if v.get('parking'))} "
-        f"toilet={sum(1 for v in out.values() if v.get('toilet'))} "
-        f"ramp={sum(1 for v in out.values() if v.get('ramp'))}",
+        f"toilet={sum(1 for v in out.values() if v.get('toilet'))}",
         flush=True,
     )
+    return out
+
+
+def fetch_ramp_allow(beaches: list[dict]) -> dict[int, dict]:
+    known = {b["id"] for b in beaches}
+    missing = sorted(bid for bid in RAMP_ALLOW if bid not in known)
+    if missing:
+        print(f"layers RAMP_ALLOW missing {missing}", flush=True)
+    out = {bid: {"ramp": True} for bid in RAMP_ALLOW if bid in known}
+    print(f"layers ramp editorial={len(out)}", flush=True)
     return out
 
 
@@ -764,7 +791,8 @@ def collect_layers(
     merge(fetch_higiene(beaches), ("higiene", "higieneDate", "higieneEcoli", "higieneEntero"))
     merge(fetch_tides(beaches), ("tidePort", "tideLow", "tideHigh"))
     merge(fetch_stops(beaches), ("stopName",))
-    merge(fetch_osm(beaches), ("parking", "toilet", "ramp"))
+    merge(fetch_osm(beaches), ("parking", "toilet"))
+    merge(fetch_ramp_allow(beaches), ("ramp",))
     if not static_already_baked(prev_by_id, "protectedName"):
         merge(fetch_protected(beaches), ("protectedName", "protectedUrl"))
     else:

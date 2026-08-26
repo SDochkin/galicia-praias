@@ -2,8 +2,13 @@
 
 - duplicate idPraia 2045 (Praia de Codesal) — keeping first
 - FORCE_CONCELLO applied: 2095,2096,2099 → Vilaboa
+- 2446 | coord 43.374,-8.41943 → 43.3724,-8.41866
+- 2447 | coord 43.3724,-8.41866 → 43.374,-8.41943
+- 2055 | coord 42.1128,-8.83115 → 42.11527777777778,-8.825277777777778
 - AEMET Galicia beaches: 114
-- AEMET match pairs: 82
+- AEMET match pairs: 83
+- AEMET force pairs (1):
+-   - 2055 Praia A Foz ↔ 3600303 Ladeira, Ramallosa (0m)
 - AEMET rejected by name (23):
 -   - 1971 | reject | near Caión but different beach (Salseiras) | nearest 1504101 Caión (114m)
 -   - 2345 | reject | near Mañóns but different beach (Carragueiros) | nearest 1501103 Mañóns (45m)
@@ -36,6 +41,7 @@
 - 2141 | Praia de Estrepeiros | Praia do Estripeiro | osm
 - 2262 | Praia de Lauxiñas (Sur) | Praia das Lousiñas (Sur) | osm
 - 2527 | Praia de Vidueiros | Praia de Bidueiro | osm
+- 2055 | Praia A Foz | Praia da Ladeira | osm
 - DOGS_ALLOW marked (5):
 -   - 2073 Praia da Calzoa, Vigo
 -   - 2089 Praia de Cesantes, Redondela
@@ -49,5 +55,3 @@
 -   - Cunchiña / Cheminea / Massó (Cangas) — no catalog match by id+concello
 -   - Arealonga (Redondela) — no catalog match by id+concello
 -   - A Foz (Vigo) — no catalog match by id+concello
-- 2446 | coord 43.374,-8.41943 → 43.3724,-8.41866
-- 2447 | coord 43.3724,-8.41866 → 43.374,-8.41943

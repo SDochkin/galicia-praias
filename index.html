@@ -3,7 +3,26 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="format-detection" content="telephone=no, address=no, email=no, date=no" />
   <title>Temperatura del agua — playas de Galicia</title>
+  <meta name="description" content="Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla." />
+  <link rel="canonical" href="https://sdochkin.github.io/galicia-praias/" />
+  <meta property="og:title" content="Temperatura del agua — playas de Galicia" />
+  <meta property="og:description" content="Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla." />
+  <meta property="og:url" content="https://sdochkin.github.io/galicia-praias/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="es_ES" />
+  <meta name="twitter:card" content="summary" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Temperatura del agua — playas de Galicia",
+    "url": "https://sdochkin.github.io/galicia-praias/",
+    "description": "Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla.",
+    "inLanguage": "es"
+  }
+  </script>
   <style>
     :root {
       --bg: #0f1419;
@@ -66,6 +85,7 @@
     #lang-bar button,
     #sort-bar button,
     #caninas-toggle,
+    #favoritas-toggle,
     #layer-filters button,
     #geo-near,
     #beach-dialog-close,
@@ -93,6 +113,7 @@
     #lang-bar button:hover,
     #sort-bar button:hover,
     #caninas-toggle:hover,
+    #favoritas-toggle:hover,
     #layer-filters button:hover,
     #geo-near:hover,
     #beach-dialog-close:hover,
@@ -104,6 +125,7 @@
     #lang-bar button[aria-checked="true"],
     #sort-bar button[aria-checked="true"],
     #caninas-toggle[aria-pressed="true"],
+    #favoritas-toggle[aria-pressed="true"],
     #layer-filters button[aria-pressed="true"] {
       background: color-mix(in srgb, var(--accent) 16%, transparent);
       color: var(--accent);
@@ -111,6 +133,7 @@
     #lang-bar button:focus-visible,
     #sort-bar button:focus-visible,
     #caninas-toggle:focus-visible,
+    #favoritas-toggle:focus-visible,
     #layer-filters button:focus-visible,
     #geo-near:focus-visible,
     #beach-dialog-close:focus-visible,
@@ -129,8 +152,9 @@
     .sub {
       color: var(--muted);
       font-size: var(--fs-sm);
-      margin-bottom: 1rem;
+      margin-bottom: 0.35rem;
     }
+    .sub + .sub { margin-bottom: 1rem; }
     label { font-size: var(--fs-sm); color: var(--muted); display: block; margin-bottom: 0.35rem; }
     .combo-row {
       display: flex;
@@ -324,8 +348,55 @@
       gap: 0.3rem;
       pointer-events: auto;
     }
-    .card-actions .hint.dogs-badge {
+    .card-actions .hint.dogs-badge,
+    .card-actions .fav-btn {
       height: 1.5rem;
+    }
+    .fav-btn {
+      flex: 0 0 auto;
+      position: relative;
+      box-sizing: border-box;
+      width: 1.5rem;
+      min-width: 1.5rem;
+      min-height: 0;
+      padding: 0;
+      border: 0;
+      border-radius: 0.3rem;
+      background: transparent;
+      color: var(--muted);
+      font-size: var(--fs-sm);
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+    }
+    .fav-btn:hover {
+      background: color-mix(in srgb, var(--text) 8%, transparent);
+      color: var(--text);
+    }
+    .fav-btn[aria-pressed="true"] {
+      color: var(--accent);
+    }
+    .fav-btn[aria-pressed="true"]:hover {
+      background: color-mix(in srgb, var(--accent) 16%, transparent);
+      color: var(--accent);
+    }
+    .fav-btn:focus-visible {
+      outline: 2px solid color-mix(in srgb, var(--accent) 55%, transparent);
+      outline-offset: 1px;
+    }
+    .fav-btn .ico {
+      width: 1.5rem;
+      height: 1.5rem;
+    }
+    .fav-btn[aria-pressed="true"] .ico {
+      fill: currentColor;
+    }
+    .fav-btn::after {
+      content: "";
+      position: absolute;
+      inset: -0.62rem;
     }
     .hint.dogs-badge {
       flex: 0 0 auto;
@@ -382,29 +453,68 @@
     }
     .dialog-layers {
       display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.35rem;
+      margin: 0 0 0.35rem;
+    }
+    .dialog-chips,
+    .dialog-icons {
+      display: flex;
       flex-wrap: wrap;
       align-items: center;
       gap: 0.35rem;
-      margin: 0 0 0.75rem;
     }
     .dialog-layers .hint {
       width: auto;
-      min-width: 2.625rem;
-      min-height: 2.625rem;
-      padding: 0.15rem 0.35rem;
+      min-width: 0;
+      min-height: 0;
+      padding: 0.1rem 0.25rem;
+    }
+    .dialog-icons .hint {
+      width: 1.75rem;
+      min-width: 1.75rem;
+      justify-content: center;
+      padding: 0.1rem 0;
+    }
+    .dialog-layers .hint::after {
+      content: "";
+      position: absolute;
+      inset: -0.5rem;
     }
     .dialog-layers .ico {
       flex: 0 0 1.5em;
       width: 1.5em;
       height: 1.5em;
     }
+    .dialog-layers .hint.decide-chip {
+      gap: 0.3rem;
+      min-width: 0;
+      font-size: var(--fs-xs);
+      font-weight: 650;
+    }
+    .dialog-layers .hint.decide-chip.uv-hot {
+      color: var(--warn);
+    }
     .dialog-layers .ficha {
       font-size: var(--fs-sm);
       color: var(--accent);
     }
+    a[x-apple-data-detectors] {
+      color: inherit;
+      text-decoration: none;
+      pointer-events: none;
+    }
+    .dialog-notes {
+      display: flex;
+      flex-direction: column;
+      gap: 0.2rem;
+      margin: 0 0 0.75rem;
+    }
     .dialog-layer-note {
-      margin: 0 0 0.55rem;
+      margin: 0;
       font-size: var(--fs-sm);
+      line-height: 1.25;
       color: var(--muted);
     }
     .card-metrics {
@@ -507,6 +617,9 @@
     }
     .card-facts {
       list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
       margin: 0;
       padding: 0;
       font-size: var(--fs-sm);
@@ -515,11 +628,31 @@
     .card-facts li {
       display: flex;
       align-items: center;
-      gap: 0.45rem;
-      padding: 0.3rem 0;
+      gap: 0.55rem;
+      padding: 0;
     }
+    .fact-text {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      column-gap: 0.55rem;
+      row-gap: 0.2rem;
+    }
+    .fact-tide {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0.2rem;
+    }
+    .card-facts li:not(.score-bar) .bar-hint {
+      width: auto;
+    }
+    .card-facts li:has(.fact-tide),
     .card-facts li.fact-figure {
       align-items: flex-start;
+    }
+    .card-facts li.fact-figure {
+      margin-top: 0.2rem;
     }
     .fact-figure-body {
       display: flex;
@@ -536,19 +669,22 @@
       display: flex;
       flex-direction: column;
       align-items: stretch;
-      gap: 0.35rem;
-      padding: 0.55rem 0;
+      gap: 0.55rem;
+      padding: 0;
+    }
+    .card-facts li.score-bar + li.score-bar {
+      margin-top: 0.2rem;
     }
     .bar-label {
       display: grid;
       grid-template-columns: 1em minmax(0, 1fr);
-      column-gap: 0.4rem;
+      column-gap: 0.55rem;
       align-items: center;
     }
     .bar-hint {
       display: flex;
       justify-content: space-between;
-      align-items: baseline;
+      align-items: center;
       gap: 0.5rem;
       width: 100%;
       min-width: 0;
@@ -567,7 +703,7 @@
       --bar-mark: 0.75rem;
       display: grid;
       align-items: center;
-      margin-left: calc(1em + 0.4rem);
+      margin-left: calc(1em + 0.55rem);
       width: auto;
       line-height: 0;
     }
@@ -731,6 +867,7 @@
       </div>
     </div>
     <p class="sub" data-i18n="subtitle">No son mediciones in situ en la orilla.</p>
+    <p class="sub" data-i18n="seoLead">Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla.</p>
     <label for="concello" data-i18n="concelloLabel">Concello</label>
     <div class="combo-row">
     <div class="combo">
@@ -757,6 +894,7 @@
         <button type="button" role="radio" data-ord="indice" aria-checked="false" data-i18n="sortIndice">Confort</button>
     </div>
     <button type="button" id="caninas-toggle" aria-pressed="false" data-i18n="caninas">Caninas</button>
+    <button type="button" id="favoritas-toggle" aria-pressed="false" data-i18n="favoritas">Favoritas</button>
     <div id="layer-filters">
       <button type="button" id="filter-flag" aria-pressed="false" data-i18n="filterFlag">Bandera azul</button>
       <button type="button" id="filter-humo" aria-pressed="false" data-i18n="filterHumo">Sin humo</button>
@@ -812,6 +950,8 @@
         docTitle: "Temperatura del agua — playas de Galicia",
         title: "Temperatura del agua",
         subtitle: "No son mediciones in situ en la orilla.",
+        seoLead: "Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla.",
+        docDescription: "Temperatura del agua y confort de baño en las playas de Galicia. Datos de modelos marinos y costeros, no mediciones en la orilla.",
         langLegend: "Idioma",
         concelloLabel: "Concello",
         concelloPlaceholder: "Buscar concello…",
@@ -822,6 +962,7 @@
         sortAgua: "Agua",
         sortIndice: "Confort",
         caninas: "Caninas",
+        favoritas: "Favoritas",
         maps: "Mapa",
         dialogClose: "Cerrar",
         footerDatos: "Datos:",
@@ -837,6 +978,9 @@
         scoreAir: "Aire",
         scoreWind: "Viento",
         scoreWaves: "Oleaje",
+        waveCalm: "calmo",
+        waveModerate: "moderado",
+        waveStrong: "fuerte",
         scoreRain: "Lluvia",
         scoreSky: "Cielo",
         tempNature: "Modelo",
@@ -902,6 +1046,10 @@
         tipIndice: "Cuánto de agradable está el baño ahora. Agua, aire, viento, oleaje y lluvia. No mide higiene.",
         caninasTitle: "Playas caninas",
         caninasEmpty: "Sin playas caninas en el catálogo.",
+        favoritasTitle: "Favoritas",
+        favoritasEmpty: "Aún no hay favoritas. Añade una playa con el botón de la tarjeta.",
+        favAdd: "Añadir a favoritas",
+        favRemove: "Quitar de favoritas",
         dogsBadge: "Canina",
         dogsAria: "Zona para perros",
         dogsTip: "Puede ser solo un tramo. La lista no es completa. Comprueba las normas del concello.",
@@ -922,10 +1070,10 @@
         parkingTip: "Hay aparcamiento cerca en OpenStreetMap.",
         toiletAria: "Aseo",
         toiletTip: "Hay aseo cerca en OpenStreetMap.",
-        rampAria: "Rampa",
-        rampTip: "Hay rampa cerca en OpenStreetMap.",
+        rampAria: "Acceso adaptado",
+        rampTip: "Está en la lista editorial de accesos del sitio. Comprueba el estado en la playa.",
         protectedAria: "Espacio protegido",
-        protectedTip: "{name}",
+        protectedTip: "La playa está en {name}. Puede haber normas de uso.",
         ficha: "Ficha",
         scoreHigiene: "Higiene",
         tipHigiene: "Control del {date}. E. coli {ecoli}. Enterococo {entero}. No es la nota anual.",
@@ -944,6 +1092,8 @@
         docTitle: "Sea temperature — beaches of Galicia",
         title: "Sea temperature",
         subtitle: "These are not in-situ measurements at the shoreline.",
+        seoLead: "Sea temperature and bathing comfort at the beaches of Galicia. Marine and coastal model data, not shoreline measurements.",
+        docDescription: "Sea temperature and bathing comfort at the beaches of Galicia. Marine and coastal model data, not shoreline measurements.",
         langLegend: "Language",
         concelloLabel: "Municipality",
         concelloPlaceholder: "Search municipality…",
@@ -954,6 +1104,7 @@
         sortAgua: "Water",
         sortIndice: "Comfort",
         caninas: "Dogs",
+        favoritas: "Favorites",
         maps: "Map",
         dialogClose: "Close",
         footerDatos: "Data:",
@@ -969,6 +1120,9 @@
         scoreAir: "Air",
         scoreWind: "Wind",
         scoreWaves: "Waves",
+        waveCalm: "calm",
+        waveModerate: "moderate",
+        waveStrong: "strong",
         scoreRain: "Rain",
         scoreSky: "Sky",
         tempNature: "Model",
@@ -1034,6 +1188,10 @@
         tipIndice: "How pleasant it is to swim now. Water, air, wind, swell and rain. It does not measure hygiene.",
         caninasTitle: "Dog beaches",
         caninasEmpty: "No dog beaches in the catalogue.",
+        favoritasTitle: "Favorites",
+        favoritasEmpty: "No favorites yet. Add a beach with the button on the card.",
+        favAdd: "Add to favorites",
+        favRemove: "Remove from favorites",
         dogsBadge: "Dogs",
         dogsAria: "Dog area",
         dogsTip: "It may be only a stretch. The list is not complete. Check the municipality rules.",
@@ -1054,10 +1212,10 @@
         parkingTip: "Parking nearby in OpenStreetMap.",
         toiletAria: "Toilet",
         toiletTip: "Toilet nearby in OpenStreetMap.",
-        rampAria: "Ramp",
-        rampTip: "Ramp nearby in OpenStreetMap.",
+        rampAria: "Adapted access",
+        rampTip: "On this site's editorial access list. Check on the beach.",
         protectedAria: "Protected area",
-        protectedTip: "{name}",
+        protectedTip: "The beach is in {name}. There may be use rules.",
         ficha: "Sheet",
         scoreHigiene: "Hygiene",
         tipHigiene: "Sample of {date}. E. coli {ecoli}. Enterococci {entero}. Not the yearly grade.",
@@ -1076,6 +1234,8 @@
         docTitle: "Температура воды — пляжи Галисии",
         title: "Температура воды",
         subtitle: "Это не измерения на берегу.",
+        seoLead: "Температура воды и комфорт купания на пляжах Галисии. Данные морских и береговых моделей, не измерения на берегу.",
+        docDescription: "Температура воды и комфорт купания на пляжах Галисии. Данные морских и береговых моделей, не измерения на берегу.",
         langLegend: "Язык",
         concelloLabel: "Муниципалитет",
         concelloPlaceholder: "Искать муниципалитет…",
@@ -1086,6 +1246,7 @@
         sortAgua: "Вода",
         sortIndice: "Комфорт",
         caninas: "Собаки",
+        favoritas: "Избранное",
         maps: "Карта",
         dialogClose: "Закрыть",
         footerDatos: "Данные:",
@@ -1101,6 +1262,9 @@
         scoreAir: "Воздух",
         scoreWind: "Ветер",
         scoreWaves: "Волны",
+        waveCalm: "спокойно",
+        waveModerate: "средне",
+        waveStrong: "сильно",
         scoreRain: "Дождь",
         scoreSky: "Небо",
         tempNature: "Модель",
@@ -1166,6 +1330,10 @@
         tipIndice: "Насколько сейчас приятно купаться. Вода, воздух, ветер, волны и дождь. Не измеряет гигиену.",
         caninasTitle: "Пляжи для собак",
         caninasEmpty: "В каталоге нет пляжей для собак.",
+        favoritasTitle: "Избранное",
+        favoritasEmpty: "Пока нет избранных. Добавьте пляж кнопкой на карточке.",
+        favAdd: "Добавить в избранное",
+        favRemove: "Убрать из избранного",
         dogsBadge: "Собаки",
         dogsAria: "Зона для собак",
         dogsTip: "Может быть только участок. Список неполный. Сверьте нормы муниципалитета.",
@@ -1186,10 +1354,10 @@
         parkingTip: "Рядом есть парковка в OpenStreetMap.",
         toiletAria: "Туалет",
         toiletTip: "Рядом есть туалет в OpenStreetMap.",
-        rampAria: "Пандус",
-        rampTip: "Рядом есть пандус в OpenStreetMap.",
+        rampAria: "Адаптированный доступ",
+        rampTip: "В редакционном списке доступов сайта. Проверьте на месте.",
         protectedAria: "Охраняемая зона",
-        protectedTip: "{name}",
+        protectedTip: "Пляж в зоне {name}. Могут действовать особые правила.",
         ficha: "Карточка",
         scoreHigiene: "Гигиена",
         tipHigiene: "Проба от {date}. E. coli {ecoli}. Энтерококк {entero}. Это не годовая оценка.",
@@ -1219,6 +1387,9 @@
     let geoResults = [];
     let caninasMode = false;
     let caninasResults = [];
+    let favoritasMode = false;
+    let favoritasResults = [];
+    let favorites = [];
     let filterFlag = false;
     let filterHumo = false;
     let filterTramo = "";
@@ -1269,10 +1440,69 @@
       }
     }
 
+    function readStoredFavorites() {
+      try {
+        const raw = localStorage.getItem("favoritas");
+        if (!raw) return [];
+        const arr = JSON.parse(raw);
+        if (!Array.isArray(arr)) return [];
+        return arr.filter((s) => typeof s === "string" && s);
+      } catch (_) {
+        return [];
+      }
+    }
+
+    function writeStoredFavorites(slugs) {
+      try {
+        localStorage.setItem("favoritas", JSON.stringify(slugs));
+      } catch (_) {
+        /* private mode */
+      }
+    }
+
+    function isFavorite(slug) {
+      return !!slug && favorites.includes(slug);
+    }
+
+    async function toggleFavorite(slug) {
+      if (!slug) return;
+      const i = favorites.indexOf(slug);
+      if (i >= 0) favorites.splice(i, 1);
+      else favorites.push(slug);
+      writeStoredFavorites(favorites);
+      if (favoritasMode && currentBeach === slug && !isFavorite(slug)) {
+        closeBeach();
+        return;
+      }
+      await renderLists();
+      if (currentBeach) {
+        const beach = findOpenBeach();
+        if (beach) fillBeachDialog(beach);
+      }
+    }
+
+    function favBtnHtml(slug) {
+      const on = isFavorite(slug);
+      return `<button type="button" class="fav-btn" data-slug="${escapeAttr(
+        slug
+      )}" aria-pressed="${on ? "true" : "false"}" aria-label="${escapeAttr(
+        on ? t("favRemove") : t("favAdd")
+      )}">${iconSvg("star")}</button>`;
+    }
+
     function applyLang(next) {
       lang = next === "en" || next === "ru" || next === "es" ? next : "es";
       document.documentElement.lang = lang;
       document.title = t("docTitle");
+      const desc = t("docDescription");
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) metaDesc.setAttribute("content", desc);
+      const ogTitle = document.querySelector('meta[property="og:title"]');
+      if (ogTitle) ogTitle.setAttribute("content", t("docTitle"));
+      const ogDesc = document.querySelector('meta[property="og:description"]');
+      if (ogDesc) ogDesc.setAttribute("content", desc);
+      const ogLocale = document.querySelector('meta[property="og:locale"]');
+      if (ogLocale) ogLocale.setAttribute("content", localeTag().replace("-", "_"));
       document.querySelectorAll("[data-i18n]").forEach((el) => {
         el.textContent = t(el.dataset.i18n);
       });
@@ -1295,6 +1525,10 @@
       if (caninas) {
         caninas.setAttribute("aria-pressed", caninasMode ? "true" : "false");
       }
+      const favoritas = document.getElementById("favoritas-toggle");
+      if (favoritas) {
+        favoritas.setAttribute("aria-pressed", favoritasMode ? "true" : "false");
+      }
       syncLayerFilters();
     }
 
@@ -1316,9 +1550,10 @@
     function parseQuery() {
       const p = new URLSearchParams(location.search);
       const raw = p.get("lang");
+      const b = p.get("b");
       return {
         c: p.get("c"),
-        b: p.get("b"),
+        b: b === "praia-a-foz" ? "praia-da-ladeira" : b,
         ord: p.get("ord") === "indice" ? "indice" : "agua",
         lang: raw === "en" || raw === "ru" || raw === "es" ? raw : null,
       };
@@ -1338,8 +1573,16 @@
 
     function currentUrlParams() {
       const params = {};
-      if (currentConcello && !geoMode && !caninasMode) params.c = currentConcello;
-      if (currentBeach && currentConcello && !geoMode && !caninasMode) {
+      if (currentConcello && !geoMode && !caninasMode && !favoritasMode) {
+        params.c = currentConcello;
+      }
+      if (
+        currentBeach &&
+        currentConcello &&
+        !geoMode &&
+        !caninasMode &&
+        !favoritasMode
+      ) {
         params.b = currentBeach;
       }
       return params;
@@ -1553,6 +1796,7 @@
     async function selectConcello(slug) {
       geoMode = false;
       caninasMode = false;
+      favoritasMode = false;
       setGeoStatus("");
       concelloShowAll = false;
       if (!slug || slug === currentConcello) {
@@ -1575,6 +1819,7 @@
     async function clearConcello() {
       geoMode = false;
       caninasMode = false;
+      favoritasMode = false;
       setGeoStatus("");
       currentConcello = null;
       currentBeach = null;
@@ -1819,6 +2064,7 @@
         sea: '<path d="M3 13c2 2 4 2 6 0s4-2 6 0 4 2 6 0M3 18c2 2 4 2 6 0s4-2 6 0 4 2 6 0"/>',
         dogs:
           '<path d="M180-475q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180-160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm240 0q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29Zm180 160q-42 0-71-29t-29-71q0-42 29-71t71-29q42 0 71 29t29 71q0 42-29 71t-71 29ZM266-75q-45 0-75.5-34.5T160-191q0-53 36-91.5t88-53.5q41-10 81.5-14.5T446-355q41 0 81 4.5T608-336q52 15 88 53.5T732-191q0 47-30.5 81.5T626-75H266Z"/>',
+        star: '<path d="M12 3.2l2.35 5.7 6.2.54-4.72 4.1 1.4 6.06L12 16.7l-5.23 3.1 1.4-6.06-4.72-4.1 6.2-.54z"/>',
         smoke: '<circle cx="12" cy="12" r="9"/><path d="M7 14h7l1.2-2.2M16 9.5c.2-1.2-1-2-2.2-1.6"/><path d="M7.2 7.2l9.6 9.6"/>',
         stop: '<rect x="3" y="4" width="18" height="12" rx="2"/><path d="M3 11h18"/><circle cx="7.5" cy="17.6" r="1.7" fill="currentColor"/><circle cx="16.5" cy="17.6" r="1.7" fill="currentColor"/><path d="M7 7h3M12 7h3"/>',
         parking: '<rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 17V7h4a3 3 0 0 1 0 6H9"/>',
@@ -1907,7 +2153,21 @@
       )}" aria-label="${escapeAttr(aria)}">${iconSvg(icon)}</button>`;
     }
 
-    function layerIconsHtml(beach) {
+    function decideHint(kind, icon, label, tip, extraClass) {
+      const cls = extraClass ? ` hint decide-chip ${extraClass}` : " hint decide-chip";
+      return `<button type="button" class="${cls.trim()}" data-kind="${kind}" data-tip="${escapeAttr(
+        tip
+      )}" aria-label="${escapeAttr(label)}">${iconSvg(icon)}<span>${escapeAttr(label)}</span></button>`;
+    }
+
+    function waveLevelLabel(level) {
+      if (level === "calm") return t("waveCalm");
+      if (level === "moderate") return t("waveModerate");
+      if (level === "strong") return t("waveStrong");
+      return "";
+    }
+
+    function layerIconBits(beach) {
       const bits = [];
       if (beach.flagYear) {
         bits.push(layerHint("flag", "flag", t("flagAria"), t("flagTip", { year: beach.flagYear })));
@@ -1927,22 +2187,58 @@
       if (beach.ramp) {
         bits.push(layerHint("ramp", "ramp", t("rampAria"), t("rampTip")));
       }
-      if (beach.protectedName) {
+      if (beach.protectedUrl) {
         bits.push(
-          layerHint(
+          `<a class="ficha" href="${escapeAttr(beach.protectedUrl)}" target="_blank" rel="noopener">${t("ficha")}</a>`
+        );
+      }
+      return bits;
+    }
+
+    function decideStripHtml(beach, uvDays) {
+      const chips = [];
+      const waveWord = waveLevelLabel(beach.wave);
+      if (waveWord) {
+        chips.push(
+          decideHint("wave", "waves", `${t("scoreWaves")} ${waveWord}`, t("tipWaves"))
+        );
+      }
+      const todayUv = uvDays.get(refDay);
+      if (typeof todayUv === "number" && todayUv >= 8) {
+        chips.push(
+          decideHint("uv", "sky", `UV ${todayUv} ${uvLabel(todayUv)}`, t("uvWarn"), "uv-hot")
+        );
+      }
+      if (typeof beach.higiene === "number") {
+        chips.push(
+          decideHint(
+            "higiene",
+            "higiene",
+            `${t("scoreHigiene")} ${partQual(beach.higiene)}`,
+            t("tipHigiene", {
+              date: beach.higieneDate || "—",
+              ecoli: beach.higieneEcoli || "—",
+              entero: beach.higieneEntero || "—",
+            })
+          )
+        );
+      }
+      if (beach.protectedName) {
+        chips.push(
+          decideHint(
             "protected",
             "park",
             t("protectedAria"),
             t("protectedTip", { name: beach.protectedName })
           )
         );
-        if (beach.protectedUrl) {
-          bits.push(
-            `<a class="ficha" href="${escapeAttr(beach.protectedUrl)}" target="_blank" rel="noopener">${t("ficha")}</a>`
-          );
-        }
       }
-      return bits.length ? `<div class="dialog-layers">${bits.join("")}</div>` : "";
+      const icons = layerIconBits(beach);
+      if (!chips.length && !icons.length) return "";
+      const rows = [];
+      if (icons.length) rows.push(`<div class="dialog-icons">${icons.join("")}</div>`);
+      if (chips.length) rows.push(`<div class="dialog-chips">${chips.join("")}</div>`);
+      return `<div class="dialog-layers">${rows.join("")}</div>`;
     }
 
     function cardBackHtml(beach) {
@@ -1960,23 +2256,11 @@
       const histDates = allDates.filter((d) => d < refDay);
       const futDates = allDates.filter((d) => d > refDay);
       const facts = [];
-      if (typeof beach.higiene === "number") {
-        facts.push(
-          scoreBar(
-            "higiene",
-            "higiene",
-            beach.higiene,
-            t("tipHigiene", {
-              date: beach.higieneDate || "—",
-              ecoli: beach.higieneEcoli || "—",
-              entero: beach.higieneEntero || "—",
-            })
-          )
-        );
-      }
       if (typeof beach.score === "number") {
         const parts = beach.scoreParts || {};
+        const waveInStrip = Boolean(waveLevelLabel(beach.wave));
         for (const k of SCORE_PART_KEYS) {
+          if (k === "waves" && waveInStrip) continue;
           if (typeof parts[k] === "number") {
             facts.push(scoreBar(SCORE_PART_ICONS[k], k, parts[k]));
           }
@@ -1991,21 +2275,21 @@
           facts.push(factItem("clock", t("ventana"), win || "—", "tipVentana", "ventana"));
         }
       }
-      const tideBits = [];
+      const tideLines = [];
       if (Array.isArray(beach.tideLow) && beach.tideLow.length) {
-        tideBits.push(`${t("tideLow")} ${beach.tideLow.join(" ")}`);
+        tideLines.push(`${t("tideLow")} ${beach.tideLow.join(" / ")}`);
       }
       if (Array.isArray(beach.tideHigh) && beach.tideHigh.length) {
-        tideBits.push(`${t("tideHigh")} ${beach.tideHigh.join(" ")}`);
+        tideLines.push(`${t("tideHigh")} ${beach.tideHigh.join(" / ")}`);
       }
-      if (tideBits.length) {
+      if (tideLines.length) {
         const port = beach.tidePort || "—";
         facts.push(
-          `<li>${iconSvg("clock")}<span><button type="button" class="hint bar-hint" data-kind="tide" data-tip="${escapeAttr(
+          `<li>${iconSvg("clock")}<span class="fact-tide"><button type="button" class="hint bar-hint" data-kind="tide" data-tip="${escapeAttr(
             t("tipTide", { port })
-          )}" aria-label="${escapeAttr(t("tideLabel"))}">${t("tideLabel")}</button> ${escapeAttr(
-            tideBits.join(" · ")
-          )} · ${escapeAttr(port)} · ${escapeAttr(t("tideApprox"))}</span></li>`
+          )}" aria-label="${escapeAttr(t("tideLabel"))}">${t("tideLabel")}</button>${tideLines
+            .map((line) => `<span>${escapeAttr(line)}</span>`)
+            .join("")}<span>${escapeAttr(port)} · ${escapeAttr(t("tideApprox"))}</span></span></li>`
         );
       }
       const mar = marOf(beach);
@@ -2018,31 +2302,29 @@
         );
       }
       const bits = [];
-      const layerRow = layerIconsHtml(beach);
-      if (layerRow) bits.push(layerRow);
+      const strip = decideStripHtml(beach, uvDays);
+      if (strip) bits.push(strip);
+      const notes = [];
       if (beach.flagSand) {
         const sandKey = { Fina: "sandFina", Grosa: "sandGrosa", "Cantos rodados": "sandCantos" }[
           beach.flagSand
         ];
-        bits.push(
+        notes.push(
           `<p class="dialog-layer-note">${t("sandLabel")}: ${escapeAttr(
             sandKey ? t(sandKey) : beach.flagSand
           )}</p>`
         );
       }
       if (beach.tramo === "urbano" || beach.tramo === "natural") {
-        bits.push(
+        notes.push(
           `<p class="dialog-layer-note">${beach.tramo === "urbano" ? t("tramoUrbano") : t("tramoNatural")}</p>`
         );
       }
+      if (notes.length) bits.push(`<div class="dialog-notes">${notes.join("")}</div>`);
       if (facts.length) bits.push(`<ul class="card-facts">${facts.join("")}</ul>`);
-      const todayUv = uvDays.get(refDay);
-      if (typeof todayUv === "number" && todayUv >= 8) {
-        bits.push(`<p class="uv-warn">${t("uvWarn")}</p>`);
-      }
       const tables = [
         accordionTable(t("hist"), histDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
-        accordionTable(t("forecast"), futDates, costaDays, marDays, uvDays, costaSrc ? beach.source : "", beach.scoreByDay || {}),
+        accordionTable(t("forecast"), futDates, costaDays, marDays, uvDays, costaSrc ? beach.source : ""),
       ].join("");
       if (tables) bits.push(tables);
       return bits.join("");
@@ -2071,11 +2353,11 @@
 
     function factItem(icon, label, value, tipKey, kind) {
       if (tipKey) {
-        return `<li>${iconSvg(icon)}<span><button type="button" class="hint bar-hint" data-kind="${kind}" data-tip="${escapeAttr(
+        return `<li>${iconSvg(icon)}<span class="fact-text"><button type="button" class="hint bar-hint" data-kind="${kind}" data-tip="${escapeAttr(
           t(tipKey)
-        )}" aria-label="${escapeAttr(label)}">${label}</button> ${value}</span></li>`;
+        )}" aria-label="${escapeAttr(label)}">${label}</button><span>${escapeAttr(value)}</span></span></li>`;
       }
-      return `<li>${iconSvg(icon)}<span>${label} ${value}</span></li>`;
+      return `<li>${iconSvg(icon)}<span class="fact-text"><span>${escapeAttr(label)}</span><span>${escapeAttr(value)}</span></span></li>`;
     }
 
     function escapeAttr(s) {
@@ -2176,6 +2458,7 @@
             </div>
             <div class="card-actions">
               ${dogs}
+              ${favBtnHtml(beach.slug)}
               <a class="maps" target="_blank" rel="noopener" data-slug="${beach.slug}" href="https://www.google.com/maps/search/?api=1&amp;query=${q}">${t("maps")}</a>
             </div>
           </div>
@@ -2273,9 +2556,21 @@
           if (!slug) return;
           if (currentBeach === slug) closeBeach();
           else {
-            const from = caninasMode ? "caninas" : geoMode ? "geo" : undefined;
+            const from = favoritasMode
+              ? "favoritas"
+              : caninasMode
+                ? "caninas"
+                : geoMode
+                  ? "geo"
+                  : undefined;
             openBeach(slug, { from });
           }
+        });
+      });
+      root.querySelectorAll("button.fav-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          const slug = btn.dataset.slug;
+          if (slug) toggleFavorite(slug);
         });
       });
       root.querySelectorAll("button.hint").forEach(bindHint);
@@ -2295,6 +2590,9 @@
 
     function findOpenBeach() {
       if (!currentBeach) return null;
+      if (favoritasMode) {
+        return favoritasResults.find((b) => b.slug === currentBeach) || null;
+      }
       if (caninasMode) {
         return caninasResults.find((b) => b.slug === currentBeach) || null;
       }
@@ -2319,6 +2617,23 @@
       maps.href = `https://www.google.com/maps/search/?api=1&query=${mapsQuery(beach)}`;
       maps.dataset.slug = beach.slug;
       maps.textContent = t("maps");
+      let fav = document.getElementById("beach-dialog-fav");
+      if (!fav) {
+        fav = document.createElement("button");
+        fav.id = "beach-dialog-fav";
+        fav.type = "button";
+        fav.className = "fav-btn";
+        maps.before(fav);
+        fav.addEventListener("click", () => {
+          const slug = fav.dataset.slug;
+          if (slug) toggleFavorite(slug);
+        });
+      }
+      const favOn = isFavorite(beach.slug);
+      fav.dataset.slug = beach.slug;
+      fav.setAttribute("aria-pressed", favOn ? "true" : "false");
+      fav.setAttribute("aria-label", favOn ? t("favRemove") : t("favAdd"));
+      fav.innerHTML = iconSvg("star");
       let badge = document.getElementById("beach-dialog-dogs");
       if (!badge) {
         badge = document.createElement("button");
@@ -2400,6 +2715,38 @@
       if (btn) btn.setAttribute("aria-pressed", caninasMode ? "true" : "false");
     }
 
+    function syncFavoritasToggle() {
+      const btn = document.getElementById("favoritas-toggle");
+      if (btn) btn.setAttribute("aria-pressed", favoritasMode ? "true" : "false");
+    }
+
+    function buildFavoritasResults() {
+      const geoBySlug = new Map((index.geo || []).map((b) => [b.slug, b]));
+      const out = [];
+      for (const slug of favorites) {
+        if (typeof slug !== "string" || !slug) continue;
+        const g = geoBySlug.get(slug);
+        const cslug = (g && g.concelloSlug) || index.beachConcello[slug];
+        if (!g && !cslug) continue;
+        out.push({
+          slug,
+          name: (g && g.name) || slug,
+          concello: g && g.concello,
+          concelloSlug: cslug,
+          t: g && g.t,
+          score: g && g.score,
+          scoreParts: g && g.scoreParts,
+          trend: g && g.trend,
+          flagYear: g && g.flagYear,
+          sinHumo: g && g.sinHumo,
+          tramo: g && g.tramo,
+          lat: g && g.lat,
+          lon: g && g.lon,
+        });
+      }
+      return out;
+    }
+
     function syncLayerFilters() {
       const flag = document.getElementById("filter-flag");
       const humo = document.getElementById("filter-humo");
@@ -2433,7 +2780,23 @@
       const dlg = document.getElementById("beach-dialog");
       if (!currentBeach && dlg.open) dlg.close();
       syncCaninasToggle();
+      syncFavoritasToggle();
       syncLayerFilters();
+
+      if (favoritasMode) {
+        favoritasResults = applyLayerFilters(buildFavoritasResults());
+        favoritasResults = await Promise.all(
+          favoritasResults.map((b) => enrichTopBeach(b))
+        );
+        const items = sortBeaches(favoritasResults)
+          .map((b) => cardHtml(b, { showConcello: true }))
+          .join("");
+        root.innerHTML = items
+          ? `<h2>${t("favoritasTitle")}</h2><ul class="beach-list">${items}</ul>`
+          : `<h2>${t("favoritasTitle")}</h2><p class="empty">${t("favoritasEmpty")}</p>`;
+        bindList(root);
+        return;
+      }
 
       if (caninasMode) {
         caninasResults = applyLayerFilters(buildCaninasResults());
@@ -2510,15 +2873,17 @@
       if (push) {
         const src =
           from ||
-          (caninasMode
-            ? "caninas"
-            : geoMode
-              ? "geo"
-              : currentConcello
-                ? "concello"
-                : "top");
+          (favoritasMode
+            ? "favoritas"
+            : caninasMode
+              ? "caninas"
+              : geoMode
+                ? "geo"
+                : currentConcello
+                  ? "concello"
+                  : "top");
         track("beach_open", { slug, from: src, ...layerTrackFields() });
-        if (currentConcello && !geoMode && !caninasMode) {
+        if (currentConcello && !geoMode && !caninasMode && !favoritasMode) {
           setUrl({ c: currentConcello, b: slug });
         }
       }
@@ -2531,7 +2896,7 @@
       const slug = currentBeach;
       currentBeach = null;
       hideTip();
-      if (push && !geoMode && !caninasMode) {
+      if (push && !geoMode && !caninasMode && !favoritasMode) {
         if (currentConcello === null) setUrl({});
         else setUrl({ c: currentConcello });
       }
@@ -2547,6 +2912,7 @@
     }
 
     async function bootFromQuery() {
+      favorites = readStoredFavorites();
       const { c, b, ord, lang: qLang } = parseQuery();
       applyListOrd(ord);
       applyLang(qLang || readStoredLang() || "es");
@@ -2648,6 +3014,7 @@
     document.getElementById("caninas-toggle").addEventListener("click", async () => {
       caninasMode = !caninasMode;
       if (caninasMode) {
+        favoritasMode = false;
         geoMode = false;
         currentConcello = null;
         currentBeach = null;
@@ -2663,6 +3030,30 @@
         track("top_view");
       }
       syncCaninasToggle();
+      syncFavoritasToggle();
+      await renderLists();
+    });
+
+    document.getElementById("favoritas-toggle").addEventListener("click", async () => {
+      favoritasMode = !favoritasMode;
+      if (favoritasMode) {
+        caninasMode = false;
+        geoMode = false;
+        currentConcello = null;
+        currentBeach = null;
+        setGeoStatus("");
+        setConcelloInput();
+        closeCombo();
+        hideTip();
+        setUrl({});
+      } else {
+        currentBeach = null;
+        hideTip();
+        setUrl({});
+        track("top_view");
+      }
+      syncCaninasToggle();
+      syncFavoritasToggle();
       await renderLists();
     });
 
@@ -2683,7 +3074,9 @@
 
     document.getElementById("geo-near").addEventListener("click", () => {
       caninasMode = false;
+      favoritasMode = false;
       syncCaninasToggle();
+      syncFavoritasToggle();
       if (!navigator.geolocation) {
         geoMode = false;
         geoResults = [];
@@ -2712,6 +3105,7 @@
           setGeoStatus("");
           geoMode = true;
           caninasMode = false;
+          favoritasMode = false;
           geoResults = near;
           currentBeach = null;
           await renderLists();
@@ -2792,6 +3186,7 @@
     window.addEventListener("popstate", async () => {
       geoMode = false;
       caninasMode = false;
+      favoritasMode = false;
       setGeoStatus("");
       const { c, b, ord, lang: qLang } = parseQuery();
       applyListOrd(ord);

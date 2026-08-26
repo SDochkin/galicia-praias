@@ -43,6 +43,7 @@ DOGS_UNMATCHED = (
 COORD_OVERRIDES: dict[int, tuple[float, float]] = {
     2446: (43.3724, -8.41866),  # Lino; was swapped with 2447
     2447: (43.374, -8.41943),  # San Roque; was swapped with 2446
+    2055: (42.11527777777778, -8.825277777777778),  # Ladeira / AEMET 3600303; was estuary
 }
 
 # Map-facing names (OSM / local spelling). Slug is recomputed from the new name.
@@ -55,10 +56,13 @@ NAME_OVERRIDES: dict[int, str] = {
     2141: "Praia do Estripeiro",  # was Estrepeiros; OSM
     2262: "Praia das Lousiñas (Sur)",  # was Lauxiñas; OSM
     2527: "Praia de Bidueiro",  # was Vidueiros; OSM
+    2055: "Praia da Ladeira",  # was A Foz; searched as Ladeira
 }
 
 # Only documented same-beach aliases (applied after names_agree fails).
-AEMET_FORCE_PAIRS: dict[int, str] = {}
+AEMET_FORCE_PAIRS: dict[int, str] = {
+    2055: "3600303",  # Ladeira, Ramallosa
+}
 
 # Mutual-nearest ≤400 m but different beaches — keep unpaired with reason.
 AEMET_REJECT_REASONS: dict[int, str] = {
