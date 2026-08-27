@@ -328,10 +328,13 @@ def source_fresh(src: dict, max_age_days: int = 3) -> bool:
         dates = [d.get("date") for d in src.get("days") or [] if d.get("date")]
         if not dates:
             return False
-        d0 = date.fromisoformat(min(dates))
+        today = today_utc()
+        if today.isoformat() in dates:
+            return True
+        d_max = date.fromisoformat(max(dates))
     except (KeyError, IndexError, ValueError, TypeError):
         return False
-    return (today_utc() - d0).days <= max_age_days
+    return (today - d_max).days <= max_age_days
 
 
 def pick_primary(sources: list[dict], today: str) -> tuple[float | None, str | None]:
@@ -1775,6 +1778,34 @@ def run_selfcheck() -> int:
         resolve_copernicus_source(None, {"sources": [fresh_cop]}) is fresh_cop
     )
     assert resolve_copernicus_source(None, {"sources": [stale_cop]}) is None
+
+    today_d = today_utc()
+    old_min = (today_d - timedelta(days=10)).isoformat()
+    mid_fresh = (today_d - timedelta(days=2)).isoformat()
+    assert source_fresh(
+        {
+            "days": [
+                {"date": old_min, "t": 14.0},
+                {"date": today_d.isoformat(), "t": 15.0},
+            ]
+        }
+    )
+    assert not source_fresh(
+        {
+            "days": [
+                {"date": (today_d - timedelta(days=12)).isoformat(), "t": 14.0},
+                {"date": old_min, "t": 15.0},
+            ]
+        }
+    )
+    assert source_fresh(
+        {
+            "days": [
+                {"date": old_min, "t": 14.0},
+                {"date": mid_fresh, "t": 15.0},
+            ]
+        }
+    )
 
     rec = concello_beach_record(
         {
