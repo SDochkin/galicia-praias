@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-27T17:10:55Z",
+  "fetchedAt": "2026-08-27T17:35:02Z",
   "beaches": [
     {
       "id": 2417,
@@ -9,29 +9,6 @@
       "source": "MeteoGalicia",
       "trend": "flat",
       "sources": [
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-27",
-              "t": 18.0
-            },
-            {
-              "date": "2026-08-28",
-              "t": 18.0
-            },
-            {
-              "date": "2026-08-29",
-              "t": 19.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-26",
-              "t": 18.0
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -58,6 +35,29 @@
               "uv": 6
             }
           ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-27",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-28",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-29",
+              "t": 19.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-26",
+              "t": 18.0
+            }
+          ]
         }
       ],
       "score": 70,
@@ -75,21 +75,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 70,
-          "scoreParts": {
-            "water": 77,
-            "air": 20,
-            "wind": 81,
-            "rain": 100,
-            "sky": 100
-          },
-          "bestHour": 17,
-          "scoreWindow": {
-            "from": 13,
-            "to": 17
-          }
-        },
         "2026-08-28": {
           "score": 69,
           "scoreParts": {
@@ -103,6 +88,21 @@
           "scoreWindow": {
             "from": 9,
             "to": 15
+          }
+        },
+        "2026-08-29": {
+          "score": 60,
+          "scoreParts": {
+            "water": 63,
+            "air": 20,
+            "wind": 100,
+            "rain": 100,
+            "sky": 25
+          },
+          "bestHour": 8,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
           }
         }
       },

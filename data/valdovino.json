@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-27T17:10:55Z",
+  "fetchedAt": "2026-08-27T17:35:02Z",
   "beaches": [
     {
       "id": 2536,
@@ -100,22 +100,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 63,
-          "scoreParts": {
-            "water": 50,
-            "air": 60,
-            "wind": 94,
-            "waves": 59,
-            "rain": 100,
-            "sky": 40
-          },
-          "bestHour": 11,
-          "scoreWindow": {
-            "from": 11,
-            "to": 12
-          }
-        },
         "2026-08-28": {
           "score": 57,
           "scoreParts": {
@@ -130,6 +114,22 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 66,
+          "scoreParts": {
+            "water": 50,
+            "air": 90,
+            "wind": 87,
+            "waves": 41,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 12,
+            "to": 14
           }
         }
       },
@@ -250,22 +250,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 61,
-          "scoreParts": {
-            "water": 50,
-            "air": 60,
-            "wind": 83,
-            "waves": 60,
-            "rain": 100,
-            "sky": 40
-          },
-          "bestHour": 12,
-          "scoreWindow": {
-            "from": 11,
-            "to": 12
-          }
-        },
         "2026-08-28": {
           "score": 56,
           "scoreParts": {
@@ -280,6 +264,22 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 63,
+          "scoreParts": {
+            "water": 50,
+            "air": 80,
+            "wind": 85,
+            "waves": 41,
+            "rain": 100,
+            "sky": 40
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 12,
+            "to": 15
           }
         }
       },
@@ -399,22 +399,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 63,
-          "scoreParts": {
-            "water": 50,
-            "air": 50,
-            "wind": 71,
-            "waves": 56,
-            "rain": 100,
-            "sky": 100
-          },
-          "bestHour": 17,
-          "scoreWindow": {
-            "from": 15,
-            "to": 17
-          }
-        },
         "2026-08-28": {
           "score": 56,
           "scoreParts": {
@@ -429,6 +413,22 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 66,
+          "scoreParts": {
+            "water": 50,
+            "air": 90,
+            "wind": 80,
+            "waves": 41,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 13,
+          "scoreWindow": {
+            "from": 12,
+            "to": 15
           }
         }
       },
@@ -513,56 +513,6 @@
           ]
         },
         {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-27",
-              "t": 18.0
-            },
-            {
-              "date": "2026-08-28",
-              "t": 19.0
-            },
-            {
-              "date": "2026-08-29",
-              "t": 19.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-26",
-              "t": 18.0
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-08-27",
-              "t": 17.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-08-28",
-              "t": 17.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-08-29",
-              "t": 17.0,
-              "uv": 7
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-26",
-              "t": 17.0,
-              "uv": 6
-            }
-          ]
-        },
-        {
           "name": "Copernicus",
           "days": [
             {
@@ -608,6 +558,56 @@
               "t": 17.0
             }
           ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-08-27",
+              "t": 17.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-08-28",
+              "t": 17.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-08-29",
+              "t": 17.0,
+              "uv": 7
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-26",
+              "t": 17.0,
+              "uv": 6
+            }
+          ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-27",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-28",
+              "t": 19.0
+            },
+            {
+              "date": "2026-08-29",
+              "t": 19.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-26",
+              "t": 18.0
+            }
+          ]
         }
       ],
       "score": 61,
@@ -626,22 +626,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 61,
-          "scoreParts": {
-            "water": 50,
-            "air": 60,
-            "wind": 80,
-            "waves": 46,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 11,
-          "scoreWindow": {
-            "from": 11,
-            "to": 17
-          }
-        },
         "2026-08-28": {
           "score": 55,
           "scoreParts": {
@@ -656,6 +640,22 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 60,
+          "scoreParts": {
+            "water": 50,
+            "air": 90,
+            "wind": 69,
+            "waves": 25,
+            "rain": 100,
+            "sky": 40
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 10,
+            "to": 15
           }
         }
       },
@@ -775,22 +775,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 59,
-          "scoreParts": {
-            "water": 50,
-            "air": 60,
-            "wind": 84,
-            "waves": 29,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 13,
-          "scoreWindow": {
-            "from": 11,
-            "to": 13
-          }
-        },
         "2026-08-28": {
           "score": 54,
           "scoreParts": {
@@ -805,6 +789,22 @@
           "scoreWindow": {
             "from": 11,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 60,
+          "scoreParts": {
+            "water": 50,
+            "air": 90,
+            "wind": 63,
+            "waves": 14,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 11,
+            "to": 15
           }
         }
       },
@@ -922,22 +922,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 57,
-          "scoreParts": {
-            "water": 50,
-            "air": 50,
-            "wind": 82,
-            "waves": 30,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 11,
-          "scoreWindow": {
-            "from": 11,
-            "to": 13
-          }
-        },
         "2026-08-28": {
           "score": 53,
           "scoreParts": {
@@ -952,6 +936,22 @@
           "scoreWindow": {
             "from": 11,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 60,
+          "scoreParts": {
+            "water": 50,
+            "air": 80,
+            "wind": 89,
+            "waves": 14,
+            "rain": 100,
+            "sky": 40
+          },
+          "bestHour": 13,
+          "scoreWindow": {
+            "from": 11,
+            "to": 15
           }
         }
       },
@@ -1069,22 +1069,6 @@
       },
       "scoreDay": "2026-08-27",
       "scoreByDay": {
-        "2026-08-27": {
-          "score": 65,
-          "scoreParts": {
-            "water": 50,
-            "air": 60,
-            "wind": 83,
-            "waves": 70,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 13,
-          "scoreWindow": {
-            "from": 11,
-            "to": 14
-          }
-        },
         "2026-08-28": {
           "score": 57,
           "scoreParts": {
@@ -1099,6 +1083,22 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          }
+        },
+        "2026-08-29": {
+          "score": 66,
+          "scoreParts": {
+            "water": 50,
+            "air": 90,
+            "wind": 67,
+            "waves": 54,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 14,
+          "scoreWindow": {
+            "from": 11,
+            "to": 15
           }
         }
       },
