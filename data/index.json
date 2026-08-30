@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-30T18:23:07Z",
+  "fetchedAt": "2026-08-30T18:32:55Z",
   "concellos": [
     {
       "slug": "a-coruna",
@@ -891,6 +891,31 @@
       "trend": "up",
       "sources": [
         {
+          "name": "MeteoSIX",
+          "days": [
+            {
+              "date": "2026-08-30",
+              "t": 18.0
+            },
+            {
+              "date": "2026-08-31",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-01",
+              "t": 18.0
+            },
+            {
+              "date": "2026-09-02",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-03",
+              "t": 19.0
+            }
+          ]
+        },
+        {
           "name": "MeteoGalicia",
           "days": [
             {
@@ -909,7 +934,20 @@
               "uv": 6
             }
           ]
-        },
+        }
+      ],
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-da-madalena",
+      "name": "Praia da Madalena",
+      "concello": "Cabanas",
+      "concelloSlug": "cabanas",
+      "t": 20.0,
+      "score": 81,
+      "source": "MeteoGalicia",
+      "trend": "flat",
+      "sources": [
         {
           "name": "MeteoSIX",
           "days": [
@@ -934,20 +972,7 @@
               "t": 19.0
             }
           ]
-        }
-      ],
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-da-madalena",
-      "name": "Praia da Madalena",
-      "concello": "Cabanas",
-      "concelloSlug": "cabanas",
-      "t": 20.0,
-      "score": 81,
-      "source": "MeteoGalicia",
-      "trend": "flat",
-      "sources": [
+        },
         {
           "name": "AEMET",
           "days": [
@@ -982,31 +1007,6 @@
               "date": "2026-09-01",
               "t": 21.0,
               "uv": 6
-            }
-          ]
-        },
-        {
-          "name": "MeteoSIX",
-          "days": [
-            {
-              "date": "2026-08-30",
-              "t": 18.0
-            },
-            {
-              "date": "2026-08-31",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-01",
-              "t": 18.0
-            },
-            {
-              "date": "2026-09-02",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.0
             }
           ]
         }
@@ -1151,16 +1151,11 @@
       "t": 20.0,
       "score": 89,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "flat",
       "sources": [
         {
           "name": "MeteoGalicia",
           "days": [
-            {
-              "date": "2026-08-29",
-              "t": 20.0,
-              "uv": 7
-            },
             {
               "date": "2026-08-30",
               "t": 20.0,
@@ -1169,6 +1164,11 @@
             {
               "date": "2026-08-31",
               "t": 20.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-01",
+              "t": 21.0,
               "uv": 7
             }
           ]
@@ -1246,8 +1246,8 @@
       "concelloSlug": "a-coruna",
       "lat": 43.374,
       "lon": -8.41943,
-      "t": 17.0,
-      "score": 59
+      "t": 18.0,
+      "score": 64
     },
     {
       "slug": "praia-de-riazor",
@@ -1734,8 +1734,8 @@
       "concelloSlug": "cabana-de-bergantinos",
       "lat": 43.2241,
       "lon": -8.9714,
-      "t": 17.0,
-      "score": 68,
+      "t": 18.0,
+      "score": 73,
       "tramo": "natural"
     },
     {
@@ -1793,8 +1793,8 @@
       "concelloSlug": "cabanas",
       "lat": 43.4237,
       "lon": -8.18536,
-      "t": 19.0,
-      "score": 76
+      "t": 20.0,
+      "score": 81
     },
     {
       "slug": "praia-de-arino",
@@ -1965,8 +1965,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1801,
       "lon": -9.09077,
-      "t": 17.0,
-      "score": 67,
+      "t": 18.0,
+      "score": 71,
       "tramo": "natural"
     },
     {
@@ -2261,8 +2261,8 @@
       "concelloSlug": "cee",
       "lat": 42.9117,
       "lon": -9.14743,
-      "t": 18.0,
-      "score": 70,
+      "t": 19.0,
+      "score": 75,
       "tramo": "natural"
     },
     {
@@ -4633,8 +4633,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7009,
       "lon": -7.61286,
-      "t": 17.0,
-      "score": 66,
+      "t": 18.0,
+      "score": 71,
       "flagYear": 2026
     },
     {
@@ -4696,8 +4696,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7304,
       "lon": -7.68834,
-      "t": 17.0,
-      "score": 64
+      "t": 18.0,
+      "score": 68
     },
     {
       "slug": "praia-dos-bloques",
@@ -4838,7 +4838,7 @@
       "concelloSlug": "viveiro",
       "lat": 43.6713,
       "lon": -7.60491,
-      "t": 17.0,
+      "t": 18.0,
       "score": 57,
       "tramo": "urbano"
     },
@@ -4935,7 +4935,7 @@
       "concelloSlug": "a-guarda",
       "lat": 41.8829,
       "lon": -8.8583,
-      "t": 18.0,
+      "t": 19.0,
       "score": 57,
       "tramo": "natural"
     },
