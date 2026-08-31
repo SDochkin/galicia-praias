@@ -102,10 +102,26 @@ RAMP_ALLOW = {
 }
 
 
-def _get(url: str, timeout: int = 90) -> bytes:
-    req = urllib.request.Request(url, headers=UA)
-    with urllib.request.urlopen(req, timeout=timeout) as resp:
-        return resp.read()
+def _get(url: str, timeout: int = 90, attempts: int = 3) -> bytes:
+    last = attempts - 1
+    for attempt in range(attempts):
+        req = urllib.request.Request(url, headers=UA)
+        try:
+            with urllib.request.urlopen(req, timeout=timeout) as resp:
+                return resp.read()
+        except (urllib.error.HTTPError, urllib.error.URLError) as exc:
+            retry = not isinstance(exc, urllib.error.HTTPError) or exc.code in (
+                429,
+                502,
+                503,
+                504,
+            )
+            if not retry or attempt == last:
+                raise
+            code = exc.code if isinstance(exc, urllib.error.HTTPError) else "net"
+            print(f"layers GET {code} retry {attempt + 1}/{attempts} {url}", flush=True)
+            time.sleep(1.0 + attempt)
+    raise RuntimeError("unreachable")
 
 
 def _post(url: str, data: bytes, timeout: int = 180) -> bytes:
