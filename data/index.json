@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-31T14:57:27Z",
+  "fetchedAt": "2026-08-31T15:04:12Z",
   "concellos": [
     {
       "slug": "a-coruna",
@@ -891,6 +891,43 @@
       "trend": "up",
       "sources": [
         {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-08-31",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-01",
+              "t": 19.0
+            },
+            {
+              "date": "2026-09-02",
+              "t": 18.0
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-08-31",
+              "t": 21.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-01",
+              "t": 21.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-09-02",
+              "t": 21.0,
+              "uv": 7
+            }
+          ]
+        },
+        {
           "name": "MeteoSIX",
           "days": [
             {
@@ -914,13 +951,26 @@
               "t": 21.0
             }
           ]
-        },
+        }
+      ],
+      "tramo": "urbano"
+    },
+    {
+      "slug": "praia-da-marosa",
+      "name": "Praia da Marosa",
+      "concello": "Cervo",
+      "concelloSlug": "cervo",
+      "t": 21.0,
+      "score": 64,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
         {
           "name": "AEMET",
           "days": [
             {
               "date": "2026-08-31",
-              "t": 20.0
+              "t": 21.0
             },
             {
               "date": "2026-09-01",
@@ -928,7 +978,7 @@
             },
             {
               "date": "2026-09-02",
-              "t": 18.0
+              "t": 19.0
             }
           ]
         },
@@ -947,24 +997,28 @@
             },
             {
               "date": "2026-09-02",
-              "t": 21.0,
+              "t": 22.0,
               "uv": 7
             }
           ]
-        }
-      ],
-      "tramo": "urbano"
-    },
-    {
-      "slug": "praia-da-marosa",
-      "name": "Praia da Marosa",
-      "concello": "Cervo",
-      "concelloSlug": "cervo",
-      "t": 21.0,
-      "score": 64,
-      "source": "MeteoGalicia",
-      "trend": "up",
-      "sources": [
+        },
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-08-31",
+              "t": 19.8
+            },
+            {
+              "date": "2026-09-01",
+              "t": 19.8
+            },
+            {
+              "date": "2026-09-02",
+              "t": 19.7
+            }
+          ]
+        },
         {
           "name": "MeteoSIX",
           "days": [
@@ -987,60 +1041,6 @@
             {
               "date": "2026-09-02",
               "t": 20.0
-            }
-          ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-08-31",
-              "t": 21.0
-            },
-            {
-              "date": "2026-09-01",
-              "t": 19.0
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.0
-            }
-          ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-08-31",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-01",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.7
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-08-31",
-              "t": 21.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-09-02",
-              "t": 22.0,
-              "uv": 7
             }
           ]
         }
