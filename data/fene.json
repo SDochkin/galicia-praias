@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-08-31T15:04:12Z",
+  "fetchedAt": "2026-08-31T17:42:42Z",
   "beaches": [
     {
       "id": 2492,
@@ -9,6 +9,53 @@
       "source": "MeteoGalicia",
       "trend": "flat",
       "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-08-31",
+              "t": 20.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-01",
+              "t": 20.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-09-02",
+              "t": 20.0,
+              "uv": 7
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-26",
+              "t": 19.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-08-27",
+              "t": 19.0,
+              "uv": 6
+            },
+            {
+              "date": "2026-08-28",
+              "t": 19.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-08-29",
+              "t": 19.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-08-30",
+              "t": 20.0,
+              "uv": 7
+            }
+          ]
+        },
         {
           "name": "MeteoSIX",
           "days": [
@@ -63,18 +110,93 @@
               "t": 18.0
             }
           ]
+        }
+      ],
+      "score": 82,
+      "scoreParts": {
+        "water": 90,
+        "air": 90,
+        "wind": 89,
+        "waves": 43,
+        "rain": 100,
+        "sky": 60
+      },
+      "bestHour": 14,
+      "scoreWindow": {
+        "from": 12,
+        "to": 17
+      },
+      "scoreDay": "2026-08-31",
+      "scoreByDay": {
+        "2026-09-01": {
+          "score": 87,
+          "scoreParts": {
+            "water": 90,
+            "air": 90,
+            "wind": 83,
+            "waves": 58,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 16,
+          "scoreWindow": {
+            "from": 11,
+            "to": 17
+          }
         },
+        "2026-09-02": {
+          "score": 93,
+          "scoreParts": {
+            "water": 90,
+            "air": 100,
+            "wind": 94,
+            "waves": 84,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 11,
+            "to": 13
+          }
+        }
+      },
+      "wave": "moderate",
+      "higiene": 100,
+      "higieneDate": "2026-08-18",
+      "higieneEcoli": "99 NMP/100ml",
+      "higieneEntero": "<10 NMP/100ml",
+      "parking": true,
+      "tidePort": "Ferrol",
+      "tideLow": [
+        "00:44",
+        "12:57"
+      ],
+      "tideHigh": [
+        "06:53",
+        "19:11"
+      ],
+      "tramo": "natural"
+    },
+    {
+      "id": 2493,
+      "slug": "praia-coido",
+      "name": "Praia Coído",
+      "t": 19.0,
+      "source": "MeteoGalicia",
+      "trend": "flat",
+      "sources": [
         {
           "name": "MeteoGalicia",
           "days": [
             {
               "date": "2026-08-31",
-              "t": 20.0,
+              "t": 19.0,
               "uv": 7
             },
             {
               "date": "2026-09-01",
-              "t": 20.0,
+              "t": 19.0,
               "uv": 6
             },
             {
@@ -106,86 +228,11 @@
             },
             {
               "date": "2026-08-30",
-              "t": 20.0,
+              "t": 19.0,
               "uv": 7
             }
           ]
-        }
-      ],
-      "score": 82,
-      "scoreParts": {
-        "water": 90,
-        "air": 90,
-        "wind": 89,
-        "waves": 43,
-        "rain": 100,
-        "sky": 60
-      },
-      "bestHour": 14,
-      "scoreWindow": {
-        "from": 12,
-        "to": 17
-      },
-      "scoreDay": "2026-08-31",
-      "scoreByDay": {
-        "2026-08-31": {
-          "score": 82,
-          "scoreParts": {
-            "water": 90,
-            "air": 90,
-            "wind": 89,
-            "waves": 43,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 14,
-          "scoreWindow": {
-            "from": 12,
-            "to": 17
-          }
         },
-        "2026-09-01": {
-          "score": 87,
-          "scoreParts": {
-            "water": 90,
-            "air": 90,
-            "wind": 83,
-            "waves": 58,
-            "rain": 100,
-            "sky": 100
-          },
-          "bestHour": 16,
-          "scoreWindow": {
-            "from": 11,
-            "to": 17
-          }
-        }
-      },
-      "wave": "moderate",
-      "higiene": 100,
-      "higieneDate": "2026-08-18",
-      "higieneEcoli": "99 NMP/100ml",
-      "higieneEntero": "<10 NMP/100ml",
-      "parking": true,
-      "tidePort": "Ferrol",
-      "tideLow": [
-        "00:44",
-        "12:57"
-      ],
-      "tideHigh": [
-        "06:53",
-        "19:11"
-      ],
-      "tramo": "natural"
-    },
-    {
-      "id": 2493,
-      "slug": "praia-coido",
-      "name": "Praia Coído",
-      "t": 19.0,
-      "source": "MeteoGalicia",
-      "trend": "flat",
-      "sources": [
         {
           "name": "MeteoSIX",
           "days": [
@@ -240,53 +287,6 @@
               "t": 18.0
             }
           ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-08-31",
-              "t": 19.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-09-01",
-              "t": 19.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-09-02",
-              "t": 20.0,
-              "uv": 7
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-26",
-              "t": 19.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-08-27",
-              "t": 19.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-08-28",
-              "t": 19.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-08-29",
-              "t": 19.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-08-30",
-              "t": 19.0,
-              "uv": 7
-            }
-          ]
         }
       ],
       "score": 77,
@@ -305,22 +305,6 @@
       },
       "scoreDay": "2026-08-31",
       "scoreByDay": {
-        "2026-08-31": {
-          "score": 77,
-          "scoreParts": {
-            "water": 77,
-            "air": 90,
-            "wind": 89,
-            "waves": 43,
-            "rain": 100,
-            "sky": 60
-          },
-          "bestHour": 14,
-          "scoreWindow": {
-            "from": 12,
-            "to": 17
-          }
-        },
         "2026-09-01": {
           "score": 82,
           "scoreParts": {
@@ -335,6 +319,22 @@
           "scoreWindow": {
             "from": 11,
             "to": 17
+          }
+        },
+        "2026-09-02": {
+          "score": 93,
+          "scoreParts": {
+            "water": 90,
+            "air": 100,
+            "wind": 94,
+            "waves": 84,
+            "rain": 100,
+            "sky": 100
+          },
+          "bestHour": 11,
+          "scoreWindow": {
+            "from": 11,
+            "to": 13
           }
         }
       },
