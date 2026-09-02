@@ -2,9 +2,9 @@ name: Update beaches
 
 on:
   schedule:
-    - cron: "0 7 * * *"
-    - cron: "0 10 * * *"
-    - cron: "0 15 * * *"
+    - cron: "17 7 * * *"
+    - cron: "17 10 * * *"
+    - cron: "17 15 * * *"
   workflow_dispatch:
 
 permissions:
@@ -34,17 +34,17 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 15 * * *'
         run: pip install copernicusmarine
 
       - name: Fetch Copernicus
         id: fetch_copernicus
-        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *'
+        if: github.event_name == 'workflow_dispatch' || github.event.schedule == '17 15 * * *'
         run: python3 scripts/update_beaches.py --skip-meteosix --skip-mg --skip-aemet
 
       - name: Commit Copernicus
         if: >-
-          (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 15 * * *')
+          (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 15 * * *')
           && steps.fetch_copernicus.outcome == 'success'
         env:
           REPLACE: Copernicus
@@ -54,13 +54,13 @@ jobs:
         id: fetch_meteosix
         if: >-
           always()
-          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10 * * *')
+          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 10 * * *')
         run: python3 scripts/update_beaches.py --skip-copernicus --skip-mg --skip-aemet
 
       - name: Commit MeteoSIX
         if: >-
           always()
-          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '0 10 * * *')
+          && (github.event_name == 'workflow_dispatch' || github.event.schedule == '17 10 * * *')
           && steps.fetch_meteosix.outcome == 'success'
         env:
           REPLACE: MeteoSIX
@@ -71,14 +71,14 @@ jobs:
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *')
+          || github.event.schedule == '17 7 * * *')
         run: python3 scripts/update_beaches.py --skip-mg --skip-aemet --skip-meteosix --skip-copernicus
 
       - name: Commit layers
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *')
+          || github.event.schedule == '17 7 * * *')
           && steps.fetch_layers.outcome == 'success'
         env:
           REPLACE: Layers
@@ -89,16 +89,16 @@ jobs:
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *'
-          || github.event.schedule == '0 15 * * *')
+          || github.event.schedule == '17 7 * * *'
+          || github.event.schedule == '17 15 * * *')
         run: python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix --skip-aemet
 
       - name: Commit MG
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *'
-          || github.event.schedule == '0 15 * * *')
+          || github.event.schedule == '17 7 * * *'
+          || github.event.schedule == '17 15 * * *')
           && steps.fetch_mg.outcome == 'success'
         env:
           REPLACE: MeteoGalicia
@@ -109,16 +109,16 @@ jobs:
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *'
-          || github.event.schedule == '0 15 * * *')
+          || github.event.schedule == '17 7 * * *'
+          || github.event.schedule == '17 15 * * *')
         run: python3 scripts/update_beaches.py --skip-copernicus --skip-meteosix --skip-mg
 
       - name: Commit AEMET
         if: >-
           always()
           && (github.event_name == 'workflow_dispatch'
-          || github.event.schedule == '0 7 * * *'
-          || github.event.schedule == '0 15 * * *')
+          || github.event.schedule == '17 7 * * *'
+          || github.event.schedule == '17 15 * * *')
           && steps.fetch_aemet.outcome == 'success'
         env:
           REPLACE: AEMET

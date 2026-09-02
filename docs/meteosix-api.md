@@ -75,9 +75,9 @@ Bake не переводит код в физическую величину. Ч
 
 Морская температура воды (ROMS) готова около 09:30 UTC; MOHID — около 12:30 UTC.
 
-Письмо выдачи ключа (не квота, не запрет второго запроса тем же утром): «la mayoría de los modelos se ejecutan una única vez al día, generalmente a primera hora de la mañana, por lo que peticiones reiteradas a lo largo del día no aportarían nueva información». Bake поэтому не зовёт MeteoSIX в слотах 07:00 и 15:00 UTC; слот 10:00 UTC — один запрос после ROMS. Покрытие (`--coverage`) и ingest в одно утро — тот же прогон модели.
+Письмо выдачи ключа (не квота, не запрет второго запроса тем же утром): «la mayoría de los modelos se ejecutan una única vez al día, generalmente a primera hora de la mañana, por lo que peticiones reiteradas a lo largo del día no aportarían nueva información». Bake поэтому не зовёт MeteoSIX в слотах 07:17 и 15:17 UTC; слот 10:17 UTC — один запрос после ROMS. Покрытие (`--coverage`) и ingest в одно утро — тот же прогон модели.
 
-Bake не использует MOHID (готово ~12:30 UTC, позже слота 10:00). Вода — ROMS.
+Bake не использует MOHID (готово ~12:30 UTC, позже слота 10:17). Вода — ROMS.
 
 ## Ответ JSON `/getNumericForecastInfo`
 
