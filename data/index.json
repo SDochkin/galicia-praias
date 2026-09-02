@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-02T12:09:18Z",
+  "fetchedAt": "2026-09-02T12:10:57Z",
   "concellos": [
     {
       "slug": "a-coruna",
@@ -881,23 +881,35 @@
   },
   "top": [
     {
-      "slug": "praia-da-marosa",
-      "name": "Praia da Marosa",
-      "concello": "Cervo",
-      "concelloSlug": "cervo",
+      "slug": "praia-da-madalena",
+      "name": "Praia da Madalena",
+      "concello": "Cabanas",
+      "concelloSlug": "cabanas",
       "t": 22.0,
-      "score": 84,
+      "score": 89,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
         {
-          "name": "MeteoGalicia",
+          "name": "AEMET",
           "days": [
             {
               "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
+              "t": 18.0
             },
+            {
+              "date": "2026-09-02",
+              "t": 18.0
+            },
+            {
+              "date": "2026-09-03",
+              "t": 18.0
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
             {
               "date": "2026-09-02",
               "t": 22.0,
@@ -905,42 +917,13 @@
             },
             {
               "date": "2026-09-03",
-              "t": 20.0,
+              "t": 22.0,
               "uv": 7
-            }
-          ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.0
             },
             {
-              "date": "2026-09-02",
-              "t": 19.0
-            },
-            {
-              "date": "2026-09-03",
-              "t": 20.0
-            }
-          ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.6
+              "date": "2026-09-04",
+              "t": 22.0,
+              "uv": 6
             }
           ]
         },
@@ -949,15 +932,15 @@
           "days": [
             {
               "date": "2026-09-01",
-              "t": 22.0
+              "t": 21.0
             },
             {
               "date": "2026-09-02",
-              "t": 22.0
+              "t": 20.0
             },
             {
               "date": "2026-09-03",
-              "t": 21.0
+              "t": 20.0
             },
             {
               "date": "2026-09-04",
@@ -970,7 +953,106 @@
           ]
         }
       ],
-      "flagYear": 2026,
+      "tramo": "urbano"
+    },
+    {
+      "slug": "praia-de-a-cabana",
+      "name": "Praia de A Cabana",
+      "concello": "Bergondo",
+      "concelloSlug": "bergondo",
+      "t": 22.0,
+      "score": 94,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "t": 22.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-03",
+              "t": 22.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 22.0,
+              "uv": 6
+            }
+          ]
+        }
+      ],
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-de-arealonga-3",
+      "name": "Praia de Arealonga",
+      "concello": "Foz",
+      "concelloSlug": "foz",
+      "t": 22.0,
+      "score": 88,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-09-01",
+              "t": 21.0
+            },
+            {
+              "date": "2026-09-02",
+              "t": 21.0
+            },
+            {
+              "date": "2026-09-03",
+              "t": 21.0
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-09-02",
+              "t": 22.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-03",
+              "t": 21.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 21.0,
+              "uv": 6
+            }
+          ]
+        },
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-09-01",
+              "t": 19.5
+            },
+            {
+              "date": "2026-09-02",
+              "t": 19.4
+            },
+            {
+              "date": "2026-09-03",
+              "t": 19.3
+            }
+          ]
+        }
+      ],
       "tramo": "natural"
     },
     {
@@ -981,7 +1063,7 @@
       "t": 22.0,
       "score": 83,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
         {
           "name": "Copernicus",
@@ -1004,11 +1086,6 @@
           "name": "MeteoGalicia",
           "days": [
             {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
-            {
               "date": "2026-09-02",
               "t": 22.0,
               "uv": 7
@@ -1017,46 +1094,29 @@
               "date": "2026-09-03",
               "t": 21.0,
               "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 20.0,
+              "uv": 6
             }
           ]
         }
       ]
     },
     {
-      "slug": "praia-de-areoura-sur",
-      "name": "Praia de Areoura (Sur)",
-      "concello": "Foz",
-      "concelloSlug": "foz",
+      "slug": "praia-de-o-pedrido-este",
+      "name": "Praia de O Pedrido (Este)",
+      "concello": "Paderne",
+      "concelloSlug": "paderne",
       "t": 22.0,
-      "score": 83,
+      "score": 94,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.7
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.7
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.5
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
-            {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
             {
               "date": "2026-09-02",
               "t": 22.0,
@@ -1064,48 +1124,31 @@
             },
             {
               "date": "2026-09-03",
-              "t": 21.0,
+              "t": 22.0,
               "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 22.0,
+              "uv": 6
             }
           ]
         }
       ]
     },
     {
-      "slug": "praia-de-cabalino",
-      "name": "Praia de Cabaliño",
-      "concello": "Burela",
-      "concelloSlug": "burela",
+      "slug": "praia-de-o-pedrido-norte",
+      "name": "Praia de O Pedrido (Norte)",
+      "concello": "Bergondo",
+      "concelloSlug": "bergondo",
       "t": 22.0,
-      "score": 83,
+      "score": 94,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.6
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
-            {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
             {
               "date": "2026-09-02",
               "t": 22.0,
@@ -1113,13 +1156,18 @@
             },
             {
               "date": "2026-09-03",
-              "t": 21.0,
+              "t": 22.0,
               "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 22.0,
+              "uv": 6
             }
           ]
         }
       ],
-      "tramo": "urbano"
+      "tramo": "natural"
     },
     {
       "slug": "praia-de-pedrouro",
@@ -1129,7 +1177,7 @@
       "t": 22.0,
       "score": 90,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
         {
           "name": "Copernicus",
@@ -1152,11 +1200,6 @@
           "name": "MeteoGalicia",
           "days": [
             {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
-            {
               "date": "2026-09-02",
               "t": 22.0,
               "uv": 7
@@ -1165,6 +1208,11 @@
               "date": "2026-09-03",
               "t": 21.0,
               "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 20.0,
+              "uv": 6
             }
           ]
         }
@@ -1172,40 +1220,35 @@
       "tramo": "natural"
     },
     {
-      "slug": "praia-do-revo",
-      "name": "Praia do Revo",
-      "concello": "Sanxenxo",
-      "concelloSlug": "sanxenxo",
+      "slug": "praia-de-pena-de-oural",
+      "name": "Praia de Pena de Oural",
+      "concello": "Burela",
+      "concelloSlug": "burela",
       "t": 22.0,
-      "score": 87,
+      "score": 82,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
         {
           "name": "Copernicus",
           "days": [
             {
               "date": "2026-09-01",
-              "t": 18.3
+              "t": 19.8
             },
             {
               "date": "2026-09-02",
-              "t": 18.4
+              "t": 19.8
             },
             {
               "date": "2026-09-03",
-              "t": 18.5
+              "t": 19.6
             }
           ]
         },
         {
           "name": "MeteoGalicia",
           "days": [
-            {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 7
-            },
             {
               "date": "2026-09-02",
               "t": 22.0,
@@ -1213,115 +1256,18 @@
             },
             {
               "date": "2026-09-03",
-              "t": 22.0,
-              "uv": 7
-            }
-          ]
-        }
-      ],
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-acantilado",
-      "name": "Praia Acantilado",
-      "concello": "Barreiros",
-      "concelloSlug": "barreiros",
-      "t": 21.0,
-      "score": 85,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.4
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.4
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.5
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-09-01",
               "t": 21.0,
+              "uv": 7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 20.0,
               "uv": 6
-            },
-            {
-              "date": "2026-09-02",
-              "t": 21.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-09-03",
-              "t": 21.0,
-              "uv": 7
             }
           ]
         }
       ],
-      "sinHumo": true,
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-altar",
-      "name": "Praia Altar",
-      "concello": "Barreiros",
-      "concelloSlug": "barreiros",
-      "t": 21.0,
-      "score": 87,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 19.4
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.3
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.3
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-09-01",
-              "t": 21.0,
-              "uv": 6
-            },
-            {
-              "date": "2026-09-02",
-              "t": 21.0,
-              "uv": 7
-            },
-            {
-              "date": "2026-09-03",
-              "t": 21.0,
-              "uv": 7
-            }
-          ]
-        }
-      ],
-      "sinHumo": true,
-      "tramo": "natural"
+      "tramo": "urbano"
     }
   ],
   "geo": [
@@ -1412,7 +1358,7 @@
       "concelloSlug": "a-coruna",
       "lat": 43.384,
       "lon": -8.3938,
-      "t": 17.0,
+      "t": 18.0,
       "score": 57
     },
     {
@@ -1431,7 +1377,7 @@
       "concelloSlug": "a-coruna",
       "lat": 43.3469,
       "lon": -8.38323,
-      "t": 18.0,
+      "t": 19.0,
       "score": 63,
       "flagYear": 2026
     },
@@ -1461,7 +1407,7 @@
       "concelloSlug": "ares",
       "lat": 43.4251,
       "lon": -8.20174,
-      "t": 19.0,
+      "t": 20.0,
       "score": 74,
       "tramo": "natural"
     },
@@ -1608,7 +1554,7 @@
       "concelloSlug": "bergondo",
       "lat": 43.3323,
       "lon": -8.22131,
-      "t": 20.0,
+      "t": 21.0,
       "score": 92,
       "tramo": "natural"
     },
@@ -1618,7 +1564,7 @@
       "concelloSlug": "bergondo",
       "lat": 43.3312,
       "lon": -8.21674,
-      "t": 21.0,
+      "t": 22.0,
       "score": 94,
       "tramo": "natural"
     },
@@ -1628,7 +1574,7 @@
       "concelloSlug": "bergondo",
       "lat": 43.3279,
       "lon": -8.21211,
-      "t": 21.0,
+      "t": 22.0,
       "score": 94,
       "tramo": "natural"
     },
@@ -1898,7 +1844,7 @@
       "concelloSlug": "cabanas",
       "lat": 43.4178,
       "lon": -8.17193,
-      "t": 21.0,
+      "t": 22.0,
       "score": 89,
       "tramo": "urbano"
     },
@@ -1908,7 +1854,7 @@
       "concelloSlug": "cabanas",
       "lat": 43.4237,
       "lon": -8.18536,
-      "t": 20.0,
+      "t": 21.0,
       "score": 88
     },
     {
@@ -2100,7 +2046,7 @@
       "concelloSlug": "carballo",
       "lat": 43.2948,
       "lon": -8.72853,
-      "t": 19.0,
+      "t": 20.0,
       "score": 67,
       "tramo": "natural"
     },
@@ -2110,7 +2056,7 @@
       "concelloSlug": "carballo",
       "lat": 43.2921,
       "lon": -8.69808,
-      "t": 19.0,
+      "t": 20.0,
       "score": 67,
       "flagYear": 2026
     },
@@ -2161,7 +2107,7 @@
       "concelloSlug": "carino",
       "lat": 43.7322,
       "lon": -7.87136,
-      "t": 19.0,
+      "t": 20.0,
       "score": 77,
       "tramo": "natural"
     },
@@ -2171,7 +2117,7 @@
       "concelloSlug": "carino",
       "lat": 43.7381,
       "lon": -7.87124,
-      "t": 19.0,
+      "t": 20.0,
       "score": 77,
       "tramo": "urbano"
     },
@@ -2481,7 +2427,7 @@
       "concelloSlug": "fene",
       "lat": 43.4247,
       "lon": -8.18697,
-      "t": 20.0,
+      "t": 21.0,
       "score": 88,
       "tramo": "natural"
     },
@@ -2758,7 +2704,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3128,
       "lon": -8.87421,
-      "t": 18.0,
+      "t": 19.0,
       "score": 71,
       "tramo": "natural"
     },
@@ -2768,7 +2714,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3179,
       "lon": -8.8638,
-      "t": 18.0,
+      "t": 19.0,
       "score": 73,
       "tramo": "natural"
     },
@@ -2778,7 +2724,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3165,
       "lon": -8.85985,
-      "t": 18.0,
+      "t": 19.0,
       "score": 73,
       "tramo": "natural"
     },
@@ -2788,7 +2734,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3197,
       "lon": -8.8454,
-      "t": 18.0,
+      "t": 19.0,
       "score": 67,
       "tramo": "natural"
     },
@@ -2798,7 +2744,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3279,
       "lon": -8.82805,
-      "t": 19.0,
+      "t": 20.0,
       "score": 67,
       "tramo": "natural"
     },
@@ -2808,7 +2754,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.3238,
       "lon": -8.81701,
-      "t": 19.0,
+      "t": 20.0,
       "score": 71,
       "tramo": "urbano"
     },
@@ -2828,7 +2774,7 @@
       "concelloSlug": "malpica-de-bergantinos",
       "lat": 43.2996,
       "lon": -8.76737,
-      "t": 19.0,
+      "t": 20.0,
       "score": 68,
       "tramo": "natural"
     },
@@ -2896,7 +2842,7 @@
       "concelloSlug": "mino",
       "lat": 43.3387,
       "lon": -8.20371,
-      "t": 20.0,
+      "t": 21.0,
       "score": 93,
       "tramo": "natural"
     },
@@ -2906,7 +2852,7 @@
       "concelloSlug": "mino",
       "lat": 43.3497,
       "lon": -8.20992,
-      "t": 20.0,
+      "t": 21.0,
       "score": 92,
       "flagYear": 2026
     },
@@ -2916,7 +2862,7 @@
       "concelloSlug": "mino",
       "lat": 43.3592,
       "lon": -8.20971,
-      "t": 20.0,
+      "t": 21.0,
       "score": 93,
       "flagYear": 2026
     },
@@ -2926,7 +2872,7 @@
       "concelloSlug": "mino",
       "lat": 43.3629,
       "lon": -8.20725,
-      "t": 20.0,
+      "t": 21.0,
       "score": 93
     },
     {
@@ -2984,7 +2930,7 @@
       "concelloSlug": "muros",
       "lat": 42.7562,
       "lon": -9.11183,
-      "t": 19.0,
+      "t": 18.0,
       "score": 67,
       "tramo": "natural"
     },
@@ -3334,7 +3280,7 @@
       "concelloSlug": "oleiros",
       "lat": 43.3393,
       "lon": -8.37856,
-      "t": 19.0,
+      "t": 20.0,
       "score": 68,
       "flagYear": 2026,
       "tramo": "urbano"
@@ -3345,7 +3291,7 @@
       "concelloSlug": "oleiros",
       "lat": 43.3406,
       "lon": -8.36261,
-      "t": 19.0,
+      "t": 20.0,
       "score": 70,
       "flagYear": 2026,
       "tramo": "urbano"
@@ -3529,7 +3475,7 @@
       "concelloSlug": "ortigueira",
       "lat": 43.6831,
       "lon": -7.85574,
-      "t": 19.0,
+      "t": 20.0,
       "score": 75
     },
     {
@@ -3548,7 +3494,7 @@
       "concelloSlug": "paderne",
       "lat": 43.3271,
       "lon": -8.21043,
-      "t": 21.0,
+      "t": 22.0,
       "score": 94
     },
     {
@@ -3895,7 +3841,7 @@
       "concelloSlug": "porto-do-son",
       "lat": 42.7357,
       "lon": -8.99111,
-      "t": 17.0,
+      "t": 18.0,
       "score": 75
     },
     {
@@ -4107,7 +4053,7 @@
       "concelloSlug": "ribeira",
       "lat": 42.5439,
       "lon": -8.98422,
-      "t": 18.0,
+      "t": 19.0,
       "score": 67,
       "tramo": "urbano"
     },
@@ -4117,7 +4063,7 @@
       "concelloSlug": "ribeira",
       "lat": 42.5452,
       "lon": -8.98389,
-      "t": 18.0,
+      "t": 19.0,
       "score": 67,
       "tramo": "urbano"
     },
@@ -4146,7 +4092,7 @@
       "concelloSlug": "ribeira",
       "lat": 42.5353,
       "lon": -8.99113,
-      "t": 18.0,
+      "t": 19.0,
       "score": 67,
       "tramo": "urbano"
     },
@@ -4156,7 +4102,7 @@
       "concelloSlug": "ribeira",
       "lat": 42.5323,
       "lon": -8.99625,
-      "t": 18.0,
+      "t": 19.0,
       "score": 68,
       "tramo": "urbano"
     },
@@ -4233,7 +4179,7 @@
       "concelloSlug": "ribeira",
       "lat": 42.5649,
       "lon": -9.03832,
-      "t": 17.0,
+      "t": 18.0,
       "score": 74,
       "tramo": "natural"
     },
@@ -4291,7 +4237,7 @@
       "concelloSlug": "sada",
       "lat": 43.3692,
       "lon": -8.25912,
-      "t": 18.0,
+      "t": 19.0,
       "score": 69
     },
     {
@@ -4310,7 +4256,7 @@
       "concelloSlug": "sada",
       "lat": 43.3523,
       "lon": -8.25258,
-      "t": 19.0,
+      "t": 20.0,
       "score": 74,
       "tramo": "urbano"
     },
@@ -4320,7 +4266,7 @@
       "concelloSlug": "sada",
       "lat": 43.3486,
       "lon": -8.25007,
-      "t": 19.0,
+      "t": 20.0,
       "score": 75,
       "tramo": "urbano"
     },
@@ -4528,7 +4474,7 @@
       "concelloSlug": "burela",
       "lat": 43.6642,
       "lon": -7.35732,
-      "t": 22.0,
+      "t": 21.0,
       "score": 83,
       "flagYear": 2026,
       "tramo": "urbano"
@@ -4539,7 +4485,7 @@
       "concelloSlug": "burela",
       "lat": 43.6714,
       "lon": -7.36456,
-      "t": 22.0,
+      "t": 21.0,
       "score": 83,
       "sinHumo": true,
       "tramo": "natural"
@@ -4550,7 +4496,7 @@
       "concelloSlug": "burela",
       "lat": 43.6664,
       "lon": -7.35687,
-      "t": 22.0,
+      "t": 21.0,
       "score": 83,
       "tramo": "urbano"
     },
@@ -4560,7 +4506,7 @@
       "concelloSlug": "cervo",
       "lat": 43.6745,
       "lon": -7.37354,
-      "t": 22.0,
+      "t": 21.0,
       "score": 84,
       "flagYear": 2026,
       "tramo": "natural"
@@ -4700,7 +4646,7 @@
       "concelloSlug": "foz",
       "lat": 43.6058,
       "lon": -7.3045,
-      "t": 21.0,
+      "t": 22.0,
       "score": 88,
       "tramo": "natural"
     },
@@ -4780,7 +4726,7 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7418,
       "lon": -7.67354,
-      "t": 20.0,
+      "t": 21.0,
       "score": 82,
       "sinHumo": true,
       "tramo": "natural"
@@ -4791,7 +4737,7 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7396,
       "lon": -7.67481,
-      "t": 20.0,
+      "t": 21.0,
       "score": 82,
       "sinHumo": true
     },
@@ -4801,7 +4747,7 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7354,
       "lon": -7.6731,
-      "t": 20.0,
+      "t": 21.0,
       "score": 82,
       "tramo": "urbano"
     },
@@ -4811,7 +4757,7 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7304,
       "lon": -7.68834,
-      "t": 20.0,
+      "t": 21.0,
       "score": 81
     },
     {
@@ -5793,7 +5739,7 @@
       "concelloSlug": "cangas",
       "lat": 42.2976,
       "lon": -8.84784,
-      "t": 18.0,
+      "t": 19.0,
       "score": 71
     },
     {
@@ -5894,7 +5840,7 @@
       "concelloSlug": "moana",
       "lat": 42.2868,
       "lon": -8.67942,
-      "t": 20.0,
+      "t": 19.0,
       "score": 78
     },
     {
@@ -5993,7 +5939,7 @@
       "concelloSlug": "nigran",
       "lat": 42.1358,
       "lon": -8.81792,
-      "t": 20.0,
+      "t": 19.0,
       "score": 85,
       "tramo": "urbano"
     },
@@ -6122,7 +6068,7 @@
       "concelloSlug": "o-grove",
       "lat": 42.4531,
       "lon": -8.92477,
-      "t": 17.0,
+      "t": 18.0,
       "score": 65,
       "tramo": "urbano"
     },
@@ -6132,7 +6078,7 @@
       "concelloSlug": "o-grove",
       "lat": 42.4522,
       "lon": -8.9278,
-      "t": 17.0,
+      "t": 18.0,
       "score": 65
     },
     {
@@ -6483,7 +6429,7 @@
       "concelloSlug": "poio",
       "lat": 42.407,
       "lon": -8.74621,
-      "t": 20.0,
+      "t": 19.0,
       "score": 89,
       "tramo": "urbano"
     },
@@ -6493,7 +6439,7 @@
       "concelloSlug": "poio",
       "lat": 42.4059,
       "lon": -8.74672,
-      "t": 20.0,
+      "t": 19.0,
       "score": 76
     },
     {
@@ -6626,7 +6572,7 @@
       "concelloSlug": "sanxenxo",
       "lat": 42.3947,
       "lon": -8.76949,
-      "t": 19.0,
+      "t": 20.0,
       "score": 73,
       "flagYear": 2026,
       "sinHumo": true,
@@ -6716,7 +6662,7 @@
       "concelloSlug": "sanxenxo",
       "lat": 42.3994,
       "lon": -8.80646,
-      "t": 18.0,
+      "t": 19.0,
       "score": 68,
       "tramo": "natural"
     },
@@ -6726,7 +6672,7 @@
       "concelloSlug": "sanxenxo",
       "lat": 42.4012,
       "lon": -8.81196,
-      "t": 18.0,
+      "t": 19.0,
       "score": 68,
       "flagYear": 2026,
       "sinHumo": true,
@@ -6750,7 +6696,7 @@
       "concelloSlug": "sanxenxo",
       "lat": 42.3918,
       "lon": -8.82565,
-      "t": 18.0,
+      "t": 19.0,
       "score": 75
     },
     {
@@ -7076,7 +7022,7 @@
       "concelloSlug": "vigo",
       "lat": 42.2098,
       "lon": -8.77606,
-      "t": 19.0,
+      "t": 18.0,
       "score": 83,
       "tramo": "urbano"
     },
@@ -7086,7 +7032,7 @@
       "concelloSlug": "vigo",
       "lat": 42.2202,
       "lon": -8.77583,
-      "t": 19.0,
+      "t": 18.0,
       "score": 85,
       "flagYear": 2026
     },
@@ -7114,7 +7060,7 @@
       "concelloSlug": "vigo",
       "lat": 42.2228,
       "lon": -8.77254,
-      "t": 19.0,
+      "t": 18.0,
       "score": 85
     },
     {
@@ -7212,7 +7158,7 @@
       "concelloSlug": "vilaboa",
       "lat": 42.2941,
       "lon": -8.65606,
-      "t": 21.0,
+      "t": 20.0,
       "score": 93,
       "tramo": "natural"
     },
@@ -7251,7 +7197,7 @@
       "concelloSlug": "vilagarcia-de-arousa",
       "lat": 42.6065,
       "lon": -8.76837,
-      "t": 19.0,
+      "t": 18.0,
       "score": 82,
       "flagYear": 2026,
       "tramo": "urbano"
