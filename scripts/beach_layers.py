@@ -47,7 +47,8 @@ FLAG_CSV = (
 )
 SERGAS_PKG = "https://abertos.sergas.gal/api/3/action/package_show?id=mapa-augas-bano-galicia"
 SEN_FUME_PAGE = "https://www.sergas.gal/Saude-publica/praiassenfume"
-SEN_FUME_FILE = SCRIPTS / "sen_fume_2026.txt"
+def sen_fume_path(year: int) -> Path:
+    return SCRIPTS / f"sen_fume_{year}.txt"
 TPGAL_IN_RANGE = "https://tpgal-ws-externos.xunta.gal/tpgal_ws/rest/busstops/in-range"
 OVERPASS_URLS = (
     "https://overpass-api.de/api/interpreter",
@@ -254,8 +255,12 @@ def _col(row: dict, *needles: str) -> str:
     return ""
 
 
-def fetch_flag(beaches: list[dict]) -> dict[int, dict]:
-    rows_raw = decode_csv(_get(FLAG_CSV))
+def fetch_flag(beaches: list[dict], year: int) -> dict[int, dict] | None:
+    try:
+        rows_raw = decode_csv(_get(FLAG_CSV))
+    except (urllib.error.HTTPError, urllib.error.URLError) as exc:
+        print(f"layers flag fail: {exc}", flush=True)
+        return None
     rows = []
     for r in rows_raw:
         name = (r.get("PRAIA") or "").strip()
@@ -272,7 +277,7 @@ def fetch_flag(beaches: list[dict]) -> dict[int, dict]:
     paired = pair_rows(rows, beaches)
     out: dict[int, dict] = {}
     for bid, row in paired.items():
-        rec: dict[str, Any] = {"flagYear": 2026}
+        rec: dict[str, Any] = {"flagYear": year}
         if row.get("sand"):
             rec["flagSand"] = row["sand"]
         out[bid] = rec
@@ -296,10 +301,10 @@ def _parse_nmp(raw: str) -> float | None:
 
 
 def _higiene_score(ec: float | None, ei: float | None) -> int | None:
-    if ec is None and ei is None:
+    if ec is None or ei is None:
         return None
-    ec_v = ec if ec is not None else 0.0
-    ei_v = ei if ei is not None else 0.0
+    ec_v = ec
+    ei_v = ei
     if ec_v > HIGIENE_EC_LIMITE or ei_v > HIGIENE_EI_LIMITE:
         return 15
     if ec_v <= HIGIENE_EC_EXCELENTE and ei_v <= HIGIENE_EI_EXCELENTE:
@@ -363,11 +368,12 @@ def fetch_higiene(beaches: list[dict]) -> dict[int, dict] | None:
     return out
 
 
-def load_sen_fume_rows() -> list[dict]:
-    if not SEN_FUME_FILE.exists():
+def load_sen_fume_rows(year: int) -> list[dict]:
+    path = sen_fume_path(year)
+    if not path.exists():
         return []
     rows = []
-    for line in SEN_FUME_FILE.read_text(encoding="utf-8").splitlines():
+    for line in path.read_text(encoding="utf-8").splitlines():
         line = line.strip()
         if not line or line.startswith("#"):
             continue
@@ -378,8 +384,10 @@ def load_sen_fume_rows() -> list[dict]:
     return rows
 
 
-def fetch_sin_humo(beaches: list[dict]) -> dict[int, dict]:
-    rows = load_sen_fume_rows()
+def fetch_sin_humo(beaches: list[dict], year: int) -> dict[int, dict] | None:
+    rows = load_sen_fume_rows(year)
+    if not rows:
+        return None
     paired = pair_rows(rows, beaches)
     out = {bid: {"sinHumo": True} for bid in paired}
     print(f"layers sinHumo src={len(rows)} paired={len(out)} page={SEN_FUME_PAGE}", flush=True)
@@ -503,11 +511,9 @@ def fetch_osm(beaches: list[dict]) -> dict[int, dict] | None:
                 print(f"layers osm tile {lat:.2f},{lon:.2f} fail: {last_exc}", flush=True)
             lon = east
         lat = north
-    if ok == 0:
+    if tiles == 0 or ok != tiles:
         print(f"layers osm incomplete ok={ok}/{tiles}", flush=True)
         return None
-    if ok != tiles:
-        print(f"layers osm partial ok={ok}/{tiles}", flush=True)
     parking = _osm_points(elements, amenity="parking")
     toilets = _osm_points(elements, amenity="toilets")
     out: dict[int, dict] = {}
@@ -705,8 +711,7 @@ def utm29n_to_wgs84(easting: float, northing: float) -> tuple[float, float]:
     return math.degrees(lat), math.degrees(lon)
 
 
-def fetch_tramo(beaches: list[dict]) -> dict[int, dict]:
-    raw = _get(DOG_TRAMO, timeout=90).decode("utf-8", errors="replace")
+def parse_tramo_html(raw: str) -> list[dict]:
     text = re.sub(r"<br\s*/?>", "\n", raw, flags=re.I)
     text = re.sub(r"<[^>]+>", "\n", text)
     lines = [html.unescape(l).strip() for l in text.splitlines()]
@@ -727,6 +732,11 @@ def fetch_tramo(beaches: list[dict]) -> dict[int, dict]:
             lat, lon = utm29n_to_wgs84(x, y)
         kind = "urbano" if cat.startswith("Urbana") else "natural"
         recs.append({"name": name, "concello": conc, "lat": lat, "lon": lon, "tramo": kind})
+    return recs
+
+
+def fetch_tramo(beaches: list[dict]) -> dict[int, dict]:
+    recs = parse_tramo_html(_get(DOG_TRAMO, timeout=90).decode("utf-8", errors="replace"))
     groups: dict[tuple[str, str], list[dict]] = {}
     for r in recs:
         groups.setdefault((fold(r["concello"]), fold(r["name"])), []).append(r)
@@ -799,8 +809,8 @@ def collect_layers(
             by_id.setdefault(bid, {}).update(rec)
 
     if not season_already_baked(prev_by_id, year):
-        merge(fetch_flag(beaches), ("flagYear", "flagSand"))
-        merge(fetch_sin_humo(beaches), ("sinHumo",))
+        merge(fetch_flag(beaches, year), ("flagYear", "flagSand"))
+        merge(fetch_sin_humo(beaches, year), ("sinHumo",))
     else:
         print(f"layers seasonal {year} already present; skip flag/sinHumo", flush=True)
 
@@ -818,3 +828,57 @@ def collect_layers(
     else:
         print("layers tramo already present; skip", flush=True)
     return by_id, replaced
+
+
+def run_selfcheck() -> None:
+    assert names_agree("Praia de Samil", "Samil")
+    assert names_agree("Praia América", "Playa America")
+    assert not names_agree("Samil", "Silgar")
+
+    beaches = [
+        {"id": 1, "name": "Samil", "concello": "Vigo", "lat": 42.21, "lon": -8.77},
+        {"id": 2, "name": "Silgar", "concello": "Sanxenxo", "lat": 42.40, "lon": -8.81},
+    ]
+    paired = pair_rows(
+        [{"name": "Samil", "concello": "Vigo", "lat": None, "lon": None}],
+        beaches,
+    )
+    assert paired[1]["name"] == "Samil"
+    assert 2 not in paired
+    ambig = pair_rows(
+        [{"name": "Praia", "concello": "Vigo", "lat": None, "lon": None}],
+        [
+            {"id": 1, "name": "Praia de Samil", "concello": "Vigo", "lat": 42.21, "lon": -8.77},
+            {"id": 3, "name": "Praia do Vao", "concello": "Vigo", "lat": 42.20, "lon": -8.78},
+        ],
+    )
+    assert ambig == {}
+
+    assert _higiene_score(None, None) is None
+    assert _higiene_score(10.0, None) is None
+    assert _higiene_score(None, 10.0) is None
+    assert _higiene_score(10.0, 10.0) == 100
+    assert _higiene_score(HIGIENE_EC_LIMITE + 1, 10.0) == 15
+
+    lat, lon = utm29n_to_wgs84(537000.0, 4743000.0)
+    assert 42.7 < lat < 43.1 and -8.8 < lon < -8.3
+
+    square = {
+        "type": "Polygon",
+        "coordinates": [[[-9.0, 42.0], [-8.0, 42.0], [-8.0, 43.0], [-9.0, 43.0], [-9.0, 42.0]]],
+    }
+    assert _geom_contains(square, 42.5, -8.5)
+    assert not _geom_contains(square, 41.0, -8.5)
+
+    html_frag = (
+        "<p>Vigo</p><p>Samil</p><p>foo</p><p>Urbana</p>"
+        "<p>bar</p><p>521000</p><p>4678000</p><p>extra</p>"
+    )
+    recs = parse_tramo_html(html_frag)
+    assert len(recs) == 1
+    assert recs[0]["name"] == "Samil" and recs[0]["concello"] == "Vigo"
+    assert recs[0]["tramo"] == "urbano"
+    assert isinstance(recs[0]["lat"], float) and isinstance(recs[0]["lon"], float)
+
+    assert sen_fume_path(2027).name == "sen_fume_2027.txt"
+    assert fetch_sin_humo(beaches, 1999) is None

@@ -26,6 +26,7 @@ from beach_layers import (
     apply_layer_fields,
     collect_layers,
     copy_layer_fields,
+    run_selfcheck as run_layers_selfcheck,
 )
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -208,7 +209,7 @@ def fetch_all_mg(entries: list[dict]) -> dict[int, list[dict] | None]:
     out: dict[int, list[dict] | None] = {}
 
     def one(bid: int) -> tuple[int, list[dict] | None]:
-        days = fetch_mg(bid, attempts=1, timeout=25)
+        days = fetch_mg(bid, timeout=25)
         time.sleep(0.3)
         return bid, days
 
@@ -323,14 +324,16 @@ def previous_source(prev_beach: dict | None, source_name: str) -> dict | None:
     return None
 
 
-def source_fresh(src: dict, max_age_days: int = 3) -> bool:
+def source_fresh(src: dict, max_age_days: int = HISTORY_DAYS) -> bool:
     try:
         dates = [d.get("date") for d in src.get("days") or [] if d.get("date")]
         if not dates:
             return False
         today = today_utc()
-        if today.isoformat() in dates:
+        today_s = today.isoformat()
+        if today_s in dates:
             return True
+        dates = [d for d in dates if d <= today_s]
         d_max = date.fromisoformat(max(dates))
     except (KeyError, IndexError, ValueError, TypeError):
         return False
@@ -639,11 +642,17 @@ def wave_at_noon(hours: list[dict], day: str) -> str | None:
         return None
     by_date: dict[str, list[dict]] = defaultdict(list)
     for rec in with_h:
-        by_date[rec["dt"].date().isoformat()].append(rec)
+        by_date[rec["dt"].astimezone(MADRID_TZ).date().isoformat()].append(rec)
     pts = by_date.get(day)
     if not pts:
         return None
-    rec = min(pts, key=lambda p: abs((p["dt"].hour * 60 + p["dt"].minute) - 12 * 60))
+    rec = min(
+        pts,
+        key=lambda p: abs(
+            (p["dt"].astimezone(MADRID_TZ).hour * 60 + p["dt"].astimezone(MADRID_TZ).minute)
+            - 12 * 60
+        ),
+    )
     period = rec["period"] if isinstance(rec.get("period"), float) else None
     return wave_level(rec["h"], period)
 
@@ -838,9 +847,10 @@ def compute_score(
             break
         right += 1
     best_parts = scored[best_i][1]
+    rounded = {k: round(best_parts[k]) for k in keys}
     return {
-        "score": scored[best_i][2],
-        "scoreParts": {k: round(best_parts[k]) for k in keys},
+        "score": score_from_parts(rounded),
+        "scoreParts": rounded,
         "bestHour": scored[best_i][0]["dt"].astimezone(timezone.utc).hour,
         "scoreWindow": {
             "from": scored[left][0]["dt"].astimezone(timezone.utc).hour,
@@ -872,6 +882,26 @@ def source_day_t(beach: dict, day: str) -> float | None:
     return None
 
 
+def meteosix_day_t(hours: list[dict], day: str) -> float | None:
+    pts = []
+    for rec in hours:
+        dt = rec.get("dt")
+        if not dt or not isinstance(rec.get("water"), float):
+            continue
+        if dt.astimezone(MADRID_TZ).date().isoformat() == day:
+            pts.append(rec)
+    if not pts:
+        return None
+    rec = min(
+        pts,
+        key=lambda p: abs(
+            (p["dt"].astimezone(MADRID_TZ).hour * 60 + p["dt"].astimezone(MADRID_TZ).minute)
+            - 12 * 60
+        ),
+    )
+    return rec["water"]
+
+
 def build_score_by_day(
     hours: list[dict], beach: dict, now: datetime
 ) -> dict[str, dict]:
@@ -885,7 +915,10 @@ def build_score_by_day(
     out: dict[str, dict] = {}
     for d in days:
         iso = d.isoformat()
-        result = compute_score(hours, source_day_t(beach, iso), now, day=d)
+        water = source_day_t(beach, iso)
+        if water is None:
+            water = meteosix_day_t(hours, iso)
+        result = compute_score(hours, water, now, day=d)
         if result["score"] is None:
             continue
         out[iso] = {
@@ -919,9 +952,7 @@ def apply_score_fields(
             beach["bestHour"] = result["bestHour"]
             beach["scoreWindow"] = result["scoreWindow"]
             beach["scoreDay"] = today_madrid
-            w = wave_at_noon(
-                hourly or [], datetime.now(timezone.utc).date().isoformat()
-            )
+            w = wave_at_noon(hourly or [], today_madrid)
             if w is not None:
                 beach["wave"] = w
             if by_day:
@@ -931,7 +962,19 @@ def apply_score_fields(
         for k in SCORE_FIELD_KEYS:
             if k in prev:
                 beach[k] = prev[k]
-        if prev.get("scoreDay") == today_madrid and isinstance(
+        by_day_prev = prev.get("scoreByDay")
+        if isinstance(by_day_prev, dict):
+            rec = by_day_prev.get(today_madrid)
+            if isinstance(rec, dict) and rec.get("score") is not None:
+                beach["score"] = rec["score"]
+                if "scoreParts" in rec:
+                    beach["scoreParts"] = rec["scoreParts"]
+                if "bestHour" in rec:
+                    beach["bestHour"] = rec["bestHour"]
+                if "scoreWindow" in rec:
+                    beach["scoreWindow"] = rec["scoreWindow"]
+                beach["scoreDay"] = today_madrid
+        if beach.get("scoreDay") == today_madrid and isinstance(
             beach.get("t"), (int, float)
         ):
             parts = beach.get("scoreParts")
@@ -1627,6 +1670,16 @@ def run_selfcheck() -> int:
     ]
     assert wave_at_noon(noon_h, "2026-08-20") == "calm"
     assert wave_at_noon(noon_h, "2026-08-19") is None
+    # 23:00 UTC 19th is 01:00 Madrid 20th (CEST).
+    edge_h = [
+        {
+            "dt": datetime(2026, 8, 19, 23, 0, tzinfo=timezone.utc),
+            "h": 0.3,
+            "period": 10.0,
+        }
+    ]
+    assert wave_at_noon(edge_h, "2026-08-20") == "calm"
+    assert wave_at_noon(edge_h, "2026-08-19") is None
 
     # score: now= 12:00 Madrid 2026-08-20 (CEST = UTC+2)
     now = datetime(2026, 8, 20, 12, 0, tzinfo=MADRID_TZ)
@@ -1656,6 +1709,22 @@ def run_selfcheck() -> int:
     assert got["bestHour"] == 9, got  # 11:00 Madrid = 09:00 UTC
     assert got["scoreWindow"] == {"from": 9, "to": 12}, got
     assert got["scoreParts"]["water"] == 90
+
+    frac_hours = [
+        hr(11, wind=3.2),
+    ]
+    got_frac = compute_score(frac_hours, 16.2, now)
+    assert got_frac["scoreParts"]["water"] == round(piecewise(16.2, SCORE_WATER))
+    assert got_frac["scoreParts"]["wind"] == round(piecewise(3.2, SCORE_WIND))
+    assert got_frac["score"] == score_from_parts(got_frac["scoreParts"])
+    raw_parts = {
+        "water": piecewise(16.2, SCORE_WATER),
+        "air": piecewise(24.0, SCORE_AIR),
+        "wind": piecewise(3.2, SCORE_WIND),
+        "waves": piecewise(h_eff(0.3, 10.0), SCORE_WAVES),
+        "rain": piecewise(0.0, SCORE_RAIN),
+    }
+    assert got_frac["score"] != score_from_parts(raw_parts)
 
     now_eve = datetime(2026, 8, 20, 18, 0, tzinfo=MADRID_TZ)
     got_morn = compute_score([hr(11, wind=2.0), hr(18, wind=5.0)], water, now_eve)
@@ -1749,6 +1818,31 @@ def run_selfcheck() -> int:
     assert b_empty["score"] == score_from_parts(b_empty["scoreParts"])
     assert b_empty["scoreDay"] == "2026-08-20"
 
+    prev_by = dict(prev_y)
+    prev_by["scoreByDay"] = {
+        "2026-08-20": {
+            "score": 70,
+            "scoreParts": {
+                "water": 50,
+                "air": 60,
+                "wind": 80,
+                "waves": 40,
+                "rain": 100,
+            },
+            "bestHour": 14,
+            "scoreWindow": {"from": 13, "to": 16},
+        }
+    }
+    b_by = {"t": 22.0}
+    apply_score_fields(
+        b_by, hourly=None, fetched_hourly=False, now=now, prev=prev_by
+    )
+    assert b_by["scoreDay"] == "2026-08-20"
+    assert b_by["bestHour"] == 14
+    assert b_by["scoreWindow"] == {"from": 13, "to": 16}
+    assert b_by["scoreParts"]["water"] == 100, b_by["scoreParts"]
+    assert b_by["score"] == score_from_parts(b_by["scoreParts"])
+
     ae_today = {"date": "2026-08-20", "t": 19.5}
     old_ae = {
         "name": "AEMET",
@@ -1803,6 +1897,17 @@ def run_selfcheck() -> int:
             "days": [
                 {"date": old_min, "t": 14.0},
                 {"date": mid_fresh, "t": 15.0},
+            ]
+        }
+    )
+    mid_old = (today_d - timedelta(days=5)).isoformat()
+    assert source_fresh({"days": [{"date": mid_old, "t": 14.0}]})
+    future = (today_d + timedelta(days=2)).isoformat()
+    assert not source_fresh(
+        {
+            "days": [
+                {"date": (today_d - timedelta(days=10)).isoformat(), "t": 14.0},
+                {"date": future, "t": 16.0},
             ]
         }
     )
@@ -1921,6 +2026,23 @@ def run_selfcheck() -> int:
     assert merged["scoreParts"]["water"] == 90
     assert merged["score"] == score_from_parts(merged["scoreParts"])
 
+    overlay_stale = dict(overlay_rec)
+    overlay_stale["scoreDay"] = (now_ov.date() - timedelta(days=1)).isoformat()
+    overlay_stale["scoreByDay"] = {
+        today_madrid: {
+            "score": 70,
+            "scoreParts": overlay_rec["scoreParts"],
+            "bestHour": 11,
+            "scoreWindow": {"from": 10, "to": 12},
+        }
+    }
+    merged_s = build_overlay_beach(
+        ov_entry, overlay_stale, disk_rec, {"MeteoSIX"}, today_ov, now_ov
+    )
+    assert merged_s["scoreDay"] == today_madrid
+    assert merged_s["scoreParts"]["water"] == 90
+    assert merged_s["score"] == score_from_parts(merged_s["scoreParts"])
+
     disk_layer = {
         "id": 1,
         "sources": [
@@ -1976,6 +2098,7 @@ def run_selfcheck() -> int:
     )
     assert b_new["flagYear"] == 2026 and "tramo" not in b_new
 
+    run_layers_selfcheck()
     print("selfcheck OK")
     return 0
 
@@ -2121,7 +2244,7 @@ def main(argv: list[str] | None = None) -> int:
 
         aemet_id = entry.get("aemetId")
         if aemet_id and api_key and not args.skip_aemet:
-            ae_days = fetch_aemet(str(aemet_id), api_key, attempts=1, timeout=25)
+            ae_days = fetch_aemet(str(aemet_id), api_key, timeout=25)
             time.sleep(2.0)
             if ae_days and day_for_date(ae_days, today):
                 old_ae = previous_source(prev, "AEMET")

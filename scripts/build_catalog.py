@@ -155,7 +155,7 @@ def extract_pdf_text(pdf_path: Path) -> str:
     return "\n".join(page.extract_text() or "" for page in reader.pages)
 
 
-def parse_annex(text: str) -> list[dict]:
+def parse_annex(text: str) -> tuple[list[dict], list[str]]:
     idx = text.find("ANEXO I")
     if idx < 0:
         raise SystemExit("ANEXO I not found")

@@ -820,7 +820,7 @@
     }
     #beach-dialog table { table-layout: fixed; width: 100%; border-collapse: collapse; font-size: var(--fs-sm); }
     #beach-dialog col.col-day { width: 28%; }
-    #beach-dialog col.col-metric { width: 18%; }
+    #beach-dialog col.col-metric { width: 24%; }
     #beach-dialog th, #beach-dialog td {
       text-align: left;
       padding: 0.35rem 0.25rem;
@@ -1006,10 +1006,8 @@
         disagree: "Costa {costaT} °C ({costaName}) · Mar {marT} °C ({marName}): dos fuentes distintas; no son el mismo dato.",
         nodata: "Sin dato de hoy.",
         nodataLast: "Sin dato de hoy. Último: {date} — {name} {t} °C",
-        singleSource: "Solo una fuente tiene dato de hoy: no hay con qué comparar.",
         hintDisagree: "Fuentes discrepan",
         hintNodata: "Sin dato de hoy",
-        hintSingle: "Una sola fuente",
         tableDay: "Día",
         tableCosta: "Costa",
         tableMar: "Mar",
@@ -1023,6 +1021,8 @@
         ventana: "Ventana",
         tipMejorHora: "Hora de hoy con el confort más alto.",
         tipVentana: "Tramo seguido de hoy en que el confort se mantiene cerca del máximo.",
+        scoreDayStale: "Índice del {date}",
+        tipScoreDayStale: "El confort se calculó ese día. Hoy no hay horas de MeteoSIX.",
         mar: "Mar",
         uvWarn: "UV muy alto: usa protección solar.",
         showMore: "Mostrar las demás ({n})",
@@ -1148,10 +1148,8 @@
         disagree: "Coast {costaT} °C ({costaName}) · Sea {marT} °C ({marName}): two different sources; they are not the same reading.",
         nodata: "No figure for today.",
         nodataLast: "No figure for today. Last: {date} — {name} {t} °C",
-        singleSource: "Only one source has a figure for today: there is nothing to compare with.",
         hintDisagree: "Sources disagree",
         hintNodata: "No figure for today",
-        hintSingle: "Single source",
         tableDay: "Day",
         tableCosta: "Coast",
         tableMar: "Sea",
@@ -1165,6 +1163,8 @@
         ventana: "Window",
         tipMejorHora: "Hour today with the highest comfort.",
         tipVentana: "Continuous stretch today when comfort stays near the peak.",
+        scoreDayStale: "Index from {date}",
+        tipScoreDayStale: "Comfort was calculated that day. There are no MeteoSIX hours for today.",
         mar: "Sea",
         uvWarn: "Very high UV: use sun protection.",
         showMore: "Show the rest ({n})",
@@ -1290,10 +1290,8 @@
         disagree: "Берег {costaT} °C ({costaName}) · Море {marT} °C ({marName}): два разных источника; это не одно и то же значение.",
         nodata: "Нет данных на сегодня.",
         nodataLast: "Нет данных на сегодня. Последнее: {date} — {name} {t} °C",
-        singleSource: "Сегодня есть только один источник: сравнивать не с чем.",
         hintDisagree: "Источники расходятся",
         hintNodata: "Нет данных на сегодня",
-        hintSingle: "Один источник",
         tableDay: "День",
         tableCosta: "Берег",
         tableMar: "Море",
@@ -1307,6 +1305,8 @@
         ventana: "Окно",
         tipMejorHora: "Час сегодня с самым высоким комфортом.",
         tipVentana: "Непрерывный отрезок сегодня, когда комфорт держится у максимума.",
+        scoreDayStale: "Индекс за {date}",
+        tipScoreDayStale: "Комфорт посчитан в тот день. Сегодня нет часов MeteoSIX.",
         mar: "Море",
         uvWarn: "Очень высокий УФ: нужна защита от солнца.",
         showMore: "Показать остальные ({n})",
@@ -1983,15 +1983,11 @@
       return t("uvExtremo");
     }
 
-    function accordionTable(title, dates, costaDays, marDays, uvDays, costaName, scoreByDay) {
+    function accordionTable(title, dates, costaDays, marDays, uvDays, costaName) {
       if (!dates.length) return "";
       const costaTitle = costaName ? t("segun", { name: costaName }) : "";
-      const showScore = Boolean(scoreByDay);
       const heads = [
         `<th>${t("tableDay")}</th>`,
-        showScore
-          ? `<th>${t("indiceLabel")}</th>`
-          : `<th aria-hidden="true"></th>`,
         `<th title="${escapeAttr(costaTitle)}">${t("tableCosta")}</th>`,
         `<th title="${escapeAttr(t("segunCopernicus"))}">${t("tableMar")}</th>`,
         `<th title="${escapeAttr(t("uvTitle"))}">${t("tableUv")}</th>`,
@@ -2000,19 +1996,14 @@
         const tC = costaDays.get(d);
         const tM = marDays.get(d);
         const uv = uvDays.get(d);
-        const sc = scoreByDay && scoreByDay[d];
-        const scoreCell = showScore
-          ? `<td>${sc && typeof sc.score === "number" ? sc.score : "—"}</td>`
-          : `<td aria-hidden="true"></td>`;
         return (
           `<tr><td>${formatDay(d)}</td>` +
-          `${scoreCell}` +
           `<td>${tC == null ? "—" : `${fmtT(tC)} °C`}</td>` +
           `<td>${tM == null ? "—" : `${fmtT(tM)} °C`}</td>` +
           `<td>${typeof uv === "number" ? `${uv} ${uvLabel(uv)}` : "—"}</td></tr>`
         );
       });
-      const cols = `<col class="col-day">${"<col class=\"col-metric\">".repeat(4)}`;
+      const cols = `<col class="col-day">${"<col class=\"col-metric\">".repeat(3)}`;
       return (
         `<h4>${title}</h4><table><colgroup>${cols}</colgroup>` +
         `<thead><tr>${heads.join("")}</tr></thead>` +
@@ -2035,7 +2026,7 @@
           });
         }
       }
-      return `${String(utcHour).padStart(2, "0")}:00`;
+      return "";
     }
 
     function scoreColor(score) {
@@ -2264,6 +2255,17 @@
           if (typeof parts[k] === "number") {
             facts.push(scoreBar(SCORE_PART_ICONS[k], k, parts[k]));
           }
+        }
+        if (beach.scoreDay && beach.scoreDay !== refDay) {
+          facts.push(
+            factItem(
+              "clock",
+              t("scoreDayStale", { date: formatDateEs(beach.scoreDay) }),
+              "",
+              "tipScoreDayStale",
+              "scoreDayStale"
+            )
+          );
         }
         const best = madridClock(beach.scoreDay, beach.bestHour);
         facts.push(factItem("clock", t("mejorHora"), best || "—", "tipMejorHora", "mejorHora"));
@@ -2775,7 +2777,9 @@
       return extra;
     }
 
+    let listsGen = 0;
     async function renderLists() {
+      const gen = ++listsGen;
       const root = document.getElementById("lists");
       const dlg = document.getElementById("beach-dialog");
       if (!currentBeach && dlg.open) dlg.close();
@@ -2788,6 +2792,7 @@
         favoritasResults = await Promise.all(
           favoritasResults.map((b) => enrichTopBeach(b))
         );
+        if (gen !== listsGen) return;
         const items = sortBeaches(favoritasResults)
           .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
@@ -2804,6 +2809,7 @@
           const idx = caninasResults.findIndex((b) => b.slug === currentBeach);
           if (idx >= 0) {
             caninasResults[idx] = await enrichTopBeach(caninasResults[idx]);
+            if (gen !== listsGen) return;
           }
         }
         const items = sortBeaches(caninasResults)
@@ -2820,6 +2826,7 @@
         geoResults = await Promise.all(
           geoResults.map((b) => enrichTopBeach(b))
         );
+        if (gen !== listsGen) return;
         const items = applyLayerFilters(geoResults)
           .map((b) => cardHtml(b, { showConcello: true }))
           .join("");
@@ -2833,6 +2840,7 @@
           const idx = (index.top || []).findIndex((b) => b.slug === currentBeach);
           if (idx >= 0) {
             index.top[idx] = await enrichTopBeach(index.top[idx]);
+            if (gen !== listsGen) return;
           }
         }
         const parts = renderBanded(index.top || [], { showConcello: true });
@@ -2852,12 +2860,14 @@
       try {
         payload = await loadConcello(currentConcello);
       } catch (err) {
+        if (gen !== listsGen) return;
         root.innerHTML = `<p class="empty">${t("noLoadConcello", {
           slug: currentConcello,
           err: err.message,
         })}</p>`;
         return;
       }
+      if (gen !== listsGen) return;
       const beaches = payload.beaches || [];
       const parts = renderBanded(beaches, {
         showConcello: false,

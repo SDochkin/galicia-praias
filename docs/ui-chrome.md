@@ -4,7 +4,7 @@ Read this file when adding a hero figure or editing chrome in [`index.html`](../
 
 ## Names
 
-- `role` — what the quantity is. Visible label: `indiceLabel` on `card-score-label` under the index in [`index.html`](../index.html); column headers in `accordionTable`; the `mar` label on the details row.
+- `role` — what the quantity is. Visible label: `indiceLabel` on `card-score-label` under the index in [`index.html`](../index.html); the `mar` label on the details row.
 - `nature` — how the number was obtained, when it is not a shoreline measurement. Visible word on the line below the degrees. Copy: i18n key `tempNature` in [`index.html`](../index.html).
 - `status` — exception relative to the usual nature. Tooltip only: `disagree` and `nodata` in [`index.html`](../index.html).
 
