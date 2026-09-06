@@ -71,7 +71,8 @@ When writing or editing ADR / agent docs:
 
 On ADR, plans, and reports:
 
-- A claim about code behaviour cites file and lines, read in this session. Memory of a previous read does not count
+- A claim about code behaviour cites file and lines, read in this session. Memory of a previous read does not count. A line range in a claim comes from reading that range; line numbers a search returned are not a read
+- A claim about a file’s contents is checked in that file. A document that describes another file is not evidence of it. Schedule, flags, and secrets are checked in [`.github/workflows/update-beaches.yml`](.github/workflows/update-beaches.yml) and [`README.md`](README.md), not in descriptive documentation
 - A claim about an external API is confirmed by a live request or the manual page; the response or quote is saved as evidence
 - When citing evidence, cite its units. Do not borrow units from a neighbouring row of the same section
 - Do not copy one variable’s method onto another, and do not confuse display with selection. `PRIMARY_ORDER` / `pick_primary` select only daily `beach.t`. Waves and wind are not in that tuple. mar-qa §Шаг 2 is TEMP / `IR_TS_MO_*`; WAV needs other variables and a check that the platform has them
