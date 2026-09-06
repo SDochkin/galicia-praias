@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-06T10:19:18Z",
+  "fetchedAt": "2026-09-06T10:43:57Z",
   "beaches": [
     {
       "id": 2021,
@@ -10,19 +10,19 @@
       "trend": "down",
       "sources": [
         {
-          "name": "Copernicus",
+          "name": "AEMET",
           "days": [
             {
               "date": "2026-09-06",
-              "t": 19.9
+              "t": 19.0
             },
             {
               "date": "2026-09-07",
-              "t": 20.2
+              "t": 20.0
             },
             {
               "date": "2026-09-08",
-              "t": 20.3
+              "t": 19.0
             }
           ],
           "history": [
@@ -32,27 +32,27 @@
             },
             {
               "date": "2026-08-31",
-              "t": 19.4
+              "t": 19.0
             },
             {
               "date": "2026-09-01",
-              "t": 19.5
+              "t": 21.0
             },
             {
               "date": "2026-09-02",
-              "t": 19.6
+              "t": 21.0
             },
             {
               "date": "2026-09-03",
-              "t": 19.7
+              "t": 21.0
             },
             {
               "date": "2026-09-04",
-              "t": 19.8
+              "t": 20.0
             },
             {
               "date": "2026-09-05",
-              "t": 19.9
+              "t": 20.0
             }
           ]
         },
@@ -114,19 +114,19 @@
           ]
         },
         {
-          "name": "AEMET",
+          "name": "Copernicus",
           "days": [
             {
               "date": "2026-09-06",
-              "t": 19.0
+              "t": 19.9
             },
             {
               "date": "2026-09-07",
-              "t": 20.0
+              "t": 20.2
             },
             {
               "date": "2026-09-08",
-              "t": 19.0
+              "t": 20.3
             }
           ],
           "history": [
@@ -136,61 +136,112 @@
             },
             {
               "date": "2026-08-31",
-              "t": 19.0
+              "t": 19.4
             },
             {
               "date": "2026-09-01",
-              "t": 21.0
+              "t": 19.5
             },
             {
               "date": "2026-09-02",
-              "t": 21.0
+              "t": 19.6
             },
             {
               "date": "2026-09-03",
-              "t": 21.0
+              "t": 19.7
             },
             {
               "date": "2026-09-04",
-              "t": 20.0
+              "t": 19.8
             },
             {
               "date": "2026-09-05",
-              "t": 20.0
+              "t": 19.9
             }
           ]
         }
       ],
-      "score": 81,
+      "score": 79,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 94,
-        "waves": 27,
+        "wind": 86,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 11
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 81,
+          "score": 79,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 94,
-            "waves": 27,
+            "wind": 86,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 11
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 86,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 60,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 59,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 90,
+              "wind": 46,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 90,
+              "wind": 44,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 80,
+              "wind": 54,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 79,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -207,10 +258,221 @@
           "scoreWindow": {
             "from": 9,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 99,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 93,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 87,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 60,
+              "wind": 90,
+              "waves": 29,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 60,
+              "wind": 100,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 70,
+              "wind": 94,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 92,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 60,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            }
+          }
+        },
+        "2026-09-08": {
+          "score": 74,
+          "scoreParts": {
+            "water": 90,
+            "air": 50,
+            "wind": 100,
+            "waves": 44,
+            "rain": 100,
+            "sky": 40
+          },
+          "bestHour": 10,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 30,
+              "wind": 100,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 50,
+              "wind": 100,
+              "waves": 44,
+              "rain": 100,
+              "sky": 40
+            },
+            "11": {
+              "air": 50,
+              "wind": 85,
+              "waves": 39,
+              "rain": 19,
+              "sky": 25
+            },
+            "12": {
+              "air": 60,
+              "wind": 84,
+              "waves": 29,
+              "rain": 6,
+              "sky": 15
+            },
+            "13": {
+              "air": 60,
+              "wind": 86,
+              "waves": 26,
+              "rain": 7,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 92,
+              "waves": 26,
+              "rain": 20,
+              "sky": 10
+            },
+            "15": {
+              "air": 50,
+              "wind": 92,
+              "waves": 23,
+              "rain": 35,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 88,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 98,
+              "waves": 17,
+              "rain": 100,
+              "sky": 25
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 86,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 60,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 59,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 90,
+          "wind": 46,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 90,
+          "wind": 44,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 80,
+          "wind": 54,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 79,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "tidePort": "Ría de Foz",
       "tideLow": [
         "06:18",
@@ -334,36 +596,87 @@
           ]
         }
       ],
-      "score": 81,
+      "score": 79,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 94,
-        "waves": 27,
+        "wind": 86,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 11
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 81,
+          "score": 79,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 94,
-            "waves": 27,
+            "wind": 86,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 11
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 86,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 60,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 59,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 90,
+              "wind": 46,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 90,
+              "wind": 44,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 80,
+              "wind": 54,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 79,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -380,10 +693,221 @@
           "scoreWindow": {
             "from": 9,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 99,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 93,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 87,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 60,
+              "wind": 90,
+              "waves": 29,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 60,
+              "wind": 100,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 70,
+              "wind": 94,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 92,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 60,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            }
+          }
+        },
+        "2026-09-08": {
+          "score": 74,
+          "scoreParts": {
+            "water": 90,
+            "air": 50,
+            "wind": 100,
+            "waves": 44,
+            "rain": 100,
+            "sky": 40
+          },
+          "bestHour": 10,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 30,
+              "wind": 100,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 50,
+              "wind": 100,
+              "waves": 44,
+              "rain": 100,
+              "sky": 40
+            },
+            "11": {
+              "air": 50,
+              "wind": 85,
+              "waves": 39,
+              "rain": 19,
+              "sky": 25
+            },
+            "12": {
+              "air": 60,
+              "wind": 84,
+              "waves": 29,
+              "rain": 6,
+              "sky": 15
+            },
+            "13": {
+              "air": 60,
+              "wind": 86,
+              "waves": 26,
+              "rain": 7,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 92,
+              "waves": 26,
+              "rain": 20,
+              "sky": 10
+            },
+            "15": {
+              "air": 50,
+              "wind": 92,
+              "waves": 23,
+              "rain": 35,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 88,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 98,
+              "waves": 17,
+              "rain": 100,
+              "sky": 25
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 86,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 60,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 59,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 90,
+          "wind": 46,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 90,
+          "wind": 44,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 80,
+          "wind": 54,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 79,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "tidePort": "Ría de Foz",
       "tideLow": [
         "06:18",
@@ -507,36 +1031,87 @@
           ]
         }
       ],
-      "score": 77,
+      "score": 75,
       "scoreParts": {
         "water": 77,
         "air": 80,
-        "wind": 92,
-        "waves": 27,
+        "wind": 84,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 11
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 77,
+          "score": 75,
           "scoreParts": {
             "water": 77,
             "air": 80,
-            "wind": 92,
-            "waves": 27,
+            "wind": 84,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 11
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 80,
+              "wind": 84,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 80,
+              "wind": 50,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 80,
+              "wind": 53,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 70,
+              "wind": 33,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 70,
+              "wind": 31,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 70,
+              "wind": 39,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 67,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -553,10 +1128,221 @@
           "scoreWindow": {
             "from": 8,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 50,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 60,
+              "wind": 96,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 60,
+              "wind": 91,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 60,
+              "wind": 84,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 60,
+              "wind": 85,
+              "waves": 29,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 60,
+              "wind": 99,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 60,
+              "wind": 94,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 60,
+              "wind": 91,
+              "waves": 33,
+              "rain": 100,
+              "sky": 40
+            },
+            "16": {
+              "air": 50,
+              "wind": 99,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 50,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            }
+          }
+        },
+        "2026-09-08": {
+          "score": 76,
+          "scoreParts": {
+            "water": 90,
+            "air": 50,
+            "wind": 100,
+            "waves": 46,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 8,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 50,
+              "wind": 100,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 60,
+              "wind": 100,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 60,
+              "wind": 100,
+              "waves": 44,
+              "rain": 100,
+              "sky": 40
+            },
+            "11": {
+              "air": 50,
+              "wind": 88,
+              "waves": 39,
+              "rain": 20,
+              "sky": 25
+            },
+            "12": {
+              "air": 60,
+              "wind": 79,
+              "waves": 29,
+              "rain": 9,
+              "sky": 15
+            },
+            "13": {
+              "air": 50,
+              "wind": 81,
+              "waves": 26,
+              "rain": 6,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 82,
+              "waves": 26,
+              "rain": 20,
+              "sky": 10
+            },
+            "15": {
+              "air": 50,
+              "wind": 83,
+              "waves": 23,
+              "rain": 38,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 80,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 50,
+              "wind": 93,
+              "waves": 17,
+              "rain": 100,
+              "sky": 40
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 80,
+          "wind": 84,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 80,
+          "wind": 50,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 80,
+          "wind": 53,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 70,
+          "wind": 33,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 70,
+          "wind": 31,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 70,
+          "wind": 39,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 67,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "higiene": 100,
       "higieneDate": "2026-08-30",
       "higieneEcoli": "<10 NMP/100ml",
@@ -685,36 +1471,87 @@
           ]
         }
       ],
-      "score": 80,
+      "score": 79,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 88,
-        "waves": 27,
+        "wind": 85,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 12
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 80,
+          "score": 79,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 88,
-            "waves": 27,
+            "wind": 85,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 12
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 85,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 62,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 59,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 90,
+              "wind": 61,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 90,
+              "wind": 60,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 80,
+              "wind": 65,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 76,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -731,10 +1568,221 @@
           "scoreWindow": {
             "from": 9,
             "to": 16
+          },
+          "hourParts": {
+            "8": {
+              "air": 40,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 97,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 96,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 87,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 70,
+              "wind": 85,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "13": {
+              "air": 80,
+              "wind": 98,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 80,
+              "wind": 96,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 94,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 99,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            },
+            "17": {
+              "air": 50,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            }
+          }
+        },
+        "2026-09-08": {
+          "score": 73,
+          "scoreParts": {
+            "water": 90,
+            "air": 30,
+            "wind": 100,
+            "waves": 46,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 8,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 40,
+              "wind": 100,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 60,
+              "wind": 91,
+              "waves": 44,
+              "rain": 82,
+              "sky": 25
+            },
+            "11": {
+              "air": 50,
+              "wind": 92,
+              "waves": 39,
+              "rain": 11,
+              "sky": 10
+            },
+            "12": {
+              "air": 60,
+              "wind": 80,
+              "waves": 29,
+              "rain": 10,
+              "sky": 15
+            },
+            "13": {
+              "air": 50,
+              "wind": 90,
+              "waves": 26,
+              "rain": 0,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 89,
+              "waves": 26,
+              "rain": 21,
+              "sky": 25
+            },
+            "15": {
+              "air": 50,
+              "wind": 93,
+              "waves": 23,
+              "rain": 53,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 91,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 99,
+              "waves": 17,
+              "rain": 100,
+              "sky": 25
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 85,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 62,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 59,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 90,
+          "wind": 61,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 90,
+          "wind": 60,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 80,
+          "wind": 65,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 76,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "stopName": "PORTOCELO (CRUZAMENTO) (XOVE)",
       "parking": true,
       "toilet": true,
@@ -862,36 +1910,87 @@
           ]
         }
       ],
-      "score": 80,
+      "score": 79,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 88,
-        "waves": 27,
+        "wind": 85,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 12
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 80,
+          "score": 79,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 88,
-            "waves": 27,
+            "wind": 85,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 12
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 85,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 62,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 59,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 90,
+              "wind": 61,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 90,
+              "wind": 60,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 80,
+              "wind": 65,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 76,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -908,10 +2007,221 @@
           "scoreWindow": {
             "from": 9,
             "to": 16
+          },
+          "hourParts": {
+            "8": {
+              "air": 40,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 97,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 96,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 87,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 70,
+              "wind": 85,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "13": {
+              "air": 80,
+              "wind": 98,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 80,
+              "wind": 96,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 94,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 99,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            },
+            "17": {
+              "air": 50,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            }
+          }
+        },
+        "2026-09-08": {
+          "score": 73,
+          "scoreParts": {
+            "water": 90,
+            "air": 30,
+            "wind": 100,
+            "waves": 46,
+            "rain": 100,
+            "sky": 60
+          },
+          "bestHour": 8,
+          "scoreWindow": {
+            "from": 8,
+            "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 30,
+              "wind": 100,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 40,
+              "wind": 100,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 60,
+              "wind": 91,
+              "waves": 44,
+              "rain": 82,
+              "sky": 25
+            },
+            "11": {
+              "air": 50,
+              "wind": 92,
+              "waves": 39,
+              "rain": 11,
+              "sky": 10
+            },
+            "12": {
+              "air": 60,
+              "wind": 80,
+              "waves": 29,
+              "rain": 10,
+              "sky": 15
+            },
+            "13": {
+              "air": 50,
+              "wind": 90,
+              "waves": 26,
+              "rain": 0,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 89,
+              "waves": 26,
+              "rain": 21,
+              "sky": 25
+            },
+            "15": {
+              "air": 50,
+              "wind": 93,
+              "waves": 23,
+              "rain": 53,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 91,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 99,
+              "waves": 17,
+              "rain": 100,
+              "sky": 25
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 85,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 62,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 59,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 90,
+          "wind": 61,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 90,
+          "wind": 60,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 80,
+          "wind": 65,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 76,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "stopName": "PORTOCELO (XOVE)",
       "protectedName": "Costa da Mariña occidental",
       "tidePort": "Ría de Foz",
@@ -932,53 +2242,6 @@
       "source": "MeteoGalicia",
       "trend": "up",
       "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-06",
-              "t": 19.7
-            },
-            {
-              "date": "2026-09-07",
-              "t": 20.3
-            },
-            {
-              "date": "2026-09-08",
-              "t": 20.5
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-30",
-              "t": 18.8
-            },
-            {
-              "date": "2026-08-31",
-              "t": 19.3
-            },
-            {
-              "date": "2026-09-01",
-              "t": 19.6
-            },
-            {
-              "date": "2026-09-02",
-              "t": 19.6
-            },
-            {
-              "date": "2026-09-03",
-              "t": 19.7
-            },
-            {
-              "date": "2026-09-04",
-              "t": 19.8
-            },
-            {
-              "date": "2026-09-05",
-              "t": 19.7
-            }
-          ]
-        },
         {
           "name": "MeteoSIX",
           "days": [
@@ -1086,38 +2349,136 @@
               "uv": 6
             }
           ]
+        },
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-09-06",
+              "t": 19.7
+            },
+            {
+              "date": "2026-09-07",
+              "t": 20.3
+            },
+            {
+              "date": "2026-09-08",
+              "t": 20.5
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-30",
+              "t": 18.8
+            },
+            {
+              "date": "2026-08-31",
+              "t": 19.3
+            },
+            {
+              "date": "2026-09-01",
+              "t": 19.6
+            },
+            {
+              "date": "2026-09-02",
+              "t": 19.6
+            },
+            {
+              "date": "2026-09-03",
+              "t": 19.7
+            },
+            {
+              "date": "2026-09-04",
+              "t": 19.8
+            },
+            {
+              "date": "2026-09-05",
+              "t": 19.7
+            }
+          ]
         }
       ],
-      "score": 80,
+      "score": 78,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 88,
-        "waves": 27,
+        "wind": 79,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
-        "to": 12
+        "from": 11,
+        "to": 13
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 80,
+          "score": 78,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 88,
-            "waves": 27,
+            "wind": 79,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
-            "to": 12
+            "from": 11,
+            "to": 13
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 79,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 81,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 61,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 90,
+              "wind": 56,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 90,
+              "wind": 64,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 80,
+              "wind": 72,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 70,
+              "wind": 82,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -1134,6 +2495,78 @@
           "scoreWindow": {
             "from": 9,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 50,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 99,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 98,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 86,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 60,
+              "wind": 84,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "13": {
+              "air": 70,
+              "wind": 95,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 70,
+              "wind": 99,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 95,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 99,
+              "waves": 36,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 50,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            }
           }
         },
         "2026-09-08": {
@@ -1150,6 +2583,78 @@
           "scoreWindow": {
             "from": 8,
             "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 50,
+              "wind": 60,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 50,
+              "wind": 76,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 60,
+              "wind": 93,
+              "waves": 44,
+              "rain": 84,
+              "sky": 25
+            },
+            "11": {
+              "air": 50,
+              "wind": 96,
+              "waves": 39,
+              "rain": 17,
+              "sky": 25
+            },
+            "12": {
+              "air": 50,
+              "wind": 88,
+              "waves": 29,
+              "rain": 16,
+              "sky": 25
+            },
+            "13": {
+              "air": 50,
+              "wind": 94,
+              "waves": 26,
+              "rain": 6,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 91,
+              "waves": 26,
+              "rain": 29,
+              "sky": 25
+            },
+            "15": {
+              "air": 50,
+              "wind": 92,
+              "waves": 23,
+              "rain": 58,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 95,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 96,
+              "waves": 17,
+              "rain": 100,
+              "sky": 40
+            }
           }
         },
         "2026-09-09": {
@@ -1166,10 +2671,133 @@
           "scoreWindow": {
             "from": 13,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 20,
+              "wind": 100,
+              "waves": 8,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 40,
+              "wind": 94,
+              "waves": 7,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 50,
+              "wind": 93,
+              "waves": 7,
+              "rain": 100,
+              "sky": 40
+            },
+            "11": {
+              "air": 50,
+              "wind": 95,
+              "waves": 7,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 50,
+              "wind": 95,
+              "waves": 8,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 60,
+              "wind": 89,
+              "waves": 9,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 60,
+              "wind": 86,
+              "waves": 10,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 60,
+              "wind": 89,
+              "waves": 10,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 50,
+              "wind": 89,
+              "waves": 11,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 50,
+              "wind": 90,
+              "waves": 11,
+              "rain": 100,
+              "sky": 100
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 79,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 81,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 61,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 90,
+          "wind": 56,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 90,
+          "wind": 64,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 80,
+          "wind": 72,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 70,
+          "wind": 82,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "stopName": "CERANZOS (XOVE)",
       "protectedName": "Costa da Mariña occidental",
       "tidePort": "Ría de Foz",
@@ -1191,57 +2819,6 @@
       "source": "MeteoGalicia",
       "trend": "up",
       "sources": [
-        {
-          "name": "MeteoSIX",
-          "days": [
-            {
-              "date": "2026-09-06",
-              "t": 19.0
-            },
-            {
-              "date": "2026-09-07",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-08",
-              "t": 19.0
-            },
-            {
-              "date": "2026-09-09",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-10",
-              "t": 19.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-08-31",
-              "t": 19.0
-            },
-            {
-              "date": "2026-09-01",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-02",
-              "t": 21.0
-            },
-            {
-              "date": "2026-09-03",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-04",
-              "t": 20.0
-            },
-            {
-              "date": "2026-09-05",
-              "t": 18.0
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -1392,38 +2969,140 @@
               "t": 18.0
             }
           ]
+        },
+        {
+          "name": "MeteoSIX",
+          "days": [
+            {
+              "date": "2026-09-06",
+              "t": 19.0
+            },
+            {
+              "date": "2026-09-07",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-08",
+              "t": 19.0
+            },
+            {
+              "date": "2026-09-09",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-10",
+              "t": 19.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-08-31",
+              "t": 19.0
+            },
+            {
+              "date": "2026-09-01",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-02",
+              "t": 21.0
+            },
+            {
+              "date": "2026-09-03",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-04",
+              "t": 20.0
+            },
+            {
+              "date": "2026-09-05",
+              "t": 18.0
+            }
+          ]
         }
       ],
-      "score": 80,
+      "score": 79,
       "scoreParts": {
         "water": 77,
         "air": 100,
-        "wind": 87,
-        "waves": 27,
+        "wind": 83,
+        "waves": 24,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 10,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 10,
+        "from": 11,
         "to": 17
       },
       "scoreDay": "2026-09-06",
       "scoreByDay": {
         "2026-09-06": {
-          "score": 80,
+          "score": 79,
           "scoreParts": {
             "water": 77,
             "air": 100,
-            "wind": 87,
-            "waves": 27,
+            "wind": 83,
+            "waves": 24,
             "rain": 100,
             "sky": 100
           },
-          "bestHour": 10,
+          "bestHour": 11,
           "scoreWindow": {
-            "from": 10,
+            "from": 11,
             "to": 17
+          },
+          "hourParts": {
+            "11": {
+              "air": 100,
+              "wind": 83,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            },
+            "12": {
+              "air": 100,
+              "wind": 78,
+              "waves": 19,
+              "rain": 100,
+              "sky": 100
+            },
+            "13": {
+              "air": 100,
+              "wind": 83,
+              "waves": 15,
+              "rain": 100,
+              "sky": 100
+            },
+            "14": {
+              "air": 100,
+              "wind": 69,
+              "waves": 13,
+              "rain": 100,
+              "sky": 100
+            },
+            "15": {
+              "air": 100,
+              "wind": 75,
+              "waves": 16,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 90,
+              "wind": 81,
+              "waves": 20,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 80,
+              "wind": 86,
+              "waves": 24,
+              "rain": 100,
+              "sky": 100
+            }
           }
         },
         "2026-09-07": {
@@ -1440,6 +3119,78 @@
           "scoreWindow": {
             "from": 8,
             "to": 11
+          },
+          "hourParts": {
+            "8": {
+              "air": 60,
+              "wind": 100,
+              "waves": 25,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 70,
+              "wind": 100,
+              "waves": 24,
+              "rain": 100,
+              "sky": 60
+            },
+            "10": {
+              "air": 80,
+              "wind": 99,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "11": {
+              "air": 80,
+              "wind": 88,
+              "waves": 27,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 60,
+              "wind": 86,
+              "waves": 29,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 70,
+              "wind": 96,
+              "waves": 29,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 70,
+              "wind": 99,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 70,
+              "wind": 95,
+              "waves": 33,
+              "rain": 100,
+              "sky": 60
+            },
+            "16": {
+              "air": 60,
+              "wind": 99,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            },
+            "17": {
+              "air": 60,
+              "wind": 100,
+              "waves": 36,
+              "rain": 100,
+              "sky": 60
+            }
           }
         },
         "2026-09-08": {
@@ -1456,6 +3207,78 @@
           "scoreWindow": {
             "from": 8,
             "to": 10
+          },
+          "hourParts": {
+            "8": {
+              "air": 50,
+              "wind": 66,
+              "waves": 46,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 60,
+              "wind": 85,
+              "waves": 45,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 60,
+              "wind": 85,
+              "waves": 44,
+              "rain": 84,
+              "sky": 25
+            },
+            "11": {
+              "air": 50,
+              "wind": 97,
+              "waves": 39,
+              "rain": 16,
+              "sky": 10
+            },
+            "12": {
+              "air": 50,
+              "wind": 92,
+              "waves": 29,
+              "rain": 17,
+              "sky": 25
+            },
+            "13": {
+              "air": 50,
+              "wind": 96,
+              "waves": 26,
+              "rain": 9,
+              "sky": 10
+            },
+            "14": {
+              "air": 50,
+              "wind": 94,
+              "waves": 26,
+              "rain": 37,
+              "sky": 20
+            },
+            "15": {
+              "air": 50,
+              "wind": 93,
+              "waves": 23,
+              "rain": 59,
+              "sky": 20
+            },
+            "16": {
+              "air": 50,
+              "wind": 95,
+              "waves": 21,
+              "rain": 100,
+              "sky": 40
+            },
+            "17": {
+              "air": 40,
+              "wind": 98,
+              "waves": 17,
+              "rain": 100,
+              "sky": 40
+            }
           }
         },
         "2026-09-09": {
@@ -1472,10 +3295,133 @@
           "scoreWindow": {
             "from": 14,
             "to": 17
+          },
+          "hourParts": {
+            "8": {
+              "air": 20,
+              "wind": 100,
+              "waves": 8,
+              "rain": 100,
+              "sky": 60
+            },
+            "9": {
+              "air": 40,
+              "wind": 94,
+              "waves": 7,
+              "rain": 100,
+              "sky": 40
+            },
+            "10": {
+              "air": 40,
+              "wind": 94,
+              "waves": 7,
+              "rain": 100,
+              "sky": 40
+            },
+            "11": {
+              "air": 60,
+              "wind": 94,
+              "waves": 7,
+              "rain": 100,
+              "sky": 60
+            },
+            "12": {
+              "air": 50,
+              "wind": 94,
+              "waves": 8,
+              "rain": 100,
+              "sky": 40
+            },
+            "13": {
+              "air": 50,
+              "wind": 91,
+              "waves": 9,
+              "rain": 100,
+              "sky": 60
+            },
+            "14": {
+              "air": 60,
+              "wind": 88,
+              "waves": 10,
+              "rain": 100,
+              "sky": 60
+            },
+            "15": {
+              "air": 60,
+              "wind": 89,
+              "waves": 10,
+              "rain": 100,
+              "sky": 100
+            },
+            "16": {
+              "air": 50,
+              "wind": 89,
+              "waves": 11,
+              "rain": 100,
+              "sky": 100
+            },
+            "17": {
+              "air": 50,
+              "wind": 90,
+              "waves": 11,
+              "rain": 100,
+              "sky": 100
+            }
           }
         }
       },
       "wave": "strong",
+      "hourParts": {
+        "11": {
+          "air": 100,
+          "wind": 83,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 78,
+          "waves": 19,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 83,
+          "waves": 15,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 100,
+          "wind": 69,
+          "waves": 13,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 100,
+          "wind": 75,
+          "waves": 16,
+          "rain": 100,
+          "sky": 100
+        },
+        "16": {
+          "air": 90,
+          "wind": 81,
+          "waves": 20,
+          "rain": 100,
+          "sky": 100
+        },
+        "17": {
+          "air": 80,
+          "wind": 86,
+          "waves": 24,
+          "rain": 100,
+          "sky": 100
+        }
+      },
       "flagYear": 2026,
       "flagSand": "Fina",
       "higiene": 100,
