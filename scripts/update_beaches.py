@@ -134,6 +134,7 @@ SCORE_FIELD_KEYS = (
     "scoreDay",
     "scoreByDay",
     "wave",
+    "hourParts",
 )
 
 
@@ -848,6 +849,10 @@ def compute_score(
         right += 1
     best_parts = scored[best_i][1]
     rounded = {k: round(best_parts[k]) for k in keys}
+    hour_parts_out: dict[int, dict[str, int]] = {}
+    for rec, full, _sc in scored:
+        utc_h = rec["dt"].astimezone(timezone.utc).hour
+        hour_parts_out[utc_h] = {k: round(full[k]) for k in keys if k != "water"}
     return {
         "score": score_from_parts(rounded),
         "scoreParts": rounded,
@@ -856,6 +861,7 @@ def compute_score(
             "from": scored[left][0]["dt"].astimezone(timezone.utc).hour,
             "to": scored[right][0]["dt"].astimezone(timezone.utc).hour,
         },
+        "hourParts": hour_parts_out,
     }
 
 
@@ -926,6 +932,7 @@ def build_score_by_day(
             "scoreParts": result["scoreParts"],
             "bestHour": result["bestHour"],
             "scoreWindow": result["scoreWindow"],
+            "hourParts": result["hourParts"],
         }
     return out
 
@@ -951,6 +958,7 @@ def apply_score_fields(
             beach["scoreParts"] = result["scoreParts"]
             beach["bestHour"] = result["bestHour"]
             beach["scoreWindow"] = result["scoreWindow"]
+            beach["hourParts"] = result["hourParts"]
             beach["scoreDay"] = today_madrid
             w = wave_at_noon(hourly or [], today_madrid)
             if w is not None:
@@ -973,6 +981,8 @@ def apply_score_fields(
                     beach["bestHour"] = rec["bestHour"]
                 if "scoreWindow" in rec:
                     beach["scoreWindow"] = rec["scoreWindow"]
+                if "hourParts" in rec:
+                    beach["hourParts"] = rec["hourParts"]
                 beach["scoreDay"] = today_madrid
         if beach.get("scoreDay") == today_madrid and isinstance(
             beach.get("t"), (int, float)
@@ -1760,6 +1770,9 @@ def run_selfcheck() -> int:
     assert got_sky["bestHour"] == 9, got_sky
     assert got_sky["scoreWindow"] == {"from": 9, "to": 9}, got_sky
     assert "sky" in got_sky["scoreParts"], got_sky
+    assert got_sky["hourParts"] and any(
+        "sky" in parts for parts in got_sky["hourParts"].values()
+    ), got_sky
 
     b_day = {
         "t": 20.0,
@@ -1831,6 +1844,7 @@ def run_selfcheck() -> int:
             },
             "bestHour": 14,
             "scoreWindow": {"from": 13, "to": 16},
+            "hourParts": {14: {"air": 60, "wind": 80, "waves": 40, "rain": 100}},
         }
     }
     b_by = {"t": 22.0}
@@ -1842,6 +1856,7 @@ def run_selfcheck() -> int:
     assert b_by["scoreWindow"] == {"from": 13, "to": 16}
     assert b_by["scoreParts"]["water"] == 100, b_by["scoreParts"]
     assert b_by["score"] == score_from_parts(b_by["scoreParts"])
+    assert b_by["hourParts"] == {14: {"air": 60, "wind": 80, "waves": 40, "rain": 100}}
 
     ae_today = {"date": "2026-08-20", "t": 19.5}
     old_ae = {
