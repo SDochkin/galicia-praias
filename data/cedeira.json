@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-20T18:27:01Z",
+  "fetchedAt": "2026-09-21T14:52:43Z",
   "beaches": [
     {
       "id": 2534,
@@ -7,7 +7,7 @@
       "name": "Praia de Area Longa",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoGalicia",
@@ -114,21 +114,21 @@
           ]
         }
       ],
-      "score": 59,
+      "score": 60,
       "scoreParts": {
         "water": 17,
         "air": 100,
-        "wind": 94,
-        "waves": 24,
+        "wind": 100,
+        "waves": 26,
         "rain": 100,
         "sky": 100
       },
-      "bestHour": 16,
+      "bestHour": 17,
       "scoreWindow": {
-        "from": 15,
+        "from": 9,
         "to": 17
       },
-      "scoreDay": "2026-09-20",
+      "scoreDay": "2026-09-21",
       "scoreByDay": {
         "2026-09-20": {
           "score": 59,
@@ -348,24 +348,73 @@
       },
       "wave": "strong",
       "hourParts": {
-        "15": {
+        "8": {
+          "air": 40,
+          "wind": 96,
+          "waves": 34,
+          "rain": 100,
+          "sky": 100
+        },
+        "9": {
+          "air": 70,
+          "wind": 100,
+          "waves": 34,
+          "rain": 100,
+          "sky": 100
+        },
+        "10": {
           "air": 100,
-          "wind": 91,
+          "wind": 95,
+          "waves": 28,
+          "rain": 100,
+          "sky": 100
+        },
+        "11": {
+          "air": 100,
+          "wind": 96,
           "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 94,
+          "waves": 9,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 100,
+          "wind": 97,
+          "waves": 8,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 92,
+          "wind": 97,
+          "waves": 10,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 92,
+          "wind": 100,
+          "waves": 13,
           "rain": 100,
           "sky": 100
         },
         "16": {
           "air": 100,
-          "wind": 94,
-          "waves": 24,
+          "wind": 97,
+          "waves": 25,
           "rain": 100,
           "sky": 100
         },
         "17": {
           "air": 100,
-          "wind": 97,
-          "waves": 24,
+          "wind": 100,
+          "waves": 26,
           "rain": 100,
           "sky": 100
         }
@@ -374,13 +423,14 @@
       "higieneDate": "2026-09-02",
       "higieneEcoli": "10 NMP/100ml",
       "higieneEntero": "<10 NMP/100ml",
-      "tidePort": "Ferrol Porto Exterior",
+      "tidePort": "Ferrol",
       "tideLow": [
-        "05:39",
-        "18:49"
+        "07:22",
+        "20:07"
       ],
       "tideHigh": [
-        "12:13"
+        "01:17",
+        "13:38"
       ],
       "tramo": "natural"
     },
@@ -390,7 +440,7 @@
       "name": "Praia da Magdalena",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "AEMET",
@@ -436,53 +486,6 @@
             {
               "date": "2026-09-19",
               "t": 18.0
-            }
-          ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-09-20",
-              "t": 15.4
-            },
-            {
-              "date": "2026-09-21",
-              "t": 15.0
-            },
-            {
-              "date": "2026-09-22",
-              "t": 15.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-09-13",
-              "t": 16.0
-            },
-            {
-              "date": "2026-09-14",
-              "t": 16.2
-            },
-            {
-              "date": "2026-09-15",
-              "t": 16.5
-            },
-            {
-              "date": "2026-09-16",
-              "t": 16.3
-            },
-            {
-              "date": "2026-09-17",
-              "t": 16.2
-            },
-            {
-              "date": "2026-09-18",
-              "t": 16.4
-            },
-            {
-              "date": "2026-09-19",
-              "t": 15.9
             }
           ]
         },
@@ -542,23 +545,70 @@
               "uv": 6
             }
           ]
+        },
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-09-20",
+              "t": 15.4
+            },
+            {
+              "date": "2026-09-21",
+              "t": 15.0
+            },
+            {
+              "date": "2026-09-22",
+              "t": 15.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-09-13",
+              "t": 16.0
+            },
+            {
+              "date": "2026-09-14",
+              "t": 16.2
+            },
+            {
+              "date": "2026-09-15",
+              "t": 16.5
+            },
+            {
+              "date": "2026-09-16",
+              "t": 16.3
+            },
+            {
+              "date": "2026-09-17",
+              "t": 16.2
+            },
+            {
+              "date": "2026-09-18",
+              "t": 16.4
+            },
+            {
+              "date": "2026-09-19",
+              "t": 15.9
+            }
+          ]
         }
       ],
-      "score": 59,
+      "score": 60,
       "scoreParts": {
         "water": 17,
         "air": 100,
-        "wind": 95,
-        "waves": 24,
+        "wind": 100,
+        "waves": 26,
         "rain": 100,
         "sky": 100
       },
       "bestHour": 17,
       "scoreWindow": {
-        "from": 15,
+        "from": 9,
         "to": 17
       },
-      "scoreDay": "2026-09-20",
+      "scoreDay": "2026-09-21",
       "scoreByDay": {
         "2026-09-20": {
           "score": 59,
@@ -778,24 +828,73 @@
       },
       "wave": "strong",
       "hourParts": {
-        "15": {
+        "8": {
+          "air": 50,
+          "wind": 99,
+          "waves": 34,
+          "rain": 100,
+          "sky": 100
+        },
+        "9": {
+          "air": 80,
+          "wind": 100,
+          "waves": 34,
+          "rain": 100,
+          "sky": 100
+        },
+        "10": {
           "air": 100,
-          "wind": 88,
+          "wind": 95,
+          "waves": 28,
+          "rain": 100,
+          "sky": 100
+        },
+        "11": {
+          "air": 100,
+          "wind": 97,
           "waves": 24,
+          "rain": 100,
+          "sky": 100
+        },
+        "12": {
+          "air": 100,
+          "wind": 96,
+          "waves": 9,
+          "rain": 100,
+          "sky": 100
+        },
+        "13": {
+          "air": 92,
+          "wind": 99,
+          "waves": 8,
+          "rain": 100,
+          "sky": 100
+        },
+        "14": {
+          "air": 92,
+          "wind": 98,
+          "waves": 10,
+          "rain": 100,
+          "sky": 100
+        },
+        "15": {
+          "air": 92,
+          "wind": 100,
+          "waves": 13,
           "rain": 100,
           "sky": 100
         },
         "16": {
           "air": 100,
-          "wind": 92,
-          "waves": 24,
+          "wind": 99,
+          "waves": 25,
           "rain": 100,
           "sky": 100
         },
         "17": {
           "air": 100,
-          "wind": 95,
-          "waves": 24,
+          "wind": 100,
+          "waves": 26,
           "rain": 100,
           "sky": 100
         }
@@ -807,13 +906,14 @@
       "stopName": "CEDEIRA E.A. (CEDEIRA)",
       "parking": true,
       "toilet": true,
-      "tidePort": "Ferrol Porto Exterior",
+      "tidePort": "Ferrol",
       "tideLow": [
-        "05:39",
-        "18:49"
+        "07:22",
+        "20:07"
       ],
       "tideHigh": [
-        "12:13"
+        "01:17",
+        "13:38"
       ],
       "tramo": "urbano"
     }
