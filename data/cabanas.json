@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-26T18:47:44Z",
+  "fetchedAt": "2026-09-27T13:31:58Z",
   "beaches": [
     {
       "id": 2490,
@@ -7,8 +7,55 @@
       "name": "Praia da Madalena",
       "t": 19.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-09-26",
+              "t": 15.0
+            },
+            {
+              "date": "2026-09-27",
+              "t": 17.0
+            },
+            {
+              "date": "2026-09-28",
+              "t": 18.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-09-19",
+              "t": 16.0
+            },
+            {
+              "date": "2026-09-20",
+              "t": 15.0
+            },
+            {
+              "date": "2026-09-21",
+              "t": 14.0
+            },
+            {
+              "date": "2026-09-22",
+              "t": 15.0
+            },
+            {
+              "date": "2026-09-23",
+              "t": 14.0
+            },
+            {
+              "date": "2026-09-24",
+              "t": 15.0
+            },
+            {
+              "date": "2026-09-25",
+              "t": 17.0
+            }
+          ]
+        },
         {
           "name": "MeteoSIX",
           "days": [
@@ -116,70 +163,23 @@
               "uv": 5
             }
           ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-09-26",
-              "t": 15.0
-            },
-            {
-              "date": "2026-09-27",
-              "t": 17.0
-            },
-            {
-              "date": "2026-09-28",
-              "t": 18.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-09-19",
-              "t": 16.0
-            },
-            {
-              "date": "2026-09-20",
-              "t": 15.0
-            },
-            {
-              "date": "2026-09-21",
-              "t": 14.0
-            },
-            {
-              "date": "2026-09-22",
-              "t": 15.0
-            },
-            {
-              "date": "2026-09-23",
-              "t": 14.0
-            },
-            {
-              "date": "2026-09-24",
-              "t": 15.0
-            },
-            {
-              "date": "2026-09-25",
-              "t": 17.0
-            }
-          ]
         }
       ],
-      "score": 80,
+      "score": 79,
       "scoreParts": {
         "water": 77,
-        "air": 100,
+        "air": 80,
         "wind": 100,
-        "waves": 41,
+        "waves": 59,
         "rain": 100,
         "sky": 60
       },
-      "bestHour": 16,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 15,
-        "to": 17
+        "from": 10,
+        "to": 13
       },
-      "scoreDay": "2026-09-26",
+      "scoreDay": "2026-09-27",
       "scoreByDay": {
         "2026-09-26": {
           "score": 80,
@@ -487,26 +487,75 @@
       },
       "wave": "moderate",
       "hourParts": {
-        "15": {
-          "air": 100,
-          "wind": 98,
-          "waves": 39,
+        "8": {
+          "air": 30,
+          "wind": 100,
+          "waves": 56,
           "rain": 100,
           "sky": 60
+        },
+        "9": {
+          "air": 50,
+          "wind": 100,
+          "waves": 58,
+          "rain": 100,
+          "sky": 60
+        },
+        "10": {
+          "air": 70,
+          "wind": 100,
+          "waves": 59,
+          "rain": 100,
+          "sky": 60
+        },
+        "11": {
+          "air": 80,
+          "wind": 100,
+          "waves": 59,
+          "rain": 100,
+          "sky": 60
+        },
+        "12": {
+          "air": 80,
+          "wind": 98,
+          "waves": 60,
+          "rain": 100,
+          "sky": 60
+        },
+        "13": {
+          "air": 80,
+          "wind": 94,
+          "waves": 60,
+          "rain": 100,
+          "sky": 60
+        },
+        "14": {
+          "air": 60,
+          "wind": 90,
+          "waves": 59,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 50,
+          "wind": 91,
+          "waves": 59,
+          "rain": 28,
+          "sky": 25
         },
         "16": {
-          "air": 100,
-          "wind": 100,
-          "waves": 41,
-          "rain": 100,
-          "sky": 60
+          "air": 50,
+          "wind": 98,
+          "waves": 57,
+          "rain": 27,
+          "sky": 10
         },
         "17": {
-          "air": 90,
-          "wind": 97,
-          "waves": 39,
-          "rain": 100,
-          "sky": 60
+          "air": 40,
+          "wind": 100,
+          "waves": 56,
+          "rain": 44,
+          "sky": 25
         }
       },
       "higiene": 100,
@@ -517,12 +566,12 @@
       "parking": true,
       "tidePort": "Ferrol",
       "tideLow": [
-        "10:48",
-        "23:08"
+        "11:21",
+        "23:41"
       ],
       "tideHigh": [
-        "04:46",
-        "17:00"
+        "05:18",
+        "17:34"
       ],
       "tramo": "urbano"
     },
@@ -532,7 +581,7 @@
       "name": "Praia Río Castro",
       "t": 18.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoSIX",
@@ -643,21 +692,21 @@
           ]
         }
       ],
-      "score": 75,
+      "score": 74,
       "scoreParts": {
         "water": 63,
-        "air": 100,
+        "air": 80,
         "wind": 100,
-        "waves": 39,
+        "waves": 59,
         "rain": 100,
         "sky": 60
       },
-      "bestHour": 15,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 15,
-        "to": 17
+        "from": 10,
+        "to": 13
       },
-      "scoreDay": "2026-09-26",
+      "scoreDay": "2026-09-27",
       "scoreByDay": {
         "2026-09-26": {
           "score": 75,
@@ -965,37 +1014,86 @@
       },
       "wave": "moderate",
       "hourParts": {
-        "15": {
-          "air": 100,
+        "8": {
+          "air": 30,
           "wind": 100,
-          "waves": 39,
+          "waves": 56,
           "rain": 100,
           "sky": 60
+        },
+        "9": {
+          "air": 50,
+          "wind": 100,
+          "waves": 58,
+          "rain": 100,
+          "sky": 60
+        },
+        "10": {
+          "air": 70,
+          "wind": 100,
+          "waves": 59,
+          "rain": 100,
+          "sky": 60
+        },
+        "11": {
+          "air": 80,
+          "wind": 100,
+          "waves": 59,
+          "rain": 100,
+          "sky": 60
+        },
+        "12": {
+          "air": 80,
+          "wind": 100,
+          "waves": 60,
+          "rain": 100,
+          "sky": 60
+        },
+        "13": {
+          "air": 80,
+          "wind": 94,
+          "waves": 60,
+          "rain": 100,
+          "sky": 60
+        },
+        "14": {
+          "air": 60,
+          "wind": 90,
+          "waves": 59,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 50,
+          "wind": 91,
+          "waves": 59,
+          "rain": 20,
+          "sky": 10
         },
         "16": {
-          "air": 100,
-          "wind": 99,
-          "waves": 41,
-          "rain": 100,
-          "sky": 60
+          "air": 40,
+          "wind": 95,
+          "waves": 57,
+          "rain": 22,
+          "sky": 25
         },
         "17": {
-          "air": 90,
-          "wind": 98,
-          "waves": 39,
-          "rain": 100,
-          "sky": 60
+          "air": 40,
+          "wind": 99,
+          "waves": 56,
+          "rain": 48,
+          "sky": 25
         }
       },
       "parking": true,
       "tidePort": "Ferrol",
       "tideLow": [
-        "10:48",
-        "23:08"
+        "11:21",
+        "23:41"
       ],
       "tideHigh": [
-        "04:46",
-        "17:00"
+        "05:18",
+        "17:34"
       ]
     }
   ]
