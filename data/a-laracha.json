@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-09-27T19:11:47Z",
+  "fetchedAt": "2026-09-28T13:44:40Z",
   "beaches": [
     {
       "id": 1971,
@@ -7,15 +7,11 @@
       "name": "Praia de Salseiras",
       "t": 17.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "Copernicus",
           "days": [
-            {
-              "date": "2026-09-27",
-              "t": 16.4
-            },
             {
               "date": "2026-09-28",
               "t": 16.6
@@ -23,13 +19,13 @@
             {
               "date": "2026-09-29",
               "t": 16.1
+            },
+            {
+              "date": "2026-09-30",
+              "t": 16.2
             }
           ],
           "history": [
-            {
-              "date": "2026-09-20",
-              "t": 16.1
-            },
             {
               "date": "2026-09-21",
               "t": 15.9
@@ -53,6 +49,10 @@
             {
               "date": "2026-09-26",
               "t": 16.3
+            },
+            {
+              "date": "2026-09-27",
+              "t": 16.4
             }
           ]
         },
@@ -114,21 +114,21 @@
           ]
         }
       ],
-      "score": 48,
+      "score": 61,
       "scoreParts": {
         "water": 50,
-        "air": 40,
+        "air": 60,
         "wind": 100,
-        "waves": 32,
-        "rain": 24,
-        "sky": 25
+        "waves": 25,
+        "rain": 100,
+        "sky": 60
       },
-      "bestHour": 17,
+      "bestHour": 15,
       "scoreWindow": {
-        "from": 16,
+        "from": 9,
         "to": 17
       },
-      "scoreDay": "2026-09-27",
+      "scoreDay": "2026-09-28",
       "scoreByDay": {
         "2026-09-27": {
           "score": 48,
@@ -341,19 +341,75 @@
       },
       "wave": "moderate",
       "hourParts": {
-        "16": {
+        "8": {
           "air": 30,
           "wind": 100,
-          "waves": 34,
-          "rain": 0,
-          "sky": 10
+          "waves": 24,
+          "rain": 100,
+          "sky": 60
+        },
+        "9": {
+          "air": 50,
+          "wind": 100,
+          "waves": 24,
+          "rain": 100,
+          "sky": 60
+        },
+        "10": {
+          "air": 60,
+          "wind": 99,
+          "waves": 23,
+          "rain": 100,
+          "sky": 60
+        },
+        "11": {
+          "air": 60,
+          "wind": 99,
+          "waves": 23,
+          "rain": 100,
+          "sky": 60
+        },
+        "12": {
+          "air": 60,
+          "wind": 95,
+          "waves": 23,
+          "rain": 100,
+          "sky": 60
+        },
+        "13": {
+          "air": 60,
+          "wind": 95,
+          "waves": 23,
+          "rain": 100,
+          "sky": 60
+        },
+        "14": {
+          "air": 60,
+          "wind": 98,
+          "waves": 24,
+          "rain": 100,
+          "sky": 60
+        },
+        "15": {
+          "air": 60,
+          "wind": 100,
+          "waves": 25,
+          "rain": 100,
+          "sky": 60
+        },
+        "16": {
+          "air": 50,
+          "wind": 100,
+          "waves": 25,
+          "rain": 100,
+          "sky": 60
         },
         "17": {
-          "air": 40,
+          "air": 50,
           "wind": 100,
-          "waves": 32,
-          "rain": 24,
-          "sky": 25
+          "waves": 26,
+          "rain": 100,
+          "sky": 40
         }
       },
       "flagYear": 2026,
