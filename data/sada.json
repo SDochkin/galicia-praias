@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-19T20:47:42Z",
+  "fetchedAt": "2026-10-20T13:26:21Z",
   "beaches": [
     {
       "id": 2471,
@@ -7,8 +7,55 @@
       "name": "Praia de Cirro",
       "t": 14.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 15.5
+            },
+            {
+              "date": "2026-10-20",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-21",
+              "t": 15.4
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 15.3
+            },
+            {
+              "date": "2026-10-13",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.1
+            },
+            {
+              "date": "2026-10-15",
+              "t": 16.2
+            },
+            {
+              "date": "2026-10-16",
+              "t": 16.3
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.7
+            }
+          ]
+        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -65,70 +112,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 15.5
-            },
-            {
-              "date": "2026-10-20",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-21",
-              "t": 15.4
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 15.3
-            },
-            {
-              "date": "2026-10-13",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.1
-            },
-            {
-              "date": "2026-10-15",
-              "t": 16.2
-            },
-            {
-              "date": "2026-10-16",
-              "t": 16.3
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.7
-            }
-          ]
         }
       ],
-      "score": 42,
+      "score": 38,
       "scoreParts": {
         "water": 0,
-        "air": 30,
-        "wind": 89,
-        "waves": 47,
+        "air": 20,
+        "wind": 97,
+        "waves": 52,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 14,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 12,
-        "to": 14
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 38,
@@ -311,73 +311,73 @@
       "hourParts": {
         "8": {
           "air": 0,
-          "wind": 97,
-          "waves": 61,
-          "rain": 82,
-          "sky": 20
+          "wind": 100,
+          "waves": 51,
+          "rain": 100,
+          "sky": 60
         },
         "9": {
           "air": 0,
-          "wind": 97,
-          "waves": 56,
+          "wind": 100,
+          "waves": 50,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 89,
-          "waves": 57,
+          "air": 10,
+          "wind": 100,
+          "waves": 52,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 93,
-          "waves": 51,
+          "air": 20,
+          "wind": 97,
+          "waves": 52,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
           "air": 20,
-          "wind": 85,
-          "waves": 52,
+          "wind": 94,
+          "waves": 53,
           "rain": 100,
-          "sky": 85
+          "sky": 60
         },
         "13": {
           "air": 20,
-          "wind": 86,
-          "waves": 48,
+          "wind": 90,
+          "waves": 54,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "14": {
-          "air": 30,
+          "air": 20,
           "wind": 89,
-          "waves": 47,
+          "waves": 54,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
-          "air": 20,
-          "wind": 82,
-          "waves": 42,
+          "air": 10,
+          "wind": 91,
+          "waves": 55,
           "rain": 100,
           "sky": 60
         },
         "16": {
           "air": 10,
-          "wind": 81,
-          "waves": 44,
+          "wind": 100,
+          "waves": 54,
           "rain": 100,
           "sky": 60
         },
         "17": {
           "air": 0,
-          "wind": 87,
-          "waves": 37,
+          "wind": 92,
+          "waves": 51,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "higiene": 15,
@@ -386,11 +386,12 @@
       "higieneEntero": "831 NMP/100ml",
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ],
       "tramo": "natural"
     },
@@ -400,7 +401,7 @@
       "name": "Praia de San Pedro",
       "t": 14.0,
       "source": "MeteoGalicia",
-      "trend": "down",
+      "trend": null,
       "sources": [
         {
           "name": "Copernicus",
@@ -446,6 +447,53 @@
             {
               "date": "2026-10-18",
               "t": 15.7
+            }
+          ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 13.0
+            },
+            {
+              "date": "2026-10-20",
+              "t": 12.0
+            },
+            {
+              "date": "2026-10-21",
+              "t": 14.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-13",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-15",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-16",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 14.0
             }
           ]
         },
@@ -505,70 +553,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 13.0
-            },
-            {
-              "date": "2026-10-20",
-              "t": 12.0
-            },
-            {
-              "date": "2026-10-21",
-              "t": 14.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-13",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-15",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-16",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 14.0
-            }
-          ]
         }
       ],
-      "score": 42,
+      "score": 39,
       "scoreParts": {
         "water": 0,
-        "air": 30,
-        "wind": 84,
-        "waves": 48,
+        "air": 20,
+        "wind": 98,
+        "waves": 54,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 13,
+      "bestHour": 16,
       "scoreWindow": {
-        "from": 12,
-        "to": 14
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 39,
@@ -751,83 +752,84 @@
       "hourParts": {
         "8": {
           "air": 0,
-          "wind": 96,
-          "waves": 61,
-          "rain": 84,
-          "sky": 20
+          "wind": 98,
+          "waves": 51,
+          "rain": 100,
+          "sky": 60
         },
         "9": {
           "air": 0,
-          "wind": 97,
-          "waves": 56,
+          "wind": 98,
+          "waves": 50,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 84,
-          "waves": 57,
+          "air": 10,
+          "wind": 100,
+          "waves": 52,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 90,
-          "waves": 51,
+          "air": 20,
+          "wind": 97,
+          "waves": 52,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
           "air": 20,
-          "wind": 82,
-          "waves": 52,
+          "wind": 94,
+          "waves": 53,
           "rain": 100,
-          "sky": 85
+          "sky": 60
         },
         "13": {
-          "air": 30,
-          "wind": 84,
-          "waves": 48,
+          "air": 20,
+          "wind": 88,
+          "waves": 54,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "14": {
-          "air": 30,
-          "wind": 85,
-          "waves": 47,
+          "air": 20,
+          "wind": 88,
+          "waves": 54,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
           "air": 20,
-          "wind": 75,
-          "waves": 42,
+          "wind": 89,
+          "waves": 55,
           "rain": 100,
           "sky": 60
         },
         "16": {
-          "air": 10,
-          "wind": 75,
-          "waves": 44,
+          "air": 20,
+          "wind": 98,
+          "waves": 54,
           "rain": 100,
           "sky": 60
         },
         "17": {
-          "air": 0,
+          "air": 10,
           "wind": 90,
-          "waves": 37,
+          "waves": 51,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "parking": true,
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ],
       "tramo": "natural"
     },
@@ -837,8 +839,55 @@
       "name": "Praia de Arnela",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 15.5
+            },
+            {
+              "date": "2026-10-20",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-21",
+              "t": 15.4
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 15.3
+            },
+            {
+              "date": "2026-10-13",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.1
+            },
+            {
+              "date": "2026-10-15",
+              "t": 16.2
+            },
+            {
+              "date": "2026-10-16",
+              "t": 16.3
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.7
+            }
+          ]
+        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -895,70 +944,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 15.5
-            },
-            {
-              "date": "2026-10-20",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-21",
-              "t": 15.4
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 15.3
-            },
-            {
-              "date": "2026-10-13",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.1
-            },
-            {
-              "date": "2026-10-15",
-              "t": 16.2
-            },
-            {
-              "date": "2026-10-16",
-              "t": 16.3
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.7
-            }
-          ]
         }
       ],
-      "score": 41,
+      "score": 38,
       "scoreParts": {
         "water": 17,
         "air": 30,
-        "wind": 83,
+        "wind": 88,
         "waves": 0,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 14,
+      "bestHour": 13,
       "scoreWindow": {
-        "from": 13,
-        "to": 15
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 38,
@@ -1141,82 +1143,83 @@
       "hourParts": {
         "8": {
           "air": 0,
-          "wind": 92,
-          "waves": 13,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
-          "sky": 25
+          "sky": 60
         },
         "9": {
           "air": 0,
-          "wind": 98,
-          "waves": 11,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 79,
-          "waves": 10,
+          "air": 10,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 90,
-          "waves": 6,
+          "air": 20,
+          "wind": 95,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
           "air": 20,
-          "wind": 76,
-          "waves": 3,
+          "wind": 97,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "13": {
           "air": 30,
-          "wind": 79,
+          "wind": 88,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "14": {
           "air": 30,
-          "wind": 83,
+          "wind": 88,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
-          "air": 30,
-          "wind": 71,
+          "air": 20,
+          "wind": 89,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "16": {
-          "air": 10,
-          "wind": 74,
+          "air": 20,
+          "wind": 94,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "17": {
-          "air": 0,
-          "wind": 70,
+          "air": 10,
+          "wind": 92,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ]
     },
     {
@@ -1225,8 +1228,55 @@
       "name": "Praia de Morozón",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 15.5
+            },
+            {
+              "date": "2026-10-20",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-21",
+              "t": 15.4
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 15.3
+            },
+            {
+              "date": "2026-10-13",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.1
+            },
+            {
+              "date": "2026-10-15",
+              "t": 16.2
+            },
+            {
+              "date": "2026-10-16",
+              "t": 16.3
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.7
+            }
+          ]
+        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -1283,70 +1333,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 15.5
-            },
-            {
-              "date": "2026-10-20",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-21",
-              "t": 15.4
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 15.3
-            },
-            {
-              "date": "2026-10-13",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.1
-            },
-            {
-              "date": "2026-10-15",
-              "t": 16.2
-            },
-            {
-              "date": "2026-10-16",
-              "t": 16.3
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.7
-            }
-          ]
         }
       ],
-      "score": 41,
+      "score": 39,
       "scoreParts": {
         "water": 17,
         "air": 30,
-        "wind": 84,
+        "wind": 96,
         "waves": 0,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 14,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 12,
-        "to": 15
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 39,
@@ -1530,72 +1533,72 @@
         "8": {
           "air": 0,
           "wind": 100,
-          "waves": 13,
+          "waves": 0,
           "rain": 100,
-          "sky": 25
+          "sky": 60
         },
         "9": {
           "air": 0,
           "wind": 100,
-          "waves": 11,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 87,
-          "waves": 10,
+          "air": 10,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 95,
-          "waves": 6,
+          "air": 20,
+          "wind": 99,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
           "air": 30,
-          "wind": 85,
-          "waves": 3,
+          "wind": 96,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "13": {
           "air": 30,
-          "wind": 82,
+          "wind": 92,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "14": {
           "air": 30,
-          "wind": 84,
+          "wind": 92,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
-          "air": 30,
-          "wind": 80,
+          "air": 20,
+          "wind": 92,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "16": {
           "air": 20,
-          "wind": 80,
+          "wind": 97,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "17": {
-          "air": 0,
-          "wind": 80,
+          "air": 10,
+          "wind": 95,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "higiene": 100,
@@ -1606,11 +1609,12 @@
       "parking": true,
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ],
       "tramo": "natural"
     },
@@ -1620,8 +1624,55 @@
       "name": "Praia de Sada (Norte)",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 15.5
+            },
+            {
+              "date": "2026-10-20",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-21",
+              "t": 15.4
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 15.3
+            },
+            {
+              "date": "2026-10-13",
+              "t": 15.4
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.1
+            },
+            {
+              "date": "2026-10-15",
+              "t": 16.2
+            },
+            {
+              "date": "2026-10-16",
+              "t": 16.3
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.7
+            }
+          ]
+        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -1678,70 +1729,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 15.5
-            },
-            {
-              "date": "2026-10-20",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-21",
-              "t": 15.4
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 15.3
-            },
-            {
-              "date": "2026-10-13",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.1
-            },
-            {
-              "date": "2026-10-15",
-              "t": 16.2
-            },
-            {
-              "date": "2026-10-16",
-              "t": 16.3
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.7
-            }
-          ]
         }
       ],
-      "score": 41,
+      "score": 39,
       "scoreParts": {
         "water": 17,
         "air": 30,
-        "wind": 90,
-        "waves": 3,
+        "wind": 93,
+        "waves": 0,
         "rain": 100,
-        "sky": 85
+        "sky": 60
       },
-      "bestHour": 12,
+      "bestHour": 13,
       "scoreWindow": {
-        "from": 12,
-        "to": 15
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 39,
@@ -1925,83 +1929,84 @@
         "8": {
           "air": 0,
           "wind": 100,
-          "waves": 13,
+          "waves": 0,
           "rain": 100,
-          "sky": 25
+          "sky": 60
         },
         "9": {
           "air": 0,
           "wind": 100,
-          "waves": 11,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 92,
-          "waves": 10,
+          "air": 10,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 96,
-          "waves": 6,
+          "air": 20,
+          "wind": 99,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
-          "air": 30,
-          "wind": 90,
-          "waves": 3,
+          "air": 20,
+          "wind": 95,
+          "waves": 0,
           "rain": 100,
-          "sky": 85
+          "sky": 60
         },
         "13": {
           "air": 30,
-          "wind": 84,
+          "wind": 93,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "14": {
           "air": 30,
-          "wind": 84,
+          "wind": 94,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "15": {
-          "air": 30,
-          "wind": 86,
+          "air": 20,
+          "wind": 93,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "16": {
-          "air": 10,
-          "wind": 82,
+          "air": 20,
+          "wind": 99,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "17": {
-          "air": 0,
-          "wind": 82,
+          "air": 10,
+          "wind": 96,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "stopName": "SADA (OFICINA TURISMO) (SADA)",
       "parking": true,
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ],
       "tramo": "urbano"
     },
@@ -2011,7 +2016,7 @@
       "name": "Praia de Sada (Sur)",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "Copernicus",
@@ -2057,6 +2062,53 @@
             {
               "date": "2026-10-18",
               "t": 15.7
+            }
+          ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-20",
+              "t": 12.0
+            },
+            {
+              "date": "2026-10-21",
+              "t": 13.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-13",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-15",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-16",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-17",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.0
             }
           ]
         },
@@ -2116,70 +2168,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-20",
-              "t": 12.0
-            },
-            {
-              "date": "2026-10-21",
-              "t": 13.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-13",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-15",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-16",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-17",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.0
-            }
-          ]
         }
       ],
-      "score": 41,
+      "score": 40,
       "scoreParts": {
         "water": 17,
         "air": 30,
-        "wind": 92,
-        "waves": 3,
+        "wind": 98,
+        "waves": 0,
         "rain": 100,
-        "sky": 85
+        "sky": 60
       },
       "bestHour": 12,
       "scoreWindow": {
-        "from": 12,
-        "to": 15
+        "from": 8,
+        "to": 17
       },
-      "scoreDay": "2026-10-19",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 40,
@@ -2363,82 +2368,83 @@
         "8": {
           "air": 0,
           "wind": 100,
-          "waves": 13,
+          "waves": 0,
           "rain": 100,
-          "sky": 25
+          "sky": 60
         },
         "9": {
           "air": 0,
           "wind": 100,
-          "waves": 11,
+          "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "10": {
-          "air": 0,
-          "wind": 95,
-          "waves": 10,
+          "air": 10,
+          "wind": 100,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "11": {
-          "air": 0,
-          "wind": 95,
-          "waves": 6,
+          "air": 20,
+          "wind": 99,
+          "waves": 0,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "12": {
           "air": 30,
-          "wind": 92,
-          "waves": 3,
+          "wind": 98,
+          "waves": 0,
           "rain": 100,
-          "sky": 85
+          "sky": 60
         },
         "13": {
           "air": 30,
-          "wind": 85,
+          "wind": 97,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "14": {
           "air": 30,
-          "wind": 84,
+          "wind": 96,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "15": {
-          "air": 30,
-          "wind": 88,
+          "air": 20,
+          "wind": 93,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "16": {
           "air": 20,
-          "wind": 82,
+          "wind": 99,
           "waves": 0,
           "rain": 100,
           "sky": 60
         },
         "17": {
-          "air": 0,
-          "wind": 83,
+          "air": 10,
+          "wind": 96,
           "waves": 0,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "stopName": "SADA (GASOLINEIRA) (SADA)",
       "tidePort": "A Coruña",
       "tideLow": [
-        "04:44",
-        "17:53"
+        "06:21",
+        "19:12"
       ],
       "tideHigh": [
-        "11:16"
+        "00:18",
+        "12:40"
       ],
       "tramo": "urbano"
     }

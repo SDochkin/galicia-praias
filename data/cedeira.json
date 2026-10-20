@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-19T20:47:42Z",
+  "fetchedAt": "2026-10-20T13:26:21Z",
   "beaches": [
     {
       "id": 2534,
@@ -7,8 +7,55 @@
       "name": "Praia de Area Longa",
       "t": 14.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 14.1
+            },
+            {
+              "date": "2026-10-20",
+              "t": 14.4
+            },
+            {
+              "date": "2026-10-21",
+              "t": 14.8
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-13",
+              "t": 16.7
+            },
+            {
+              "date": "2026-10-14",
+              "t": 16.9
+            },
+            {
+              "date": "2026-10-15",
+              "t": 17.4
+            },
+            {
+              "date": "2026-10-16",
+              "t": 17.5
+            },
+            {
+              "date": "2026-10-17",
+              "t": 15.9
+            },
+            {
+              "date": "2026-10-18",
+              "t": 14.5
+            }
+          ]
+        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -65,70 +112,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 14.1
-            },
-            {
-              "date": "2026-10-20",
-              "t": 14.4
-            },
-            {
-              "date": "2026-10-21",
-              "t": 14.8
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-13",
-              "t": 16.7
-            },
-            {
-              "date": "2026-10-14",
-              "t": 16.9
-            },
-            {
-              "date": "2026-10-15",
-              "t": 17.4
-            },
-            {
-              "date": "2026-10-16",
-              "t": 17.5
-            },
-            {
-              "date": "2026-10-17",
-              "t": 15.9
-            },
-            {
-              "date": "2026-10-18",
-              "t": 14.5
-            }
-          ]
         }
       ],
-      "score": 31,
+      "score": 37,
       "scoreParts": {
         "water": 0,
-        "air": 10,
-        "wind": 83,
-        "waves": 0,
+        "air": 20,
+        "wind": 86,
+        "waves": 50,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 16,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 16,
-        "to": 17
+        "from": 8,
+        "to": 16
       },
-      "scoreDay": "2026-10-18",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 37,
@@ -311,73 +311,73 @@
       "hourParts": {
         "8": {
           "air": 0,
-          "wind": 84,
-          "waves": 0,
+          "wind": 100,
+          "waves": 47,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "9": {
           "air": 0,
-          "wind": 68,
-          "waves": 0,
+          "wind": 100,
+          "waves": 47,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "10": {
           "air": 10,
-          "wind": 73,
-          "waves": 0,
+          "wind": 95,
+          "waves": 49,
           "rain": 100,
           "sky": 60
         },
         "11": {
-          "air": 20,
-          "wind": 37,
-          "waves": 0,
+          "air": 10,
+          "wind": 89,
+          "waves": 49,
           "rain": 100,
           "sky": 60
         },
         "12": {
           "air": 20,
-          "wind": 43,
-          "waves": 0,
+          "wind": 86,
+          "waves": 50,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "13": {
           "air": 20,
-          "wind": 42,
-          "waves": 0,
+          "wind": 83,
+          "waves": 50,
           "rain": 100,
           "sky": 60
         },
         "14": {
-          "air": 20,
-          "wind": 44,
-          "waves": 0,
+          "air": 10,
+          "wind": 82,
+          "waves": 46,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
           "air": 10,
-          "wind": 47,
-          "waves": 0,
+          "wind": 85,
+          "waves": 41,
           "rain": 100,
           "sky": 60
         },
         "16": {
           "air": 10,
-          "wind": 83,
-          "waves": 0,
+          "wind": 93,
+          "waves": 39,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "17": {
           "air": 0,
-          "wind": 73,
-          "waves": 0,
+          "wind": 88,
+          "waves": 35,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "higiene": 100,
@@ -386,11 +386,12 @@
       "higieneEntero": "<10 NMP/100ml",
       "tidePort": "Ferrol",
       "tideLow": [
-        "04:46",
-        "17:57"
+        "06:26",
+        "19:15"
       ],
       "tideHigh": [
-        "11:20"
+        "00:22",
+        "12:43"
       ],
       "tramo": "natural"
     },
@@ -400,7 +401,7 @@
       "name": "Praia da Magdalena",
       "t": 14.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "Copernicus",
@@ -446,6 +447,53 @@
             {
               "date": "2026-10-18",
               "t": 14.5
+            }
+          ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-10-19",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-20",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-21",
+              "t": 17.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-12",
+              "t": 20.0
+            },
+            {
+              "date": "2026-10-13",
+              "t": 20.0
+            },
+            {
+              "date": "2026-10-14",
+              "t": 18.0
+            },
+            {
+              "date": "2026-10-15",
+              "t": 20.0
+            },
+            {
+              "date": "2026-10-16",
+              "t": 19.0
+            },
+            {
+              "date": "2026-10-17",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 15.0
             }
           ]
         },
@@ -505,70 +553,23 @@
               "uv": 3
             }
           ]
-        },
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-10-19",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-20",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-21",
-              "t": 17.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-12",
-              "t": 20.0
-            },
-            {
-              "date": "2026-10-13",
-              "t": 20.0
-            },
-            {
-              "date": "2026-10-14",
-              "t": 18.0
-            },
-            {
-              "date": "2026-10-15",
-              "t": 20.0
-            },
-            {
-              "date": "2026-10-16",
-              "t": 19.0
-            },
-            {
-              "date": "2026-10-17",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 15.0
-            }
-          ]
         }
       ],
-      "score": 33,
+      "score": 37,
       "scoreParts": {
         "water": 0,
         "air": 20,
-        "wind": 85,
-        "waves": 0,
+        "wind": 91,
+        "waves": 49,
         "rain": 100,
-        "sky": 100
+        "sky": 60
       },
-      "bestHour": 16,
+      "bestHour": 11,
       "scoreWindow": {
-        "from": 16,
-        "to": 17
+        "from": 8,
+        "to": 16
       },
-      "scoreDay": "2026-10-18",
+      "scoreDay": "2026-10-20",
       "scoreByDay": {
         "2026-10-20": {
           "score": 37,
@@ -751,73 +752,73 @@
       "hourParts": {
         "8": {
           "air": 0,
-          "wind": 95,
-          "waves": 0,
+          "wind": 100,
+          "waves": 47,
           "rain": 100,
-          "sky": 25
+          "sky": 60
         },
         "9": {
-          "air": 10,
-          "wind": 89,
-          "waves": 0,
+          "air": 0,
+          "wind": 100,
+          "waves": 47,
           "rain": 100,
-          "sky": 40
+          "sky": 60
         },
         "10": {
           "air": 10,
-          "wind": 81,
-          "waves": 0,
+          "wind": 96,
+          "waves": 49,
           "rain": 100,
           "sky": 60
         },
         "11": {
-          "air": 30,
-          "wind": 55,
-          "waves": 0,
+          "air": 20,
+          "wind": 91,
+          "waves": 49,
           "rain": 100,
           "sky": 60
         },
         "12": {
-          "air": 30,
-          "wind": 59,
-          "waves": 0,
+          "air": 20,
+          "wind": 88,
+          "waves": 50,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "13": {
           "air": 20,
-          "wind": 55,
-          "waves": 0,
+          "wind": 86,
+          "waves": 50,
           "rain": 100,
           "sky": 60
         },
         "14": {
           "air": 20,
-          "wind": 58,
-          "waves": 0,
+          "wind": 84,
+          "waves": 46,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "15": {
-          "air": 20,
-          "wind": 54,
-          "waves": 0,
+          "air": 10,
+          "wind": 87,
+          "waves": 41,
           "rain": 100,
           "sky": 60
         },
         "16": {
-          "air": 20,
-          "wind": 85,
-          "waves": 0,
+          "air": 10,
+          "wind": 95,
+          "waves": 39,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         },
         "17": {
           "air": 0,
-          "wind": 82,
-          "waves": 0,
+          "wind": 88,
+          "waves": 35,
           "rain": 100,
-          "sky": 100
+          "sky": 60
         }
       },
       "higiene": 100,
@@ -829,11 +830,12 @@
       "toilet": true,
       "tidePort": "Ferrol",
       "tideLow": [
-        "04:46",
-        "17:57"
+        "06:26",
+        "19:15"
       ],
       "tideHigh": [
-        "11:20"
+        "00:22",
+        "12:43"
       ],
       "tramo": "urbano"
     }
