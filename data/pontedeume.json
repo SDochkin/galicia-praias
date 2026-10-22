@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-21T19:30:42Z",
+  "fetchedAt": "2026-10-22T13:41:41Z",
   "beaches": [
     {
       "id": 2488,
@@ -7,7 +7,7 @@
       "name": "Praia do Coído",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoGalicia",
@@ -67,21 +67,21 @@
           ]
         }
       ],
-      "score": 35,
+      "score": 34,
       "scoreParts": {
         "water": 17,
         "air": 0,
-        "wind": 100,
-        "waves": 7,
+        "wind": 80,
+        "waves": 21,
         "rain": 100,
         "sky": 60
       },
-      "bestHour": 16,
+      "bestHour": 8,
       "scoreWindow": {
-        "from": 16,
-        "to": 17
+        "from": 8,
+        "to": 15
       },
-      "scoreDay": "2026-10-21",
+      "scoreDay": "2026-10-22",
       "scoreByDay": {
         "2026-10-21": {
           "score": 35,
@@ -294,19 +294,75 @@
       },
       "wave": "strong",
       "hourParts": {
-        "16": {
+        "8": {
           "air": 0,
-          "wind": 100,
+          "wind": 80,
+          "waves": 21,
+          "rain": 100,
+          "sky": 60
+        },
+        "9": {
+          "air": 0,
+          "wind": 81,
+          "waves": 16,
+          "rain": 100,
+          "sky": 60
+        },
+        "10": {
+          "air": 0,
+          "wind": 76,
+          "waves": 21,
+          "rain": 100,
+          "sky": 40
+        },
+        "11": {
+          "air": 10,
+          "wind": 57,
+          "waves": 15,
+          "rain": 100,
+          "sky": 60
+        },
+        "12": {
+          "air": 10,
+          "wind": 63,
+          "waves": 19,
+          "rain": 100,
+          "sky": 40
+        },
+        "13": {
+          "air": 10,
+          "wind": 59,
+          "waves": 12,
+          "rain": 100,
+          "sky": 25
+        },
+        "14": {
+          "air": 20,
+          "wind": 30,
+          "waves": 16,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 10,
+          "wind": 66,
           "waves": 7,
           "rain": 100,
           "sky": 60
         },
+        "16": {
+          "air": 10,
+          "wind": 50,
+          "waves": 11,
+          "rain": 70,
+          "sky": 20
+        },
         "17": {
-          "air": 0,
-          "wind": 100,
-          "waves": 0,
-          "rain": 100,
-          "sky": 60
+          "air": 10,
+          "wind": 28,
+          "waves": 5,
+          "rain": 54,
+          "sky": 20
         }
       },
       "higiene": 100,
@@ -316,12 +372,12 @@
       "parking": true,
       "tidePort": "Ferrol",
       "tideLow": [
-        "07:36",
-        "20:09"
+        "08:25",
+        "20:50"
       ],
       "tideHigh": [
-        "01:36",
-        "13:47"
+        "02:25",
+        "14:34"
       ],
       "tramo": "natural"
     },
@@ -331,59 +387,8 @@
       "name": "Praia de Ber",
       "t": 14.0,
       "source": "MeteoGalicia",
-      "trend": "down",
+      "trend": null,
       "sources": [
-        {
-          "name": "MeteoSIX",
-          "days": [
-            {
-              "date": "2026-10-21",
-              "t": 15.0
-            },
-            {
-              "date": "2026-10-22",
-              "t": 15.0
-            },
-            {
-              "date": "2026-10-23",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-24",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-25",
-              "t": 14.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-14",
-              "t": 19.0
-            },
-            {
-              "date": "2026-10-16",
-              "t": 18.0
-            },
-            {
-              "date": "2026-10-17",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-18",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-19",
-              "t": 15.0
-            },
-            {
-              "date": "2026-10-20",
-              "t": 15.0
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -442,6 +447,57 @@
           ]
         },
         {
+          "name": "MeteoSIX",
+          "days": [
+            {
+              "date": "2026-10-21",
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-22",
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-23",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-24",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-25",
+              "t": 14.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-14",
+              "t": 19.0
+            },
+            {
+              "date": "2026-10-16",
+              "t": 18.0
+            },
+            {
+              "date": "2026-10-17",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-18",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-19",
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-20",
+              "t": 15.0
+            }
+          ]
+        },
+        {
           "name": "AEMET",
           "days": [
             {
@@ -489,21 +545,21 @@
           ]
         }
       ],
-      "score": 29,
+      "score": 28,
       "scoreParts": {
         "water": 0,
         "air": 0,
-        "wind": 99,
-        "waves": 7,
+        "wind": 81,
+        "waves": 21,
         "rain": 100,
         "sky": 60
       },
-      "bestHour": 16,
+      "bestHour": 8,
       "scoreWindow": {
-        "from": 16,
-        "to": 17
+        "from": 8,
+        "to": 15
       },
-      "scoreDay": "2026-10-21",
+      "scoreDay": "2026-10-22",
       "scoreByDay": {
         "2026-10-21": {
           "score": 29,
@@ -804,31 +860,87 @@
       },
       "wave": "strong",
       "hourParts": {
-        "16": {
+        "8": {
           "air": 0,
-          "wind": 99,
+          "wind": 81,
+          "waves": 21,
+          "rain": 100,
+          "sky": 60
+        },
+        "9": {
+          "air": 0,
+          "wind": 85,
+          "waves": 16,
+          "rain": 100,
+          "sky": 60
+        },
+        "10": {
+          "air": 0,
+          "wind": 75,
+          "waves": 21,
+          "rain": 100,
+          "sky": 40
+        },
+        "11": {
+          "air": 20,
+          "wind": 53,
+          "waves": 15,
+          "rain": 100,
+          "sky": 60
+        },
+        "12": {
+          "air": 20,
+          "wind": 64,
+          "waves": 19,
+          "rain": 100,
+          "sky": 40
+        },
+        "13": {
+          "air": 20,
+          "wind": 70,
+          "waves": 12,
+          "rain": 100,
+          "sky": 25
+        },
+        "14": {
+          "air": 20,
+          "wind": 42,
+          "waves": 16,
+          "rain": 100,
+          "sky": 60
+        },
+        "15": {
+          "air": 10,
+          "wind": 68,
           "waves": 7,
           "rain": 100,
           "sky": 60
         },
+        "16": {
+          "air": 10,
+          "wind": 52,
+          "waves": 11,
+          "rain": 73,
+          "sky": 20
+        },
         "17": {
-          "air": 0,
-          "wind": 100,
-          "waves": 0,
-          "rain": 100,
-          "sky": 60
+          "air": 10,
+          "wind": 20,
+          "waves": 5,
+          "rain": 59,
+          "sky": 20
         }
       },
       "stopName": "VER (PONTEDEUME)",
       "parking": true,
       "tidePort": "Ferrol",
       "tideLow": [
-        "07:36",
-        "20:09"
+        "08:25",
+        "20:50"
       ],
       "tideHigh": [
-        "01:36",
-        "13:47"
+        "02:25",
+        "14:34"
       ],
       "tramo": "urbano"
     }
