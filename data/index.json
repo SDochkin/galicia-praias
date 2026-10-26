@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-26T15:04:28Z",
+  "fetchedAt": "2026-10-26T15:06:45Z",
   "concellos": [
     {
       "slug": "a-coruna",
@@ -888,8 +888,28 @@
       "t": 16.0,
       "score": 58,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
+            }
+          ]
+        },
         {
           "name": "Copernicus",
           "days": [
@@ -904,26 +924,6 @@
             {
               "date": "2026-10-27",
               "t": 16.1
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
             }
           ]
         }
@@ -939,14 +939,65 @@
       "t": 16.0,
       "score": 63,
       "source": "MeteoGalicia",
-      "trend": null,
+      "trend": "up",
       "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
+            }
+          ]
+        },
         {
           "name": "Copernicus",
           "days": [
             {
               "date": "2026-10-25",
               "t": 15.9
+            },
+            {
+              "date": "2026-10-26",
+              "t": 15.9
+            },
+            {
+              "date": "2026-10-27",
+              "t": 15.9
+            }
+          ]
+        }
+      ],
+      "sinHumo": true,
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-as-catedrais",
+      "name": "Praia As Catedrais",
+      "concello": "Ribadeo",
+      "concelloSlug": "ribadeo",
+      "t": 16.0,
+      "score": 63,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-25",
+              "t": 16.0
             },
             {
               "date": "2026-10-26",
@@ -962,11 +1013,6 @@
           "name": "MeteoGalicia",
           "days": [
             {
-              "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 4
-            },
-            {
               "date": "2026-10-26",
               "t": 16.0,
               "uv": 3
@@ -975,37 +1021,45 @@
               "date": "2026-10-27",
               "t": 15.0,
               "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
             }
           ]
-        }
-      ],
-      "sinHumo": true,
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-da-marosa",
-      "name": "Praia da Marosa",
-      "concello": "Cervo",
-      "concelloSlug": "cervo",
-      "t": 16.0,
-      "score": 53,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-10-25",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-26",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-27",
+              "t": 17.0
+            }
+          ]
+        },
         {
           "name": "MeteoSIX",
           "days": [
             {
               "date": "2026-10-25",
-              "t": 16.0
+              "t": 15.0
             },
             {
               "date": "2026-10-26",
-              "t": 16.0
+              "t": 15.0
             },
             {
               "date": "2026-10-27",
-              "t": 16.0
+              "t": 15.0
             },
             {
               "date": "2026-10-28",
@@ -1016,7 +1070,21 @@
               "t": 16.0
             }
           ]
-        },
+        }
+      ],
+      "flagYear": 2026,
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-da-marosa",
+      "name": "Praia da Marosa",
+      "concello": "Cervo",
+      "concelloSlug": "cervo",
+      "t": 16.0,
+      "score": 53,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
         {
           "name": "Copernicus",
           "days": [
@@ -1031,6 +1099,26 @@
             {
               "date": "2026-10-27",
               "t": 15.5
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 17.0,
+              "uv": 3
             }
           ]
         },
@@ -1052,45 +1140,11 @@
           ]
         },
         {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
-            }
-          ]
-        }
-      ],
-      "flagYear": 2026,
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-de-a-rapadoira",
-      "name": "Praia de A Rapadoira",
-      "concello": "Foz",
-      "concelloSlug": "foz",
-      "t": 16.0,
-      "score": 63,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
           "name": "MeteoSIX",
           "days": [
             {
               "date": "2026-10-25",
-              "t": 15.0
+              "t": 16.0
             },
             {
               "date": "2026-10-26",
@@ -1098,7 +1152,7 @@
             },
             {
               "date": "2026-10-27",
-              "t": 15.0
+              "t": 16.0
             },
             {
               "date": "2026-10-28",
@@ -1109,7 +1163,54 @@
               "t": 16.0
             }
           ]
-        },
+        }
+      ],
+      "flagYear": 2026,
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-da-travesada",
+      "name": "Praia da Travesada",
+      "concello": "Vilaboa",
+      "concelloSlug": "vilaboa",
+      "t": 16.0,
+      "score": 57,
+      "source": "MeteoGalicia",
+      "trend": "flat",
+      "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 4
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
+            }
+          ]
+        }
+      ],
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-de-a-rapadoira",
+      "name": "Praia de A Rapadoira",
+      "concello": "Foz",
+      "concelloSlug": "foz",
+      "t": 16.0,
+      "score": 63,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
         {
           "name": "Copernicus",
           "days": [
@@ -1124,6 +1225,26 @@
             {
               "date": "2026-10-27",
               "t": 15.9
+            }
+          ]
+        },
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
             }
           ]
         },
@@ -1145,91 +1266,6 @@
           ]
         },
         {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 15.0,
-              "uv": 3
-            }
-          ]
-        }
-      ],
-      "flagYear": 2026,
-      "sinHumo": true,
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-de-area-brava",
-      "name": "Praia de Area Brava",
-      "concello": "Foz",
-      "concelloSlug": "foz",
-      "t": 16.0,
-      "score": 57,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.7
-            },
-            {
-              "date": "2026-10-26",
-              "t": 15.7
-            },
-            {
-              "date": "2026-10-27",
-              "t": 15.7
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
-            }
-          ]
-        }
-      ],
-      "tramo": "natural"
-    },
-    {
-      "slug": "praia-de-area-grande-3",
-      "name": "Praia de Area Grande",
-      "concello": "O Vicedo",
-      "concelloSlug": "o-vicedo",
-      "t": 16.0,
-      "score": 62,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
           "name": "MeteoSIX",
           "days": [
             {
@@ -1253,7 +1289,72 @@
               "t": 16.0
             }
           ]
+        }
+      ],
+      "flagYear": 2026,
+      "sinHumo": true,
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-de-area-brava",
+      "name": "Praia de Area Brava",
+      "concello": "Foz",
+      "concelloSlug": "foz",
+      "t": 16.0,
+      "score": 57,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
+        {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
+            }
+          ]
         },
+        {
+          "name": "Copernicus",
+          "days": [
+            {
+              "date": "2026-10-25",
+              "t": 15.7
+            },
+            {
+              "date": "2026-10-26",
+              "t": 15.7
+            },
+            {
+              "date": "2026-10-27",
+              "t": 15.7
+            }
+          ]
+        }
+      ],
+      "tramo": "natural"
+    },
+    {
+      "slug": "praia-de-area-grande-3",
+      "name": "Praia de Area Grande",
+      "concello": "O Vicedo",
+      "concelloSlug": "o-vicedo",
+      "t": 16.0,
+      "score": 62,
+      "source": "MeteoGalicia",
+      "trend": "up",
+      "sources": [
         {
           "name": "Copernicus",
           "days": [
@@ -1272,6 +1373,26 @@
           ]
         },
         {
+          "name": "MeteoGalicia",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-27",
+              "t": 16.0,
+              "uv": 3
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0,
+              "uv": 3
+            }
+          ]
+        },
+        {
           "name": "AEMET",
           "days": [
             {
@@ -1289,126 +1410,32 @@
           ]
         },
         {
-          "name": "MeteoGalicia",
+          "name": "MeteoSIX",
           "days": [
             {
               "date": "2026-10-25",
-              "t": 15.0,
-              "uv": 3
+              "t": 15.0
             },
             {
               "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
+              "t": 16.0
             },
             {
               "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-28",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-29",
+              "t": 16.0
             }
           ]
         }
       ],
       "tramo": "natural"
-    },
-    {
-      "slug": "praia-de-cabalino",
-      "name": "Praia de Cabaliño",
-      "concello": "Burela",
-      "concelloSlug": "burela",
-      "t": 16.0,
-      "score": 51,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.6
-            },
-            {
-              "date": "2026-10-26",
-              "t": 15.5
-            },
-            {
-              "date": "2026-10-27",
-              "t": 15.5
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 16.0,
-              "uv": 4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
-            }
-          ]
-        }
-      ],
-      "tramo": "urbano"
-    },
-    {
-      "slug": "praia-de-caosa",
-      "name": "Praia de Caosa",
-      "concello": "Cervo",
-      "concelloSlug": "cervo",
-      "t": 16.0,
-      "score": 55,
-      "source": "MeteoGalicia",
-      "trend": null,
-      "sources": [
-        {
-          "name": "Copernicus",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 15.4
-            },
-            {
-              "date": "2026-10-26",
-              "t": 15.3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 15.3
-            }
-          ]
-        },
-        {
-          "name": "MeteoGalicia",
-          "days": [
-            {
-              "date": "2026-10-25",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-26",
-              "t": 16.0,
-              "uv": 3
-            },
-            {
-              "date": "2026-10-27",
-              "t": 16.0,
-              "uv": 3
-            }
-          ]
-        }
-      ]
     }
   ],
   "geo": [
@@ -1539,8 +1566,8 @@
       "concelloSlug": "ares",
       "lat": 43.4268,
       "lon": -8.19681,
-      "t": 14.0,
-      "score": 40
+      "t": 15.0,
+      "score": 46
     },
     {
       "slug": "praia-de-redes",
@@ -1548,8 +1575,8 @@
       "concelloSlug": "ares",
       "lat": 43.4251,
       "lon": -8.20174,
-      "t": 14.0,
-      "score": 40,
+      "t": 15.0,
+      "score": 46,
       "tramo": "natural"
     },
     {
@@ -1558,8 +1585,8 @@
       "concelloSlug": "ares",
       "lat": 43.4277,
       "lon": -8.22299,
-      "t": 14.0,
-      "score": 39,
+      "t": 15.0,
+      "score": 46,
       "tramo": "natural"
     },
     {
@@ -1568,8 +1595,8 @@
       "concelloSlug": "ares",
       "lat": 43.4306,
       "lon": -8.23778,
-      "t": 14.0,
-      "score": 43
+      "t": 15.0,
+      "score": 49
     },
     {
       "slug": "praia-de-ares",
@@ -1577,8 +1604,8 @@
       "concelloSlug": "ares",
       "lat": 43.4259,
       "lon": -8.24341,
-      "t": 14.0,
-      "score": 40,
+      "t": 15.0,
+      "score": 46,
       "tramo": "urbano"
     },
     {
@@ -1860,8 +1887,8 @@
       "concelloSlug": "boiro",
       "lat": 42.6123,
       "lon": -8.87249,
-      "t": 14.0,
-      "score": 31
+      "t": 15.0,
+      "score": 37
     },
     {
       "slug": "praia-gabiotea",
@@ -1995,8 +2022,8 @@
       "concelloSlug": "cabanas",
       "lat": 43.4237,
       "lon": -8.18536,
-      "t": 14.0,
-      "score": 45
+      "t": 15.0,
+      "score": 51
     },
     {
       "slug": "praia-de-arino",
@@ -2051,8 +2078,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1316,
       "lon": -9.19829,
-      "t": 14.0,
-      "score": 28
+      "t": 15.0,
+      "score": 34
     },
     {
       "slug": "praia-de-pedrosa",
@@ -2099,8 +2126,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1831,
       "lon": -9.15821,
-      "t": 14.0,
-      "score": 30
+      "t": 15.0,
+      "score": 36
     },
     {
       "slug": "praia-do-trece-este",
@@ -2108,8 +2135,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1841,
       "lon": -9.15421,
-      "t": 14.0,
-      "score": 30
+      "t": 15.0,
+      "score": 36
     },
     {
       "slug": "praia-de-ensenada-de-cabanas",
@@ -2117,8 +2144,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.193,
       "lon": -9.13235,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 39,
       "tramo": "natural"
     },
     {
@@ -2127,8 +2154,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1943,
       "lon": -9.11636,
-      "t": 14.0,
-      "score": 35,
+      "t": 15.0,
+      "score": 41,
       "tramo": "natural"
     },
     {
@@ -2137,8 +2164,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1853,
       "lon": -9.10601,
-      "t": 14.0,
-      "score": 34,
+      "t": 15.0,
+      "score": 41,
       "flagYear": 2026,
       "tramo": "natural"
     },
@@ -2148,8 +2175,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1856,
       "lon": -9.11143,
-      "t": 14.0,
-      "score": 34,
+      "t": 15.0,
+      "score": 41,
       "tramo": "natural"
     },
     {
@@ -2158,8 +2185,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1871,
       "lon": -9.10011,
-      "t": 14.0,
-      "score": 36
+      "t": 15.0,
+      "score": 42
     },
     {
       "slug": "praia-de-camelle",
@@ -2167,8 +2194,8 @@
       "concelloSlug": "camarinas",
       "lat": 43.1801,
       "lon": -9.09077,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 39,
       "tramo": "natural"
     },
     {
@@ -2298,8 +2325,8 @@
       "concelloSlug": "carnota",
       "lat": 42.7985,
       "lon": -9.14913,
-      "t": 14.0,
-      "score": 26
+      "t": 15.0,
+      "score": 32
     },
     {
       "slug": "praia-de-porto-da-barca",
@@ -2405,8 +2432,8 @@
       "concelloSlug": "carnota",
       "lat": 42.8737,
       "lon": -9.14793,
-      "t": 14.0,
-      "score": 38
+      "t": 15.0,
+      "score": 44
     },
     {
       "slug": "praia-porto-de-quilmas",
@@ -2531,8 +2558,8 @@
       "concelloSlug": "corcubion",
       "lat": 42.9381,
       "lon": -9.19057,
-      "t": 15.0,
-      "score": 37,
+      "t": 14.0,
+      "score": 30,
       "tramo": "urbano"
     },
     {
@@ -2568,8 +2595,8 @@
       "concelloSlug": "fene",
       "lat": 43.4247,
       "lon": -8.18697,
-      "t": 14.0,
-      "score": 45,
+      "t": 15.0,
+      "score": 51,
       "tramo": "natural"
     },
     {
@@ -2670,8 +2697,8 @@
       "concelloSlug": "ferrol",
       "lat": 43.4951,
       "lon": -8.31923,
-      "t": 14.0,
-      "score": 38,
+      "t": 15.0,
+      "score": 44,
       "flagYear": 2026,
       "tramo": "natural"
     },
@@ -2795,8 +2822,8 @@
       "concelloSlug": "laxe",
       "lat": 43.1934,
       "lon": -9.04316,
-      "t": 14.0,
-      "score": 36
+      "t": 15.0,
+      "score": 43
     },
     {
       "slug": "praia-de-arnado",
@@ -2804,8 +2831,8 @@
       "concelloSlug": "laxe",
       "lat": 43.2083,
       "lon": -9.03356,
-      "t": 14.0,
-      "score": 35,
+      "t": 15.0,
+      "score": 41,
       "tramo": "natural"
     },
     {
@@ -2973,8 +3000,8 @@
       "concelloSlug": "manon",
       "lat": 43.7504,
       "lon": -7.72283,
-      "t": 15.0,
-      "score": 53,
+      "t": 16.0,
+      "score": 59,
       "tramo": "natural"
     },
     {
@@ -3022,8 +3049,8 @@
       "concelloSlug": "mino",
       "lat": 43.3774,
       "lon": -8.21434,
-      "t": 14.0,
-      "score": 45,
+      "t": 15.0,
+      "score": 51,
       "flagYear": 2026,
       "tramo": "natural"
     },
@@ -3227,8 +3254,8 @@
       "concelloSlug": "muros",
       "lat": 42.7593,
       "lon": -9.07317,
-      "t": 14.0,
-      "score": 40,
+      "t": 15.0,
+      "score": 47,
       "flagYear": 2026,
       "tramo": "urbano"
     },
@@ -3238,8 +3265,8 @@
       "concelloSlug": "muros",
       "lat": 42.7538,
       "lon": -9.07941,
-      "t": 14.0,
-      "score": 40,
+      "t": 15.0,
+      "score": 47,
       "tramo": "natural"
     },
     {
@@ -3258,8 +3285,8 @@
       "concelloSlug": "muxia",
       "lat": 43.0483,
       "lon": -9.26231,
-      "t": 14.0,
-      "score": 27
+      "t": 15.0,
+      "score": 33
     },
     {
       "slug": "praia-de-arnela-3",
@@ -3267,8 +3294,8 @@
       "concelloSlug": "muxia",
       "lat": 43.084,
       "lon": -9.24347,
-      "t": 14.0,
-      "score": 27,
+      "t": 15.0,
+      "score": 33,
       "tramo": "natural"
     },
     {
@@ -3277,8 +3304,8 @@
       "concelloSlug": "muxia",
       "lat": 43.0874,
       "lon": -9.22262,
-      "t": 14.0,
-      "score": 32,
+      "t": 15.0,
+      "score": 39,
       "tramo": "natural"
     },
     {
@@ -3287,8 +3314,8 @@
       "concelloSlug": "muxia",
       "lat": 43.0933,
       "lon": -9.22236,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 40,
       "tramo": "natural"
     },
     {
@@ -3297,8 +3324,8 @@
       "concelloSlug": "muxia",
       "lat": 43.1006,
       "lon": -9.21248,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 41,
       "tramo": "natural"
     },
     {
@@ -3307,8 +3334,8 @@
       "concelloSlug": "muxia",
       "lat": 43.1002,
       "lon": -9.20856,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 41,
       "tramo": "natural"
     },
     {
@@ -3317,8 +3344,8 @@
       "concelloSlug": "muxia",
       "lat": 43.1025,
       "lon": -9.21876,
-      "t": 14.0,
-      "score": 33,
+      "t": 15.0,
+      "score": 41,
       "tramo": "urbano"
     },
     {
@@ -3327,8 +3354,8 @@
       "concelloSlug": "muxia",
       "lat": 43.093,
       "lon": -9.19468,
-      "t": 14.0,
-      "score": 32
+      "t": 15.0,
+      "score": 39
     },
     {
       "slug": "praia-de-area-maior",
@@ -3336,8 +3363,8 @@
       "concelloSlug": "muxia",
       "lat": 43.0894,
       "lon": -9.19156,
-      "t": 14.0,
-      "score": 31
+      "t": 15.0,
+      "score": 38
     },
     {
       "slug": "praia-de-os-muinos",
@@ -3345,8 +3372,8 @@
       "concelloSlug": "muxia",
       "lat": 43.0964,
       "lon": -9.19624,
-      "t": 14.0,
-      "score": 32
+      "t": 15.0,
+      "score": 39
     },
     {
       "slug": "praia-das-raias",
@@ -3540,8 +3567,8 @@
       "concelloSlug": "ortigueira",
       "lat": 43.7446,
       "lon": -7.74452,
-      "t": 15.0,
-      "score": 54
+      "t": 16.0,
+      "score": 60
     },
     {
       "slug": "praia-de-pena-furada",
@@ -3857,8 +3884,8 @@
       "concelloSlug": "pontedeume",
       "lat": 43.3857,
       "lon": -8.22028,
-      "t": 14.0,
-      "score": 42,
+      "t": 15.0,
+      "score": 48,
       "tramo": "natural"
     },
     {
@@ -4487,8 +4514,8 @@
       "concelloSlug": "barreiros",
       "lat": 43.5556,
       "lon": -7.17323,
-      "t": 15.0,
-      "score": 57,
+      "t": 16.0,
+      "score": 63,
       "sinHumo": true,
       "tramo": "natural"
     },
@@ -4498,8 +4525,8 @@
       "concelloSlug": "barreiros",
       "lat": 43.5611,
       "lon": -7.18303,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "flagYear": 2026,
       "sinHumo": true,
       "tramo": "natural"
@@ -4867,8 +4894,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7418,
       "lon": -7.67354,
-      "t": 15.0,
-      "score": 56,
+      "t": 16.0,
+      "score": 61,
       "sinHumo": true,
       "tramo": "natural"
     },
@@ -4878,8 +4905,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7396,
       "lon": -7.67481,
-      "t": 15.0,
-      "score": 56,
+      "t": 16.0,
+      "score": 61,
       "sinHumo": true
     },
     {
@@ -4888,8 +4915,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7354,
       "lon": -7.6731,
-      "t": 15.0,
-      "score": 56,
+      "t": 16.0,
+      "score": 61,
       "tramo": "urbano"
     },
     {
@@ -4898,8 +4925,8 @@
       "concelloSlug": "o-vicedo",
       "lat": 43.7304,
       "lon": -7.68834,
-      "t": 15.0,
-      "score": 55
+      "t": 16.0,
+      "score": 61
     },
     {
       "slug": "praia-dos-bloques",
@@ -4907,8 +4934,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5292,
       "lon": -7.04414,
-      "t": 15.0,
-      "score": 60,
+      "t": 16.0,
+      "score": 66,
       "tramo": "natural"
     },
     {
@@ -4917,8 +4944,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5537,
       "lon": -7.04412,
-      "t": 15.0,
-      "score": 60,
+      "t": 16.0,
+      "score": 67,
       "tramo": "natural"
     },
     {
@@ -4927,8 +4954,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5566,
       "lon": -7.06448,
-      "t": 15.0,
-      "score": 61,
+      "t": 16.0,
+      "score": 68,
       "tramo": "natural"
     },
     {
@@ -4937,8 +4964,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5541,
       "lon": -7.12495,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "tramo": "natural"
     },
     {
@@ -4947,8 +4974,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5559,
       "lon": -7.13832,
-      "t": 15.0,
-      "score": 59
+      "t": 16.0,
+      "score": 65
     },
     {
       "slug": "praia-os-xuncos",
@@ -4956,8 +4983,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5557,
       "lon": -7.13054,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "tramo": "natural"
     },
     {
@@ -4966,8 +4993,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5554,
       "lon": -7.13452,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "tramo": "natural"
     },
     {
@@ -4976,8 +5003,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5552,
       "lon": -7.14369,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "tramo": "natural"
     },
     {
@@ -4986,8 +5013,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5545,
       "lon": -7.14874,
-      "t": 15.0,
-      "score": 59,
+      "t": 16.0,
+      "score": 65,
       "sinHumo": true,
       "tramo": "natural"
     },
@@ -4997,8 +5024,8 @@
       "concelloSlug": "ribadeo",
       "lat": 43.5541,
       "lon": -7.15687,
-      "t": 15.0,
-      "score": 57,
+      "t": 16.0,
+      "score": 63,
       "flagYear": 2026,
       "tramo": "natural"
     },
@@ -5137,8 +5164,8 @@
       "concelloSlug": "a-guarda",
       "lat": 41.8829,
       "lon": -8.8583,
-      "t": 14.0,
-      "score": 32,
+      "t": 15.0,
+      "score": 38,
       "tramo": "natural"
     },
     {
@@ -5147,8 +5174,8 @@
       "concelloSlug": "a-guarda",
       "lat": 41.8782,
       "lon": -8.86134,
-      "t": 14.0,
-      "score": 36,
+      "t": 15.0,
+      "score": 42,
       "flagYear": 2026,
       "sinHumo": true,
       "tramo": "natural"
@@ -5159,8 +5186,8 @@
       "concelloSlug": "a-guarda",
       "lat": 41.8726,
       "lon": -8.8702,
-      "t": 14.0,
-      "score": 36
+      "t": 15.0,
+      "score": 42
     },
     {
       "slug": "praia-de-fedorento",
@@ -5480,8 +5507,8 @@
       "concelloSlug": "bueu",
       "lat": 42.3279,
       "lon": -8.78253,
-      "t": 14.0,
-      "score": 44
+      "t": 15.0,
+      "score": 50
     },
     {
       "slug": "praia-de-bueu-este",
@@ -5489,8 +5516,8 @@
       "concelloSlug": "bueu",
       "lat": 42.3287,
       "lon": -8.78041,
-      "t": 14.0,
-      "score": 44
+      "t": 15.0,
+      "score": 50
     },
     {
       "slug": "praia-de-pescadoira",
@@ -5498,8 +5525,8 @@
       "concelloSlug": "bueu",
       "lat": 42.3295,
       "lon": -8.77885,
-      "t": 14.0,
-      "score": 44,
+      "t": 15.0,
+      "score": 50,
       "tramo": "urbano"
     },
     {
@@ -5880,8 +5907,8 @@
       "concelloSlug": "cangas",
       "lat": 42.2976,
       "lon": -8.84784,
-      "t": 14.0,
-      "score": 42
+      "t": 15.0,
+      "score": 48
     },
     {
       "slug": "praia-o-santo",
@@ -5909,8 +5936,8 @@
       "concelloSlug": "marin",
       "lat": 42.3682,
       "lon": -8.7404,
-      "t": 15.0,
-      "score": 51,
+      "t": 14.0,
+      "score": 45,
       "flagYear": 2026,
       "tramo": "natural"
     },
@@ -7299,8 +7326,8 @@
       "concelloSlug": "vilaboa",
       "lat": 42.2941,
       "lon": -8.65606,
-      "t": 15.0,
-      "score": 51,
+      "t": 16.0,
+      "score": 57,
       "tramo": "natural"
     },
     {
