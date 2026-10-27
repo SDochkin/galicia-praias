@@ -1,5 +1,5 @@
 {
-  "fetchedAt": "2026-10-26T20:44:43Z",
+  "fetchedAt": "2026-10-27T13:57:41Z",
   "beaches": [
     {
       "id": 2088,
@@ -7,7 +7,7 @@
       "name": "Praia de Rande",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoGalicia",
@@ -67,21 +67,21 @@
           ]
         }
       ],
-      "score": 46,
+      "score": 38,
       "scoreParts": {
         "water": 17,
-        "air": 10,
-        "wind": 92,
-        "waves": 54,
+        "air": 20,
+        "wind": 95,
+        "waves": 17,
         "rain": 100,
-        "sky": 100
+        "sky": 40
       },
-      "bestHour": 18,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 18,
-        "to": 18
+        "from": 12,
+        "to": 16
       },
-      "scoreDay": "2026-10-26",
+      "scoreDay": "2026-10-27",
       "scoreByDay": {
         "2026-10-26": {
           "score": 46,
@@ -287,12 +287,75 @@
       },
       "wave": "moderate",
       "hourParts": {
-        "18": {
+        "9": {
           "air": 10,
-          "wind": 92,
-          "waves": 54,
+          "wind": 95,
+          "waves": 12,
+          "rain": 25,
+          "sky": 25
+        },
+        "10": {
+          "air": 10,
+          "wind": 100,
+          "waves": 14,
+          "rain": 72,
+          "sky": 20
+        },
+        "11": {
+          "air": 10,
+          "wind": 100,
+          "waves": 13,
+          "rain": 58,
+          "sky": 10
+        },
+        "12": {
+          "air": 20,
+          "wind": 95,
+          "waves": 17,
           "rain": 100,
-          "sky": 100
+          "sky": 40
+        },
+        "13": {
+          "air": 20,
+          "wind": 85,
+          "waves": 16,
+          "rain": 100,
+          "sky": 40
+        },
+        "14": {
+          "air": 10,
+          "wind": 86,
+          "waves": 20,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 10,
+          "wind": 85,
+          "waves": 20,
+          "rain": 100,
+          "sky": 40
+        },
+        "16": {
+          "air": 10,
+          "wind": 82,
+          "waves": 23,
+          "rain": 100,
+          "sky": 40
+        },
+        "17": {
+          "air": 0,
+          "wind": 77,
+          "waves": 22,
+          "rain": 100,
+          "sky": 40
+        },
+        "18": {
+          "air": 0,
+          "wind": 80,
+          "waves": 24,
+          "rain": 69,
+          "sky": 10
         }
       },
       "higiene": 100,
@@ -303,12 +366,12 @@
       "stopName": "RANDE (REDONDELA)",
       "tidePort": "Vigo",
       "tideLow": [
-        "09:30",
-        "21:48"
+        "10:09",
+        "22:27"
       ],
       "tideHigh": [
-        "03:24",
-        "15:42"
+        "04:01",
+        "16:23"
       ],
       "tramo": "natural"
     },
@@ -318,55 +381,8 @@
       "name": "Praia de Cesantes",
       "t": 15.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
-        {
-          "name": "AEMET",
-          "days": [
-            {
-              "date": "2026-10-26",
-              "t": 17.0
-            },
-            {
-              "date": "2026-10-27",
-              "t": 18.0
-            },
-            {
-              "date": "2026-10-28",
-              "t": 15.0
-            }
-          ],
-          "history": [
-            {
-              "date": "2026-10-19",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-20",
-              "t": 14.0
-            },
-            {
-              "date": "2026-10-21",
-              "t": 15.0
-            },
-            {
-              "date": "2026-10-22",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-23",
-              "t": 16.0
-            },
-            {
-              "date": "2026-10-24",
-              "t": 15.0
-            },
-            {
-              "date": "2026-10-25",
-              "t": 17.0
-            }
-          ]
-        },
         {
           "name": "MeteoGalicia",
           "days": [
@@ -423,22 +439,69 @@
               "uv": 4
             }
           ]
+        },
+        {
+          "name": "AEMET",
+          "days": [
+            {
+              "date": "2026-10-26",
+              "t": 17.0
+            },
+            {
+              "date": "2026-10-27",
+              "t": 18.0
+            },
+            {
+              "date": "2026-10-28",
+              "t": 15.0
+            }
+          ],
+          "history": [
+            {
+              "date": "2026-10-19",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-20",
+              "t": 14.0
+            },
+            {
+              "date": "2026-10-21",
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-22",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-23",
+              "t": 16.0
+            },
+            {
+              "date": "2026-10-24",
+              "t": 15.0
+            },
+            {
+              "date": "2026-10-25",
+              "t": 17.0
+            }
+          ]
         }
       ],
-      "score": 46,
+      "score": 42,
       "scoreParts": {
         "water": 17,
-        "air": 10,
+        "air": 20,
         "wind": 100,
         "rain": 100,
-        "sky": 100
+        "sky": 40
       },
-      "bestHour": 18,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 18,
-        "to": 18
+        "from": 12,
+        "to": 17
       },
-      "scoreDay": "2026-10-26",
+      "scoreDay": "2026-10-27",
       "scoreByDay": {
         "2026-10-26": {
           "score": 46,
@@ -619,23 +682,77 @@
         }
       },
       "hourParts": {
-        "18": {
+        "9": {
           "air": 10,
           "wind": 100,
+          "rain": 47,
+          "sky": 20
+        },
+        "10": {
+          "air": 10,
+          "wind": 100,
+          "rain": 70,
+          "sky": 20
+        },
+        "11": {
+          "air": 10,
+          "wind": 100,
+          "rain": 56,
+          "sky": 20
+        },
+        "12": {
+          "air": 20,
+          "wind": 100,
           "rain": 100,
-          "sky": 100
+          "sky": 40
+        },
+        "13": {
+          "air": 20,
+          "wind": 91,
+          "rain": 100,
+          "sky": 40
+        },
+        "14": {
+          "air": 10,
+          "wind": 94,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 10,
+          "wind": 94,
+          "rain": 100,
+          "sky": 40
+        },
+        "16": {
+          "air": 10,
+          "wind": 94,
+          "rain": 100,
+          "sky": 40
+        },
+        "17": {
+          "air": 10,
+          "wind": 95,
+          "rain": 100,
+          "sky": 40
+        },
+        "18": {
+          "air": 0,
+          "wind": 93,
+          "rain": 100,
+          "sky": 25
         }
       },
       "sinHumo": true,
       "stopName": "FERROCARRIL (CRUZAMENTO) (REDONDELA)",
       "tidePort": "Vigo",
       "tideLow": [
-        "09:30",
-        "21:48"
+        "10:09",
+        "22:27"
       ],
       "tideHigh": [
-        "03:24",
-        "15:42"
+        "04:01",
+        "16:23"
       ],
       "tramo": "natural"
     },
@@ -645,7 +762,7 @@
       "name": "Praia do Cabo",
       "t": 16.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoGalicia",
@@ -705,20 +822,20 @@
           ]
         }
       ],
-      "score": 54,
+      "score": 48,
       "scoreParts": {
         "water": 33,
         "air": 20,
-        "wind": 97,
+        "wind": 99,
         "rain": 100,
-        "sky": 100
+        "sky": 40
       },
-      "bestHour": 18,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 18,
-        "to": 18
+        "from": 12,
+        "to": 16
       },
-      "scoreDay": "2026-10-26",
+      "scoreDay": "2026-10-27",
       "scoreByDay": {
         "2026-10-26": {
           "score": 54,
@@ -899,22 +1016,76 @@
         }
       },
       "hourParts": {
-        "18": {
+        "9": {
           "air": 20,
-          "wind": 97,
+          "wind": 96,
+          "rain": 48,
+          "sky": 20
+        },
+        "10": {
+          "air": 20,
+          "wind": 100,
+          "rain": 60,
+          "sky": 20
+        },
+        "11": {
+          "air": 20,
+          "wind": 100,
+          "rain": 38,
+          "sky": 20
+        },
+        "12": {
+          "air": 20,
+          "wind": 99,
           "rain": 100,
-          "sky": 100
+          "sky": 40
+        },
+        "13": {
+          "air": 20,
+          "wind": 86,
+          "rain": 100,
+          "sky": 40
+        },
+        "14": {
+          "air": 20,
+          "wind": 88,
+          "rain": 100,
+          "sky": 40
+        },
+        "15": {
+          "air": 10,
+          "wind": 88,
+          "rain": 100,
+          "sky": 40
+        },
+        "16": {
+          "air": 10,
+          "wind": 84,
+          "rain": 100,
+          "sky": 40
+        },
+        "17": {
+          "air": 10,
+          "wind": 83,
+          "rain": 100,
+          "sky": 25
+        },
+        "18": {
+          "air": 0,
+          "wind": 81,
+          "rain": 100,
+          "sky": 25
         }
       },
       "stopName": "PUNTA PRAIA CESANTES (REDONDELA)",
       "tidePort": "Vigo",
       "tideLow": [
-        "09:30",
-        "21:48"
+        "10:09",
+        "22:27"
       ],
       "tideHigh": [
-        "03:24",
-        "15:42"
+        "04:01",
+        "16:23"
       ],
       "tramo": "natural"
     },
@@ -924,7 +1095,7 @@
       "name": "Praia de Sotoxusto",
       "t": 16.0,
       "source": "MeteoGalicia",
-      "trend": "flat",
+      "trend": null,
       "sources": [
         {
           "name": "MeteoGalicia",
@@ -984,20 +1155,20 @@
           ]
         }
       ],
-      "score": 52,
+      "score": 49,
       "scoreParts": {
         "water": 33,
-        "air": 10,
-        "wind": 95,
+        "air": 20,
+        "wind": 100,
         "rain": 100,
-        "sky": 100
+        "sky": 40
       },
-      "bestHour": 18,
+      "bestHour": 12,
       "scoreWindow": {
-        "from": 18,
-        "to": 18
+        "from": 12,
+        "to": 17
       },
-      "scoreDay": "2026-10-26",
+      "scoreDay": "2026-10-27",
       "scoreByDay": {
         "2026-10-26": {
           "score": 52,
@@ -1178,22 +1349,76 @@
         }
       },
       "hourParts": {
-        "18": {
+        "9": {
+          "air": 10,
+          "wind": 92,
+          "rain": 48,
+          "sky": 20
+        },
+        "10": {
+          "air": 10,
+          "wind": 100,
+          "rain": 60,
+          "sky": 20
+        },
+        "11": {
+          "air": 10,
+          "wind": 100,
+          "rain": 44,
+          "sky": 20
+        },
+        "12": {
+          "air": 20,
+          "wind": 100,
+          "rain": 100,
+          "sky": 40
+        },
+        "13": {
+          "air": 20,
+          "wind": 95,
+          "rain": 100,
+          "sky": 40
+        },
+        "14": {
           "air": 10,
           "wind": 95,
           "rain": 100,
-          "sky": 100
+          "sky": 40
+        },
+        "15": {
+          "air": 10,
+          "wind": 95,
+          "rain": 100,
+          "sky": 40
+        },
+        "16": {
+          "air": 10,
+          "wind": 87,
+          "rain": 100,
+          "sky": 40
+        },
+        "17": {
+          "air": 10,
+          "wind": 91,
+          "rain": 100,
+          "sky": 25
+        },
+        "18": {
+          "air": 0,
+          "wind": 87,
+          "rain": 100,
+          "sky": 40
         }
       },
       "stopName": "SOUTOXUSTE (REDONDELA)",
       "tidePort": "Marín",
       "tideLow": [
-        "09:32",
-        "21:51"
+        "10:11",
+        "22:29"
       ],
       "tideHigh": [
-        "03:26",
-        "15:44"
+        "04:03",
+        "16:25"
       ],
       "tramo": "natural"
     }
